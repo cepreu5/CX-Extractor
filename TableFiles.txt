@@ -1,8 +1,8 @@
 Files = [
 "04ad44444c5c5e41175f724a92d475df754275ca77228628cc7c94ea7c849ac5d15547d1a44087fecbe7927eab3d6221b1e0ca18a930482ab2c519d3b3671e82x1zL3ss4S6/vOJ9IWwXglWG+l11bv4JJ+gJZViD21ZrIS9QbkCxgRF9Yu0ZKo6fOUQU0YbiFsQNrgeyeLTqTpkUCy5ieVd06Vcj6TccvfrT6MkXSNjt+OoGKMEF8Uszm4+vwblIWRBhPieQzdsQL8Q==",
-  "РџРµСЂСЃРѕРЅР°Р»РЅРё С„РёРЅР°РЅСЃРё",
+  "Персонални финанси",
 "a1ba58bad4f4452a4311b8c2b8287d23d104306372d1f581d9cd08012b9f3df94764eb16b329ff81a9671df2704ce3906dbf6827935b6dac4fad6e0da6cbeae0M5+kx5zx/SOt9XLWlHiHOdn9Wc2AUDlQCujOCf+G/ItqlkpD4c6K2Fa78bMIf9lYgXN4F8AVPl2DBTVVPTDMv6jZa8UB3n12BlWVo534MF+C3/Vyu5j6GRv11UJ5HvWE",
-  "РРЅС‚РµСЂРЅРµС‚ РїРѕРєСѓРїРєРё",
+  "Интернет покупки",
 "9ac18538a1df7bc18b9ce98f27fe4b7f7f1f02f1d9d3bd4abb75190c601399c83e4eef4cb789c0b32bbe59dac08cc054625897d2c6f6d29d552f19639bee0f1di0gkU+/uE7RfbOyLd70s1FkjIp76dw294wbEFkPWvaqScwbaoRIhLF1jnlk6uYSbjrE53P1UF8JWMHfeFPDsCUlOChQCmr4gQ5SO4JYTBaFiSc0G/hi3deHGzdpnroBrseJlUVPiKpMAuwz7FYSTqw==",
-  "РЎС‚Р°С‚РёСЃС‚РёРєР°"
+  "Статистика"
 ];
