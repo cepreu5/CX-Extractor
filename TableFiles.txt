@@ -1,0 +1,8 @@
+Files = [
+  "https://script.google.com/macros/s/AKfycbzAOygMIZZutrCAtU8Cvvd2R_zJCgAfNHWMF4r_oaE1MYuNzrps/exec",
+  "Персонални финанси",
+  "https://script.google.com/macros/s/AKfycbxa2Mfg32GchahTcseY1pVssSMckFa1-TbQnW4kag/exec",
+  "Интернет покупки",
+  "https://script.google.com/macros/s/AKfycbyYqMqsyCJWsGZnnDwrXnh0Da3x3Z2scFFxGQ8xJO0Yp-LCeGzF/exec",
+  "Статистика"
+];

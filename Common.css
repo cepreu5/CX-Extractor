@@ -1,0 +1,85 @@
+input, select, fieldset {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+body, html {
+  background: var(--FormBgrd, black);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.parent {
+  display: grid;
+  place-items: start center;
+  width: (device-width)/2px; 
+  /* 349
+  height: 625px; (device-height)/2
+  resize: both; 
+  overflow: auto; */
+}
+
+.child {
+  padding: 3px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+
+.rotated {
+  transition: all 1.0s ease-in-out 0s;
+  transform: rotate(360deg);
+}
+
+.cbutton {
+  background-image: url("CalcBtn.png");
+  background-color: transparent;
+  border: solid black 0px; 
+  color: white; 
+  width: 60px;
+  height: 60px;
+  font-size:30px; 
+}
+
+/* Color picker */
+input[type="color"] {
+  background-color: #999999;
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  border-radius: 3px;
+  border: 0px solid #000;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--TipColor, Yellow);
+  color: var(--TipText, black);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+	
+/* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+select option {
+  background: rgba(0, 0, 0, 0.3);
+  color: #0;
+}
+  
+img {cursor: pointer; border: 0}
+
