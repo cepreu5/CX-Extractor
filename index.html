@@ -139,11 +139,11 @@ function createFilesDec(passphrase) {
 		encryptedHTML = encryptedMsg.substring(64),
 		decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
 		if (decryptedHMAC !== encryptedHMAC) {
-				createOpt("", "Р“СЂРµС€РЅР° РїР°СЂРѕР»Р°");
-				document.getElementById("MsgText").value="РџСЂРѕРіСЂР°РјР°С‚Р° Рµ РЅР°РїСЉР»РЅРѕ С„СѓРЅРєС†РёРѕРЅР°Р»РЅР°, РЅРѕ РЅСЏРјР° РґР° РёР·РїСЂР°С‰Р° РґР°РЅРЅРё.";
+				createOpt("", "Грешна парола");
+				document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
 		} else {
 			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
-			//document.getElementById("MsgText").value="РўСѓРє РїРѕСЃС‚Р°РІРµС‚Рµ С‚РµРєСЃС‚Р°, РѕС‚ РєРѕР№С‚Рѕ РёСЃРєР°С‚Рµ РґР° РІР·РµРјРµС‚Рµ РґР°РЅРЅРё.";
+			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
 		}
 		i++;
 	}
@@ -266,19 +266,19 @@ function createSels() { // Extract selection field
 		x.setAttribute("class", "inputMessage");
 		x.setAttribute("style", "height: 23px;");
 		document.getElementById("Sels").appendChild(x);
-			createOpt("1", "РЎСѓРјР°", i);
-			createOpt("2", "Р”Р°С‚Р°Р§Р°СЃ", i);
-			createOpt("3", "РўРµРєСЃС‚", i);
-			createOpt("4", "Р§РёСЃР»Рѕ", i);
-			createOpt("5", "РџСЂР°Р·РЅРѕ", i);
+			createOpt("1", "Сума", i);
+			createOpt("2", "ДатаЧас", i);
+			createOpt("3", "Текст", i);
+			createOpt("4", "Число", i);
+			createOpt("5", "Празно", i);
 			createOpt("6", "RegEx", i);
 		document.getElementById("Sels").appendChild(x);
-		createLbl(i, "1", " РџРѕСЂРµРґРЅРѕСЃС‚ ");
-		createLbl(i, "2", " Р‘СЂРѕР№ ");
+		createLbl(i, "1", " Поредност ");
+		createLbl(i, "2", " Брой ");
 		createInp(i, "count", 3)
-		createLbl(i, "", " РЎР»РµРґ ");
+		createLbl(i, "", " След ");
 		createInp(i, "sep", 10);
-		createLbl(i, "3", "&nbsp Р Р°Р·С…РѕРґ");
+		createLbl(i, "3", "&nbsp Разход");
 		createChk(i);
 
 		var brElem = document.createElement("BR");
@@ -303,15 +303,15 @@ function MakeTempl() {
 		S='';
 		Tmpl=Tmpl+i+'-';
 		switch (document.getElementById("Types"+i).value) {
-			case "1":	L='РЎ'; S="0"
+			case "1":	L='С'; S="0"
 				if (document.getElementById("Exp"+i).checked) {S="1"};
 				break;
-			case "2": L='Р”'; break;
-			case "3": L='Рў';
+			case "2": L='Д'; break;
+			case "3": L='Т';
 				S=document.getElementById("sep"+i).value;
 				break;
-			case "4": L='Р§'; break;
-			case "5": L='Рџ'; break;
+			case "4": L='Ч'; break;
+			case "5": L='П'; break;
 			case "6": L='R';
 				S=document.getElementById("sep"+i).value;
 				S=RegExp.quote(S);
@@ -324,8 +324,8 @@ function MakeTempl() {
 		if (S != '') {Tmpl=Tmpl+';'+S;}
 		Tmpl=Tmpl+'#';
 	}
-	Tmpl=Tmpl+(LTempl-1)+"-Рљ;"+document.getElementById("Cats").value+"#"+
-		LTempl+"-Рћ;"+document.getElementById("SubCats").value+"##"
+	Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
+		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
 		+document.getElementById("Files").selectedIndex;
 	document.getElementById("CSV").value=
 	document.getElementById("res1").value + ", " + // \t
@@ -364,15 +364,15 @@ function SelTempl(str, clear) {
 			second=fsplit[1];//alert(second);
 		if (typeof sep === "undefined") {sep="";}
 		switch(first.slice(2,3)) {
-			case "РЎ": Combo2(I+1, "1", second, sep); break;
-			case "Р”": Combo2(I+1, "2", second, sep); break;
-			case "Рў": Combo2(I+1, "3", second, sep); break;
-			case "Р§": Combo2(I+1, "4", second, sep); break;
-			case "Рџ": Combo2(I+1, "5", second, sep); break;
+			case "С": Combo2(I+1, "1", second, sep); break;
+			case "Д": Combo2(I+1, "2", second, sep); break;
+			case "Т": Combo2(I+1, "3", second, sep); break;
+			case "Ч": Combo2(I+1, "4", second, sep); break;
+			case "П": Combo2(I+1, "5", second, sep); break;
 			case "R": Combo2(I+1, "6", second, sep); break;
-			//case "Рљ": document.getElementById("Cats").options.selectedIndex=second; break;
-			case "Рљ": document.getElementById("Cats").value=second;	break;
-			case "Рћ":
+			//case "К": document.getElementById("Cats").options.selectedIndex=second; break;
+			case "К": document.getElementById("Cats").value=second;	break;
+			case "О":
 				createSubCat("SubCat"+document.getElementById("Cats").options.selectedIndex);
 				document.getElementById("SubCats").value=second;
 		}
@@ -385,8 +385,8 @@ function getTempls() {
 		'onChange="SelTempl(' + 
 		"document.getElementById('Templates').value" +
 		', true); Extract()">'+
-		'<option value="1-Рџ;1#2-Рџ;1#3-Рџ;1#4-Рџ;1#5-Рџ;1#6-Рџ;1#7-Рљ;#8-Рћ;">' +
-		'РР·Р±РµСЂРµС‚Рµ С€Р°Р±Р»РѕРЅ</option>';
+		'<option value="1-П;1#2-П;1#3-П;1#4-П;1#5-П;1#6-П;1#7-К;#8-О;">' +
+		'Изберете шаблон</option>';
 	ReplaceF=3;
 	for (i=0; i<Templates.length; i++) {
 		if (CheckAuto(Templates[i])) { //exclude Auto templates
@@ -457,7 +457,7 @@ function Extract() {
 				}
 				Incl = (sep.substr(-1)=="+");
 				if (sep.substr(-1)==">") {
-					pattern = "(?<=([A-z,0-9,Рђ-СЏ,\,\.\:]+\s){0})([A-z,0-9,Рђ-СЏ,\,\.\:]+)";
+					pattern = "(?<=([A-z,0-9,А-я,\,\.\:]+\s){0})([A-z,0-9,А-я,\,\.\:]+)";
 					Process(part, pattern, count-1);
 					break;
 				}
@@ -554,7 +554,7 @@ function Normal() {
 	text=text.replace(/([\d])\,([\d\s])/g,'$1.$2');			// dd,dd dd.dd
 	text=text.replace(/ ([\d]+) ([\d])/g,' $1$2');			// d ddd dddd
 	text=text.replace(/ (\d\d)\:(\d\d) /g,' $1:$2:00 ');			// dd:dd dd:dd:00
-	text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// в‚¬ 5 672.65 в‚¬ 5672.65
+	text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
 	text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
 	text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
 	text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
@@ -698,7 +698,7 @@ function InsDate() {
 		var d = new Date();
 		dt = d;
 		FormDate(d);
-	} else if (document.getElementById("res3").value == "РџР»Р°РЅРёСЂР°РЅРё") {
+	} else if (document.getElementById("res3").value == "Планирани") {
 		var dsplit=document.getElementById("res1").value.split(".");
 		if (dsplit[0].length<2) dsplit[0]='0' + dsplit[0];
 		if (dsplit[1].length<2) dsplit[1]='0' + dsplit[1];
@@ -741,13 +741,13 @@ function switchSheet() {
 		BArea = document.getElementById("TRow").innerHTML;
     theme.href = "Second.css";
     document.getElementById("Cell1").innerHTML=
-		'<input type="submit" class="abutton" title="РР·РїСЂР°С‚Рё" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
+		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
     document.getElementById("Cell2").innerHTML=
-		'<input type="button" class="abutton" title="Р•РєСЃС‚СЂР°РєС‚" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
     document.getElementById("Cell3").innerHTML=
-		'<input type="button" class="abutton" title="Р‘РµР»РµР¶РєР°" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowNote()">&nbsp';
+		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowNote()">&nbsp';
     document.getElementById("Cell4").innerHTML=
-		'<input type="button" class="abutton" title="РЁР°Р±Р»РѕРЅ" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
   } else {
     theme.href = "First.css";
     document.getElementById("TRow").innerHTML=BArea;
@@ -853,7 +853,7 @@ function init() {
 	dataListOpt(Notes, "combo-options");
 	dataListOpt(Accs, "acc-options");
 	ClearTextArea();
-	// document.getElementById("MsgText").value="РўСѓРє РїРѕСЃС‚Р°РІРµС‚Рµ С‚РµРєСЃС‚Р°, РѕС‚ РєРѕР№С‚Рѕ РёСЃРєР°С‚Рµ РґР° РІР·РµРјРµС‚Рµ РґР°РЅРЅРё.";
+	// document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
 	// document.getElementById("MsgText").select()
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
@@ -912,7 +912,7 @@ function init2() {
 	<fieldset ID="Main" class="child">
 
 		<div ID="PwdFld">
-				<input id="Password" type="password" class="inputMessage" placeholder="РџР°СЂРѕР»Р°"/>&nbsp;&nbsp;
+				<input id="Password" type="password" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
 				<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'>
 				<script>
 				var input = document.getElementById("Password");
@@ -928,7 +928,7 @@ function init2() {
 		<SELECT ID="Files" style="vertical-align: super;" onChange="SelFile()" class="inputMessage">
 		</SELECT>
 		&nbsp;
-		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="РР·С‚СЂРёРІР°РЅРµ"></a>
+		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;&nbsp;
 		<a><img src="Copy.png" width="20px" onclick="doSelectAll()" title="Copy"></a>
 		<!-- <script>
@@ -946,11 +946,11 @@ function init2() {
 		</script -->
 		
 		&nbsp;&nbsp;
-		<a><img src="Palette.png" width="15px" style="vertical-align: super" onclick="switchSheet()" title="РўРµРјР°"></a>
+		<a><img src="Palette.png" width="15px" style="vertical-align: super" onclick="switchSheet()" title="Тема"></a>
 		&nbsp;&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
 		&nbsp;
-		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom()" title="РЈРІРµР»РёС‡Рё"></a>
+		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom()" title="Увеличи"></a>
 		<br>
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
 			onFocus="AutoTempl()" onInput="AutoTempl()">
@@ -958,14 +958,14 @@ function init2() {
 		<textarea ID="Log" rows="5" style="width: 320px" hidden>
 		</textarea>
 		<br>
-		РЁР°Р±Р»РѕРЅРё 
-		<span ID="Sel"></span>&nbsp;РђРІС‚Рѕ
+		Шаблони 
+		<span ID="Sel"></span>&nbsp;Авто
 		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
-			onclick="NoAuto()" title="РђРІС‚Рѕ"></a> 
+			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
-			onclick="NoAuto()" title="РђРІС‚Рѕ"></a> 
+			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
-			align="center" title="РќРѕСЂРјР°Р»РёР·Р°С†РёСЏ"></a><br>
+			align="center" title="Нормализация"></a><br>
 		<span ID="Info"></span>
 		<br>
 		<span ID="Sels"></span>
@@ -1014,56 +1014,56 @@ function init2() {
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
-			<img src="Calendar.png" width="30px" align="center" title="Р”Р°С‚Р°"
+			<img src="Calendar.png" width="30px" align="center" title="Дата"
          onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
-			<img src="Calculator.png" width="30px" align="center" title="РљР°Р»РєСѓР»Р°С‚РѕСЂ"
+			<img src="Calculator.png" width="30px" align="center" title="Калкулатор"
         onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
 				<datalist id="acc-options">
 				</datalist>
 			<img src="Remove.png" width="30px" onclick="ClearFld('res3')"
-					align="center" title="РР·С‚СЂРёРІР°РЅРµ">
+					align="center" title="Изтриване">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field4" ID=res4 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res4')"
-					align="center" title="РР·С‚СЂРёРІР°РЅРµ">
+					align="center" title="Изтриване">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 
 				value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res5')"
-					align="center" title="РР·С‚СЂРёРІР°РЅРµ">
+					align="center" title="Изтриване">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 
 				value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
-					align="center" title="РР·С‚СЂРёРІР°РЅРµ">
+					align="center" title="Изтриване">
 			<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
-				<option value="" selected>РљР°С‚РµРіРѕСЂРёСЏ</option>
+				<option value="" selected>Категория</option>
 			</SELECT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
-				<option value="" selected>РџРѕРґРєР°С‚РµРіРѕСЂРёСЏ</option>
+				<option value="" selected>Подкатегория</option>
 			</SELECT>
 			<br>
 			<span ID="NoteFld">
-				Р‘РµР»РµР¶РєР°: 
+				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
 					list="combo-options" value="">
 				<datalist class="inputMessage" id="combo-options">
 				</datalist>
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
-					align="center" title="РР·С‚СЂРёРІР°РЅРµ"></a>
+					align="center" title="Изтриване"></a>
 			</span><br>
 			<table><tr ID="TRow">
 				<td ID="Cell1"><input type="image" name="submit" src="Send.png" style="width: 70px;" border="0" 
-					title="РР·РїСЂР°С‚Рё" onclick="showDiv()" alt="РР·РїСЂР°С‚Рё"></td>
-				<td ID="Cell2"><img style="width: 70px;" src="Extract.png" title="Р•РєСЃС‚СЂР°РєС‚" ID="ExtBtn"
+					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
+				<td ID="Cell2"><img style="width: 70px;" src="Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
 				<td ID="Cell3"><img style="width: 70px;" src="Note.png" ID="NoteBtn" onclick="ShowNote()" 
-					title="Р‘РµР»РµР¶РєР°"></td>
+					title="Бележка"></td>
 				<td ID="Cell4"><img src="Template.png" style="width: 70px;" onclick="MakeTempl()" 
-					title="РЁР°Р±Р»РѕРЅ">
+					title="Шаблон">
 				</td>
 				<td>
 					<img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
@@ -1071,7 +1071,7 @@ function init2() {
 					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
-						style="display:none" title="РќР°РјР°Р»Рё"></a>
+						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
 		</form>
@@ -1088,7 +1088,7 @@ function init2() {
 						  document.getElementById("res3").value+" "+
 						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+"\n";
 					})
-					.catch(error => alert('Р“СЂРµС€РєР°! ' + error.message))
+					.catch(error => alert('Грешка! ' + error.message))
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
@@ -1119,37 +1119,51 @@ function init2() {
 							throw Error(`Request rejected with status ${res.status}`);
 							}
 						})
-						.catch(error => alert('Р“СЂРµС€РєР°! ' + error.message))
+						.catch(error => alert('Грешка! ' + error.message))
 				}
 			})
 		</script>
 		
 		<span ID="TemplFld">
-			РЁР°Р±Р»РѕРЅ: <input style="text-align:left; width: 18em" ID="res" class="inputMessage" value="">
+			Шаблон: <input style="text-align:left; width: 18em" ID="res" class="inputMessage" value="">
 			<a><img src="Remove.png" width="20px" onclick="ClearFld('res')"
-				align="center" title="РР·С‚СЂРёРІР°РЅРµ"></a>
+				align="center" title="Изтриване"></a>
 			<br>
 			CSV: <input style="text-align:left; width: 19.8em" ID="CSV" class="inputMessage" value=""> 
 			<a><img src="Copy.png" width="20px" align="top" onclick="CopyCSV()" title="Copy"></a>
 		</span>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 		&nbsp;&nbsp;
-		<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Р¦РІСЏС‚"></a>	
+		<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
 		&nbsp;
 			<input type="color" value="#FFFFFF" id="colorPicker" hidden>
 			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
-				<option value="--FormBgrd">- РћС†РІРµС‚Рё -</option>
-				<option value="--FormBgrd">Р¤РѕРЅ</option>
-				<option value="--FormColor">Р¤РѕСЂРјР°</option>
-				<option value="--BtnColor">Р‘СѓС‚РѕРЅРё</option>
-				<option value="--InpBgrd">РџРѕР»РµС‚Р°</option>
-				<option value="--LblColor">Р•С‚РёРєРµС‚Рё</option>
-				<option value="--InpText">РўРµРєСЃС‚</option>
+				<option value="--FormBgrd">- Оцвети -</option>
+				<option value="--FormBgrd">Фон</option>
+				<option value="--FormColor">Форма</option>
+				<option value="--BtnColor">Бутони</option>
+				<option value="--InpBgrd">Полета</option>
+				<option value="--LblColor">Етикети</option>
+				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			В© 2020 CX Extractor v. 4.27 / 
+			© 2020 CX Extractor v. 4.27 / 
 		</span>
 	</fieldset>
 	</div>
 </body>
 </html>
+<!--
+Steps:
+1.Create a directory on the local file system.
+2.Create a repo on Github.
+3.Select Clone "Clone or download" on Github, copy the link
+4.In Visual Studio Code, sect File -> Add Folder to Workspace -> Select the newly created directory
+5.Select Terminal Window
+6.In the window, type:
+
+git config --global user.name <github userID>
+git clone <URL from github link copied earlier>
+
+Any newly created file should be available on github after stage/commit/push.
+-->
