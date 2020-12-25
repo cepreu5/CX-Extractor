@@ -912,17 +912,17 @@ function init2() {
 	<fieldset ID="Main" class="child">
 
 		<div ID="PwdFld">
-				<input id="Password" type="password" style="width: 158px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
-				<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'>
-				<script>
-				var input = document.getElementById("Password");
-				input.addEventListener("keyup", function(event) {
-					if (event.keyCode === 13) {
-					 event.preventDefault();
-					 document.getElementById("Suc2").click();
-					}
-				});
-				</script>
+			<input id="Password" type="password" style="width: 158px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
+			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'>
+			<script>
+			var input = document.getElementById("Password");
+			input.addEventListener("keyup", function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					document.getElementById("Suc2").click();
+				}
+			});
+			</script>
 		</div>
 
 		<SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
@@ -972,54 +972,54 @@ function init2() {
 		<br>
 		
 		<!-- Calc -->
-				<div style="margin-left: 1px; text-align: center;">
-				<span ID="CalcSp"><br>
-					<table border="0" width="90%"> 
-						<tr> 
-							<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
-							<!-- clr() function will call clr to clear all value -->
-							<td><input type="button" class="cbutton" value="C" onclick="clr()"/> </td> 
-						</tr> 
-						<tr> 
-							<!-- create button and assign value to each button -->
-							<!-- dis("1") will call function dis to display value -->
-							<td><input type="button" class="cbutton" value="1" onclick="dis('1')"/> </td> 
-							<td><input type="button" class="cbutton" value="2" onclick="dis('2')"/> </td> 
-							<td><input type="button" class="cbutton" value="3" onclick="dis('3')"/> </td> 
-							<td><input type="button" class="cbutton" value="/" onclick="dis('/')"/> </td> 
-						</tr> 
-						<tr> 
-							<td><input type="button" class="cbutton" value="4" onclick="dis('4')"/> </td> 
-							<td><input type="button" class="cbutton" value="5" onclick="dis('5')"/> </td> 
-							<td><input type="button" class="cbutton" value="6" onclick="dis('6')"/> </td> 
-							<td><input type="button" class="cbutton" value="-" onclick="dis('-')"/> </td> 
-						</tr> 
-						<tr> 
-							<td><input type="button" class="cbutton" value="7" onclick="dis('7')"/> </td> 
-							<td><input type="button" class="cbutton" value="8" onclick="dis('8')"/> </td> 
-							<td><input type="button" class="cbutton" value="9" onclick="dis('9')"/> </td> 
-							<td><input type="button" class="cbutton" value="+" onclick="dis('+')"/> </td> 
-						</tr> 
-						<tr> 
-							<td><input type="button" class="cbutton" value="." onclick="dis('.')"/> </td> 
-							<td><input type="button" class="cbutton" value="0" onclick="dis('0')"/> </td> 
-							<!-- solve function call function solve to evaluate value -->
-							<td><input type="button" class="cbutton" value="=" onclick="solve()"/> </td> 
-							<td><input type="button" class="cbutton" value="*" onclick="dis('*')"/> </td> 
-						</tr> 
-					</table>
-					<br>
-				</span>
-				</div>
+		<div style="margin-left: 1px; text-align: center;">
+		<span ID="CalcSp"><br>
+			<table border="0" width="90%"> 
+				<tr> 
+					<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
+					<!-- clr() function will call clr to clear all value -->
+					<td><input type="button" class="cbutton" value="C" onclick="clr()"/> </td> 
+				</tr> 
+				<tr> 
+					<!-- create button and assign value to each button -->
+					<!-- dis("1") will call function dis to display value -->
+					<td><input type="button" class="cbutton" value="1" onclick="dis('1')"/> </td> 
+					<td><input type="button" class="cbutton" value="2" onclick="dis('2')"/> </td> 
+					<td><input type="button" class="cbutton" value="3" onclick="dis('3')"/> </td> 
+					<td><input type="button" class="cbutton" value="/" onclick="dis('/')"/> </td> 
+				</tr> 
+				<tr> 
+					<td><input type="button" class="cbutton" value="4" onclick="dis('4')"/> </td> 
+					<td><input type="button" class="cbutton" value="5" onclick="dis('5')"/> </td> 
+					<td><input type="button" class="cbutton" value="6" onclick="dis('6')"/> </td> 
+					<td><input type="button" class="cbutton" value="-" onclick="dis('-')"/> </td> 
+				</tr> 
+				<tr> 
+					<td><input type="button" class="cbutton" value="7" onclick="dis('7')"/> </td> 
+					<td><input type="button" class="cbutton" value="8" onclick="dis('8')"/> </td> 
+					<td><input type="button" class="cbutton" value="9" onclick="dis('9')"/> </td> 
+					<td><input type="button" class="cbutton" value="+" onclick="dis('+')"/> </td> 
+				</tr> 
+				<tr> 
+					<td><input type="button" class="cbutton" value="." onclick="dis('.')"/> </td> 
+					<td><input type="button" class="cbutton" value="0" onclick="dis('0')"/> </td> 
+					<!-- solve function call function solve to evaluate value -->
+					<td><input type="button" class="cbutton" value="=" onclick="solve()"/> </td> 
+					<td><input type="button" class="cbutton" value="*" onclick="dis('*')"/> </td> 
+				</tr> 
+			</table>
+			<br>
+		</span>
+		</div>
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата"
-         onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
+         		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
 			<img src="Calculator.png" width="30px" align="center" title="Калкулатор"
-        onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
+        		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
 				<datalist id="acc-options">
@@ -1133,9 +1133,9 @@ function init2() {
 			<a><img src="Copy.png" width="20px" align="top" onclick="CopyCSV()" title="Copy"></a>
 		</span>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
-		&nbsp;&nbsp;
-		<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
-		&nbsp;
+			&nbsp;&nbsp;
+			<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
+			&nbsp;
 			<input type="color" value="#FFFFFF" id="colorPicker" hidden>
 			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
 				<option value="--FormBgrd">- Оцвети -</option>
