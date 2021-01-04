@@ -1,5 +1,5 @@
 var 
-CfgDate="3.01",
+CfgDate="4.01",
 ZoomL1="108%",
 ZoomL2="150%",
 Templates = [
@@ -242,6 +242,9 @@ Accs = [
   "Revolut",
   "RevolutBGN",
   "RevolutUSD",
+  "iuvo",
+  "iuvo 2",
+  "iuvo m",
 ],
 
 Cats = [
