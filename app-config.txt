@@ -133,7 +133,6 @@ AutoT = [
   "Revolut*",     "RevoTop",
   "cashw",        "credit", 
   "TEGLENE NA",   "Теглене",
-  "дневна",       "ток",
   "план-ток",     "план-ток",
   "stoynost",     "план-сот",
   "ВиК",          "план-вода",
@@ -179,6 +178,7 @@ AutoT = [
   "Цеца",          "ePayЦ",
   "Данък",         "ePayДК",
   "SALARY",        "SALARY",
+  "дневна",        "ток",
 ],
 
 Replaces = [
