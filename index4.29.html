@@ -862,20 +862,7 @@ function init() {
 	// document.getElementById("MsgText").select()
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
-	var ww=window.innerWidth;
-	document.getElementById("Info").innerHTML="SW: "+ww;
-	if (ww<501) {
-		document.getElementById("Top").hidden = false;
-		document.getElementById("Bottom").hidden = true;
-		document.getElementById("CatsTop").hidden = false;
-		document.getElementById("CatsBottom").hidden = true;
-	}
-	else {
-		document.getElementById("Top").hidden = true;
-		document.getElementById("Bottom").hidden = false;
-		document.getElementById("CatsTop").hidden = true;
-		document.getElementById("CatsBottom").hidden = false;
-	}
+	document.getElementById("Info").innerHTML="SW: "+window.innerWidth;
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
 	CZoom ();
@@ -1031,7 +1018,7 @@ function init2() {
 		</div>
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
-			<table ID="Top" hidden><tr ID="TRow">
+			<table><tr ID="TRow">
 				<td ID="Cell3"><img style="width: 70px;" src="Note.png" ID="NoteBtn" onclick="ShowNote()" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="Template.png" style="width: 70px;" onclick="MakeTempl()" 
@@ -1051,8 +1038,7 @@ function init2() {
 						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
-			<span ID="CatsTop" hidden>
-				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
+			<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
 				<option value="" selected>Категория</option>
 			</SELECT>
@@ -1062,8 +1048,7 @@ function init2() {
 				<option value="" selected>Подкатегория</option>
 			</SELECT>
 			<img src="Calendar.png" width="30px" align="center" title="Изтриване"
-				 onclick="ClearFld('res1');">
-			</span>
+         		onclick="ClearFld('res1');">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
@@ -1088,19 +1073,6 @@ function init2() {
 				value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
-			<span ID="CatsBottom">
-				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
-				onChange="createSubCat('SubCat'+this.selectedIndex)">
-				<option value="" selected>Категория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" onclick="NoCat()"
-					align="center" title="Изтриване">
-			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
-				<option value="" selected>Подкатегория</option>
-			</SELECT>
-			<img src="Calendar.png" width="30px" align="center" title="Изтриване"
-					onclick="ClearFld('res1');">
-			</span>
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
@@ -1110,27 +1082,6 @@ function init2() {
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
 					align="center" title="Изтриване"></a>
 			</span><br>
-			<table ID="Bottom"><tr ID="TRow">
-				<td ID="Cell1"><input type="image" name="submit" src="Send.png" style="width: 70px;" border="0" 
-					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td>
-				<td ID="Cell2"><img style="width: 70px;" src="Extract.png" title="Екстракт" ID="ExtBtn"
-					onclick="ExtClick()">
-				</td>
-				<td ID="Cell3"><img style="width: 70px;" src="Note.png" ID="NoteBtn" onclick="ShowNote()" 
-					title="Бележка"></td>
-				<td ID="Cell4"><img src="Template.png" style="width: 70px;" onclick="MakeTempl()" 
-					title="Шаблон">
-				</td>
-					<img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'>
-					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
-						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
-						style="display:none" title="Намали"></a>
-				</td></tr>
-			</table>
-
 		</form>
 
 		<script>
@@ -1204,7 +1155,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor v. 4.30 / 
+			© 2021 CX Extractor v. 4.29 / 
 		</span>
 	</fieldset>
 	</div>
