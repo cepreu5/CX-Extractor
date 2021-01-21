@@ -854,7 +854,7 @@ function zoomfunction(el, d) {
 function init() {
 	getTempls();
 	createSels();
-	createCats();
+	//createCats();
 	dataListOpt(Notes, "combo-options");
 	dataListOpt(Accs, "acc-options");
 	ClearTextArea();
@@ -866,16 +866,23 @@ function init() {
 	document.getElementById("Info").innerHTML="SW: "+ww;
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
-		document.getElementById("Bottom").hidden = true;
+		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
+		//document.getElementById("Bottom").hidden = true;
 		document.getElementById("CatsTop").hidden = false;
-		document.getElementById("CatsBottom").hidden = true;
+		//document.getElementById("CatsBottom").hidden = true;
+		document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
 	}
 	else {
-		document.getElementById("Top").hidden = true;
+		//document.getElementById("Top").hidden = true;
+		document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
 		document.getElementById("Bottom").hidden = false;
-		document.getElementById("CatsTop").hidden = true;
+		//document.getElementById("CatsTop").hidden = false;
+		document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
+		//document.getElementById("CatsTop").removeChild(document.getElementById("Cats"));
+		//document.getElementById("CatsTop").removeChild(document.getElementById("SubCats"));
 		document.getElementById("CatsBottom").hidden = false;
 	}
+	createCats();
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
 	CZoom ();
@@ -1204,7 +1211,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor v. 4.30 / 
+			© 2021 CX Extractor v. 4.31 / 
 		</span>
 	</fieldset>
 	</div>
