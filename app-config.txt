@@ -1,5 +1,5 @@
 var 
-CfgDate="8.03",
+CfgDate="9.03",
 ZoomL1="108%",
 ZoomL2="150%",
 Templates = [
@@ -169,7 +169,7 @@ AutoT = [
   "ток Яворов",    "ePayТЯ",
   "Поддръжка Яв",  "ePayПЯ",
   "Поддръжка Пав", "ePayПП",
-  "Топ",           "ePayПК",
+  "Топ В",         "ePayПК",
   "Lusinexpress",  "ePayПТ",
   "жка Знаме",     "ePayПЗ",
   "вода (M)",      "ePayВП",
