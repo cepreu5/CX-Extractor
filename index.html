@@ -18,7 +18,8 @@ var Encrypted=true; // false uncomment crypto-js above and use the correct Table
 
 var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 		Z100=true, // zoom level
-		CalcFl=false, 
+		CalcFl=false,
+		TOtal=0,
 		LTempl=8, // elements in template (without optional replace field and selected sheet)
 		val="", // initial calc display value
 		SelectSheet=0, // selected sheet
@@ -1148,9 +1149,10 @@ function init2() {
 					scriptURL, {method: 'POST', body: new FormData(form)})
 					.then(response => {
 						showSuc();
+						Total+=document.getElementById("res2").value
 						document.getElementById("Log").value=document.getElementById("Log").value+
 						  document.getElementById("res3").value+" "+
-						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+"\n";
+						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+Total+"\n";
 					})
 					.catch(error => alert('Грешка! ' + error.message))
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
@@ -1211,7 +1213,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor v. 4.31 / 
+			© 2021 CX Extractor v. 4.32 / 
 		</span>
 	</fieldset>
 	</div>
