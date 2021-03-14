@@ -19,7 +19,6 @@ var Encrypted=true; // false uncomment crypto-js above and use the correct Table
 var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 		Z100=true, // zoom level
 		CalcFl=false,
-		TOtal=0,
 		LTempl=8, // elements in template (without optional replace field and selected sheet)
 		val="", // initial calc display value
 		SelectSheet=0, // selected sheet
@@ -1143,16 +1142,24 @@ function init2() {
 
 		<script>
 			const form = document.forms['submit-to-google-sheet']
+			var Total=0
+			var formatter = new Intl.NumberFormat(undefined, {
+				style: 'currency',
+				currency: 'BGN',
+				// These options are needed to round to whole numbers if that's what you want.
+				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+			});
 			form.addEventListener('submit', e => {
 				e.preventDefault()
 				fetch(
 					scriptURL, {method: 'POST', body: new FormData(form)})
 					.then(response => {
 						showSuc();
-						Total+=document.getElementById("res2").value
+						Total+=+document.getElementById("res2").value
 						document.getElementById("Log").value=document.getElementById("Log").value+
 						  document.getElementById("res3").value+" "+
-						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+Total+"\n";
+						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
 					})
 					.catch(error => alert('Грешка! ' + error.message))
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
@@ -1213,7 +1220,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor v. 4.32 / 
+			© 2021 CX Extractor 15.03 / 
 		</span>
 	</fieldset>
 	</div>
