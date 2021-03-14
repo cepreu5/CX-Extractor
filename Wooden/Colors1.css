@@ -1,0 +1,10 @@
+:root {
+  --InpText: black;
+  --FormBgrd: black;
+  --LblColor: white;
+  --TipColor: DarkOrange;
+  --TipText: black;
+
+  --InpBgrd: snow;
+  --FormColor: FireBrick;
+}
