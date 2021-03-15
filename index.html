@@ -1142,7 +1142,7 @@ function init2() {
 
 		<script>
 			const form = document.forms['submit-to-google-sheet']
-			var Total=0
+			var Total=0, Cnt=0
 			var formatter = new Intl.NumberFormat(undefined, {
 				style: 'currency',
 				currency: 'BGN',
@@ -1157,8 +1157,9 @@ function init2() {
 					.then(response => {
 						showSuc();
 						Total+=+document.getElementById("res2").value
+						Cnt+=1
 						document.getElementById("Log").value=document.getElementById("Log").value+
-						  document.getElementById("res3").value+" "+
+						  Cnt+". "+document.getElementById("res3").value+" "+
 						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
 					})
 					.catch(error => alert('Грешка! ' + error.message))
@@ -1220,7 +1221,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 15.03 / 
+			© 2021 CX Extractor 16.03 / 
 		</span>
 	</fieldset>
 	</div>
