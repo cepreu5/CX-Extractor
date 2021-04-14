@@ -1,5 +1,5 @@
 var 
-CfgDate="16.03",
+CfgDate="17.03",
 ZoomL1="108%",
 ZoomL2="150%",
 Templates = [
