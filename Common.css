@@ -78,7 +78,7 @@ input[type="color"] {
 
 select option {
   background: rgba(0, 0, 0, 0.3);
-  color: #0;
+  color: #000;
 }
   
 img {cursor: pointer; border: 0}
