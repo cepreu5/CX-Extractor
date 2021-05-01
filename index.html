@@ -703,6 +703,7 @@ function InsDate() {
 		var d = new Date();
 		dt = d;
 		FormDate(d);
+		alert("1")
 	} else if (document.getElementById("res3").value == "Планирани") {
 		var dsplit=document.getElementById("res1").value.split(".");
 		if (dsplit[0].length<2) dsplit[0]='0' + dsplit[0];
@@ -719,7 +720,6 @@ function InsDate() {
 	else {
 		dt.setDate(dt.getDate() - 1);
 		FormDate(dt);
-		alert("1")
 	}
 }
 
