@@ -1,7 +1,7 @@
 :root {
-  --LblColor: grey;
-  --InpText: white;
-  --InpBgrd: black;
+  --LblColor: green;
+  --InpText: red;
+  --InpBgrd: blue;
   --TipColor: DarkOrange;
   --TipText: black;
 
