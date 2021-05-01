@@ -3,7 +3,7 @@
 fieldset {
   width: 330px; 
   background-color: var(--FormColor, #990000);
-  background-image: url('Bgrd.jpg');
+  background-image: url('0-Bgrd.jpg');
   background-repeat: repeat;
 }
 
@@ -11,7 +11,7 @@ fieldset {
 {
   background-color: var(--InpBgrd, white);
   color: var(--InpText, black);
-  background: url(FBgrd.jpg) repeat; 
+  background: url(0-FBgrd.jpg) repeat; 
 }
 
 input[type="text"] { /* calc display */
@@ -21,6 +21,5 @@ input[type="text"] { /* calc display */
   height: 60px;
   font-size:30px;
   padding: 15px;
-  background: url(FBgrd.jpg) repeat; 
+  background: url(0-FBgrd.jpg) repeat; 
 }
-
