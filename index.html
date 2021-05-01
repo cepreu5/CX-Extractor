@@ -700,12 +700,12 @@ function InsDate() {
 	}
 
 	if (document.getElementById("res1").value == "") {
-		//var d = new Date();
-		//dt = d;
-		//FormDate(d);
-		alert("1")
-		dt.setDate(dt.getDate() - 1);
-		FormDate(dt);
+		var d = new Date();
+		dt = d;
+		FormDate(d);
+		//alert("1")
+		//dt.setDate(dt.getDate() - 1);
+		//FormDate(dt);
 	} else if (document.getElementById("res3").value == "Планирани") {
 		var dsplit=document.getElementById("res1").value.split(".");
 		if (dsplit[0].length<2) dsplit[0]='0' + dsplit[0];
