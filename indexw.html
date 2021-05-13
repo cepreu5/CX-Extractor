@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="content-type" content="text/html; charset=Utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head> 
+<title>CX Extractor</title>
+<link rel="shortcut icon" type="image/png" href="Fav.png" />
+<link rel="stylesheet" href="Common.css" />
+<link rel="stylesheet" href="First.css" id="theme" />
+
+<style>
+    .spinner-3 {
+        width:20px;
+        height:20px;
+        border-radius:50%;
+        background:conic-gradient(#0000 10%,#25b09b);
+        -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
+        animation:s3 1s infinite linear;
+    }
+    @keyframes s3 {to{transform: rotate(1turn)}}
+
+    .spinner-4 {
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      padding:1px;
+      background:conic-gradient(#0000 10%,#f03355) content-box;
+      -webkit-mask:
+        repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+        radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 calc(100% - 8px));
+      -webkit-mask-composite: destination-in;
+      mask-composite: intersect;
+      animation:s4 1s infinite steps(10);
+    }
+    @keyframes s4 {to{transform: rotate(1turn)}}
+</style>
+
+<script type="text/javascript" src="app-config.txt"></script>
+<script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
+
+<!-- script src="../js/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+<script type="text/javascript">
+
+var Encrypted=true; // false uncomment crypto-js above and use the correct TableFilesEnc.txt
+
+var ReplaceF, // Replace Field calculated in getTempls and used in Extract
+		Z100=true, // zoom level
+		CalcFl=false,
+		LTempl=8, // elements in template (without optional replace field and selected sheet)
+		val="", // initial calc display value
+		SelectSheet=0, // selected sheet
+		AllTemplFlag=false, // don't get Auto templates	
+		OpenFrom = 'res2'; // calculator OpenFrom which field
+
+RegExp.quote = function(str) {
+     return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
+};
+
+function CheckAuto(F) {//alert(AllTemplFlag)
+	if (AllTemplFlag) {return true}
+	var i;
+	for (i=0; i<AutoT.length; i++) { 
+		if (F == AutoT[i+1]) {return false}
+		i=i+1;  
+	}
+	return true;
+}
+
+function NoAuto() { 
+	AllTemplFlag=!AllTemplFlag; //!AllTemplFlag; 
+	if (AllTemplFlag) { 
+		document.getElementById('No').style.display = "inline"; 
+		document.getElementById('Yes').style.display = "none"; 
+	} 
+	else { 
+		document.getElementById('Yes').style.display = "inline"; 
+		document.getElementById('No').style.display = "none";
+		AutoTempl(); 
+	} 
+	if (AllTemplFlag) document.getElementById("Info").innerHTML=""; //<br>
+	getTempls(); 
+}
+
+function trueFalse(part, p1, p2, p3, p4, p5, p6) {
+	document.getElementById("sep"+part).hidden=p1;
+	if (p1) document.getElementById("sep"+part).value="";
+	document.getElementById("lab"+part).hidden=p2;
+	document.getElementById("lab"+part+"1").hidden=p3;
+	document.getElementById("lab"+part+"2").hidden=p4;
+	document.getElementById("count"+part).hidden=p5;
+	if (p5) document.getElementById("count"+part).value="1";
+	document.getElementById("lab"+part+"3").hidden=p6;
+	document.getElementById("Exp"+part).hidden=p6;
+	if (p6) document.getElementById("Exp"+part).checked=false;
+}
+
+function Combo2(part, types, num, septxt) {
+	document.getElementById("Types"+part).options[types-1].selected=true;
+	document.getElementById("count"+part).value=num;
+	switch(types) {
+		case "1":
+			document.getElementById("Exp"+part).checked=(septxt=="1");
+			trueFalse(part, true, true, false, true, false, false); 
+			break;
+		case "2":	trueFalse(part, true, true, false, true, false, true); break;
+		case "3":
+			document.getElementById("sep"+part).value=septxt;
+			trueFalse(part, false, false, true, false, false, true);
+			break;
+		case "4":	trueFalse(part, true, true, false, true, false, true); break;
+		case "5": 
+			trueFalse(part, true, true, true, true, true, true);
+		  document.getElementById("res"+part).value="";
+		break;
+		case "6":	document.getElementById("sep"+part).value=septxt;
+			trueFalse(part, false, false, true, false, false, true);
+	}
+}
+	
+function createOpt(f, o) {
+	var z, t;
+	z = document.createElement("option");
+	z.setAttribute("value", f);
+	t = document.createTextNode(o);
+	z.appendChild(t);
+	document.getElementById("Files").appendChild(z);
+}
+
+function createFiles() {
+	var i;
+	for (i=1; i<=Files.length; i++) {
+		createOpt(Files[i-1], Files[i].substring(0, 18));
+		i++;
+	}
+}
+
+function createFilesDec(passphrase) {
+
+	function decrypt (encryptedMsg, pass) {
+			var keySize = 256;
+			var iterations = 1000;
+			var salt = CryptoJS.enc.Hex.parse(encryptedMsg.substr(0, 32));
+			var iv = CryptoJS.enc.Hex.parse(encryptedMsg.substr(32, 32))
+			var encrypted = encryptedMsg.substring(64);
+			var key = CryptoJS.PBKDF2(pass, salt, {
+					keySize: keySize/32,
+					iterations: iterations
+			});
+			var decrypted = CryptoJS.AES.decrypt(encrypted, key, {
+					iv: iv,
+					padding: CryptoJS.pad.Pkcs7,
+					mode: CryptoJS.mode.CBC
+			}).toString(CryptoJS.enc.Utf8);
+			return decrypted;
+	}
+
+	var i;
+	var
+		encryptedMsg,
+		encryptedHMAC,
+		encryptedHTML,
+		decryptedHMAC;
+	for (i=1; i<=Files.length; i++) {
+		encryptedMsg = Files[i-1],
+		encryptedHMAC = encryptedMsg.substring(0, 64),
+		encryptedHTML = encryptedMsg.substring(64),
+		decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
+		if (decryptedHMAC !== encryptedHMAC) {
+				createOpt("", "Грешна парола");
+				document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
+		} else {
+			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
+			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
+		}
+		i++;
+	}
+}
+
+function createCats() {
+
+	function createOpt(n) {
+		var z, t;
+		z = document.createElement("option");
+		z.setAttribute("value", n);
+		t = document.createTextNode(n);
+		z.appendChild(t);
+		document.getElementById("Cats").appendChild(z);
+	}
+
+	var i;
+	for (i=1; i<=Cats.length; i++) {
+		createOpt(Cats[i-1]);
+	}
+}
+
+function createSubCat(SC) {
+
+	function clearOpts() {
+		var i;
+		var select = document.getElementById("SubCats");
+		var length = select.options.length;
+		if (length==1) {return}
+		for (i = length-1; i>0; i--) {select.options[i] = null}
+	}
+
+	function createOpt(n) {
+		var z = document.createElement("option");
+		z.setAttribute("value", n);
+		var t = document.createTextNode(n);
+		z.appendChild(t);
+		document.getElementById("SubCats").appendChild(z);
+	}
+
+	var a, l, i;
+	if (SC=="SubCat0") {clearOpts(); document.getElementById("SubCats").size= 1; return;}
+	eval ("l="+SC+".length");
+	document.getElementById("SubCats").options[0].selected=true;
+	clearOpts();
+	for (i=1; i<l+1; i++) {
+		eval("a="+SC+"[i-1]");
+		createOpt(a);
+	}
+}
+
+function NoCat() {
+	document.getElementById("Cats").options[0].selected=true;
+	document.getElementById("SubCats").options[0].selected=true;
+}
+
+function createSels() { // Extract selection field
+
+	function createOpt(v, n, s) {
+		var z, t;
+		z = document.createElement("option");
+		z.setAttribute("value", v);
+		if (v=="5") {z.setAttribute("selected", true);}
+		t = document.createTextNode(n);
+		z.appendChild(t);
+		document.getElementById("Types"+s).appendChild(z);
+	}
+		
+	function createInp(s, i, sz) {
+		var x;
+		x = document.createElement("span");
+		x.setAttribute("id", "TSpan"+s+i);
+		x.setAttribute("class", "tooltip");
+		document.getElementById("Sels").appendChild(x);
+		if (i=="count") {
+			var I1='<input type="number" class="inputMessage" ID="'+i+s+
+				'" oninput="Extract();ChangeTip(\'Tip'+s+i+
+				'\', '+s+');" value="1" style="width: '+sz+
+				'em" hidden></input>';
+			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
+			  '">.</span>';  //alert(I1+I2)
+			document.getElementById("TSpan"+s+i).innerHTML=I1+I2;
+		}
+		else {
+			var I1='<input ID="'+i+s+
+				'" class="inputMessage" oninput="Extract();ChangeTip(\'Tip'+s+i+'\', '+s+
+				');" value="" size="'+sz+'" hidden></input>';
+			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
+			  '">.</span>';  //alert(I1+I2)
+			document.getElementById("TSpan"+s+i).innerHTML=I1+I2;
+		}
+		document.getElementById("Sels").appendChild(x);
+	}
+
+	function createChk(i) {
+		var x, where;
+		x = document.createElement("input");
+		x.type = "checkbox";
+		x.setAttribute("id", "Exp"+i);
+		x.setAttribute("style", "vertical-align: sub;");
+		x.setAttribute("onchange", "Extract()");
+		x.setAttribute("hidden", true);
+		where = document.getElementById('Sels');
+		where.appendChild(x);
+	}
+
+	function createLbl(s, n, t) {
+		var x;
+		x = document.createElement("LABEL");
+		x.setAttribute("id", "lab"+s+n);
+		x.setAttribute("hidden", true);
+		x.innerHTML=t;
+		document.getElementById("Sels").appendChild(x);
+	}
+
+	var x, i;
+	for (i=1; i<=6; i++) {
+		x = document.createElement("LABEL");
+		//x.setAttribute("id", "L"+i);
+		x.innerHTML=i+":";
+		document.getElementById("Sels").appendChild(x);
+		x = document.createElement("SELECT");
+		x.setAttribute("id", "Types"+i);
+		x.setAttribute("onChange", "Combo("+i+")");
+		x.setAttribute("class", "inputMessage");
+		x.setAttribute("style", "height: 23px;");
+		document.getElementById("Sels").appendChild(x);
+			createOpt("1", "Сума", i);
+			createOpt("2", "ДатаЧас", i);
+			createOpt("3", "Текст", i);
+			createOpt("4", "Число", i);
+			createOpt("5", "Празно", i);
+			createOpt("6", "RegEx", i);
+		document.getElementById("Sels").appendChild(x);
+		createLbl(i, "1", " Поредност ");
+		createLbl(i, "2", " Брой ");
+		createInp(i, "count", 3)
+		createLbl(i, "", " След ");
+		createInp(i, "sep", 10);
+		createLbl(i, "3", "&nbsp Разход");
+		createChk(i);
+
+		var brElem = document.createElement("BR");
+		document.getElementById("Sels").appendChild(brElem);
+	}
+	document.getElementById("TemplFld").hidden=true;
+	document.getElementById("NoteFld").hidden=true;
+	document.getElementById("CalcSp").hidden=true; //
+}
+
+function MakeTempl() {
+	var Tmpl='';
+	var i, L, C, S; 
+	document.getElementById("res").value="";
+	if (document.getElementById("TemplFld").hidden) {
+		document.getElementById("TemplFld").hidden = false;
+	}
+	else { document.getElementById("TemplFld").hidden = true;
+		return;
+	}
+	for (i=1; i<=(LTempl-2); i++) {
+		S='';
+		Tmpl=Tmpl+i+'-';
+		switch (document.getElementById("Types"+i).value) {
+			case "1":	L='С'; S="0"
+				if (document.getElementById("Exp"+i).checked) {S="1"};
+				break;
+			case "2": L='Д'; break;
+			case "3": L='Т';
+				S=document.getElementById("sep"+i).value;
+				break;
+			case "4": L='Ч'; break;
+			case "5": L='П'; break;
+			case "6": L='R';
+				S=document.getElementById("sep"+i).value;
+				S=RegExp.quote(S);
+		}
+		C='';
+		if (document.getElementById("Types"+i).value != 5) {
+			C=document.getElementById("count"+i).value;
+		}
+		Tmpl=Tmpl+L+';'+C;
+		if (S != '') {Tmpl=Tmpl+';'+S;}
+		Tmpl=Tmpl+'#';
+	}
+	Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
+		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
+		+document.getElementById("Files").selectedIndex;
+	document.getElementById("CSV").value=
+	document.getElementById("res1").value + ", " + // \t
+	document.getElementById("res2").value + ", " +
+	document.getElementById("res3").value + ", " +
+	document.getElementById("res4").value + ", " +
+	document.getElementById("res5").value + ", " +
+	document.getElementById("res6").value + ", " +
+	document.getElementById("Cats").value + ", " +
+	document.getElementById("SubCats").value;
+	document.getElementById("res").value='" ", "'+Tmpl+'",';
+	document.getElementById("res").select();
+	var CopyRes = document.execCommand('copy');
+}
+
+function SelTempl(str, clear) {
+	if (clear) {document.getElementById("Info").innerHTML=""} //<br>
+	var result, fsplit, first, second, sep, I;
+	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
+	if (str[0] == '"') { // delete "s
+		result=str.split('"');
+		str=result[1];
+	}	
+	result=str.split("#");
+	ReplaceF=result[LTempl];
+	if (typeof ReplaceF === "undefined") { ReplaceF=0; }
+	SelectSheet=result[LTempl+1];
+	if (typeof SelectSheet === "undefined") { SelectSheet=0; }
+	document.getElementById("Files").options.selectedIndex=SelectSheet;
+	SelFile();
+	for (I=0; I<LTempl; I++) {
+		first=result[I];
+			if (first.match(/;/g)==null) {return}
+			fsplit=first.split(";");
+		if (fsplit.length>2) {sep=fsplit[2]}
+			second=fsplit[1];//alert(second);
+		if (typeof sep === "undefined") {sep="";}
+		switch(first.slice(2,3)) {
+			case "С": Combo2(I+1, "1", second, sep); break;
+			case "Д": Combo2(I+1, "2", second, sep); break;
+			case "Т": Combo2(I+1, "3", second, sep); break;
+			case "Ч": Combo2(I+1, "4", second, sep); break;
+			case "П": Combo2(I+1, "5", second, sep); break;
+			case "R": Combo2(I+1, "6", second, sep); break;
+			//case "К": document.getElementById("Cats").options.selectedIndex=second; break;
+			case "К": document.getElementById("Cats").value=second;	break;
+			case "О":
+				createSubCat("SubCat"+document.getElementById("Cats").options.selectedIndex);
+				document.getElementById("SubCats").value=second;
+		}
+	}
+}
+
+function getTempls() {
+	var i;
+	var htmlString = '<select id="Templates" style="width: 133px;" class="inputMessage" '+
+		'onChange="SelTempl(' + 
+		"document.getElementById('Templates').value" +
+		', true); Extract()">'+
+		'<option value="1-П;1#2-П;1#3-П;1#4-П;1#5-П;1#6-П;1#7-К;#8-О;">' +
+		'Изберете шаблон</option>';
+	ReplaceF=3;
+	for (i=0; i<Templates.length; i++) {
+		if (CheckAuto(Templates[i])) { //exclude Auto templates
+			htmlString = htmlString + 
+				'<option value="'+Templates[i+1]+'">'+Templates[i]+'</option>';
+		}	
+		i=i+1;  
+	}
+	htmlString = htmlString + '</select>';
+	document.getElementById('Sel').innerHTML = htmlString;
+}
+
+function Replace(F) { 
+	var i;
+	if (F > 0) {
+		var FTR=document.getElementById('res'+F).value;
+		for (i=0; i<Replaces.length; i++) { 
+			if (FTR == Replaces[i]) {document.getElementById('res'+F).value=Replaces[i+1];}
+			i=i+1;  
+		}
+	}	
+}
+
+function Extract() {
+	var text=document.getElementById("MsgText").value;
+	text=text + ' ';	// to process dd.dd at end
+	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTempl, WordTmpF;
+
+	function Process(part, pattern, c) {
+		re = new RegExp(pattern,"g");
+		work=text.match(re);
+		if ((work!=null) && (work[c]!=undefined) && (c<=work.length)) {
+			document.getElementById("res"+part).value=work[c];
+		}
+	}
+
+	for (part=1; part<=6; part++) {
+		sep=document.getElementById("sep"+part).value;
+		count=document.getElementById("count"+part).value;
+		switch (document.getElementById("Types"+part).value) {
+			case "1":
+				pattern = "(\-|[0-9])+(\\.|\\,)([0-9]{1,2})( |\n|\t)"; 
+				re = new RegExp(pattern,"g");
+				var Sum=text.match(re);
+				if (Sum!=null) {Sum=text.match(re)[count-1]}
+				Exp=document.getElementById("Exp"+part).checked; //alert(Exp);
+				if (Sum!=undefined) {
+					if (Exp) Sum="-"+Sum; // alert(Sum);
+					// Sum=Sum.replace(",", ".");
+					document.getElementById("res"+part).value=Sum.trim();
+				}	
+				break;
+			case "2":
+				pattern = "[0-9]+(\\.|\\-|:|/\)[0-9]+(\\.|\\-|:|/\)[0-9]+";
+				Process(part, pattern, count-1);
+				break;
+			case "3": // text
+				if (sep=="") break;
+				document.getElementById("res"+part).value="";
+				T='', WordTempl=''; // remove templ chars
+				var ii, Yes="^";
+				WordTmpF = (sep.substr(-1)==Yes);
+				if (WordTmpF) { // remove - ^ chars and store them in WordTempl
+					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
+						WordTempl=sep.substr(-1)+WordTempl;
+						sep=sep.substr(0,sep.length-1);
+					}
+				}
+				Incl = (sep.substr(-1)=="+");
+				if (sep.substr(-1)==">") {
+					pattern = "(?<=([A-z,0-9,А-я,\,\.\:]+\s){0})([A-z,0-9,А-я,\,\.\:]+)";
+					Process(part, pattern, count-1);
+					break;
+				}
+				if (Incl) sep=sep.substr(0,sep.length-1); // cut +    alert(sep)
+				PutTxt = (sep.substr(-1)=="!");
+				if (PutTxt) {document.getElementById("res"+part).value= // cut !
+					sep.substr(0,sep.length-1);
+				} else {	
+					pattern = sep.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + 
+							"\\s+(\\S+(?:\\s+\\S+){0," + (count-1) + "})";
+					re = new RegExp(pattern,"gi"); //alert(text+sep)
+					while (m=re.exec(text)) {T=T+m[1];}
+					re = new RegExp(sep,"gi");
+					if (Incl && (text.match(re)!==null)) T=sep + " " + T;
+					if (T.substr(-1)==".") {T=T.substr(0,T.length-1);}
+					TS=T.split(' '), TT=""; // strip extra spaces
+					for (ii=0; ii<TS.length; ii++) if (TS[ii]!="") TT=TT+" "+TS[ii];
+					TT=TT.trim();
+					if (WordTmpF) {
+						TS=TT.split(' '), TT=""; // strip extra words
+						if (Incl) WordTempl=Yes+WordTempl;
+						for (ii=0; ii<TS.length; ii++) if (WordTempl[ii]==Yes) TT=TT+" "+TS[ii];
+					}	
+					document.getElementById("res"+part).value=TT.trim();//.match(/[\w,\s,\.,\*:]+[^\.]/);
+				}
+				break;
+			case "4":
+				pattern = "[0-9]+";
+				Process(part, pattern, count-1);
+				break;
+			case "5":
+				document.getElementById("res"+part).value="";
+				break;
+			case "6":
+				if (sep=="") {break}
+				pattern = document.getElementById("sep"+part).value;
+				var c=document.getElementById("count"+part).value-1;
+				Process(part, pattern, c);
+		}
+	}
+	Replace(ReplaceF);
+	document.getElementById("Note").value="";
+	if (document.getElementById("res1").value == "") InsDate(); 
+}
+
+function Combo(part) {
+	switch(document.getElementById("Types"+part).value) {
+		case "1": trueFalse(part, true, true, false, true, false, false); break;
+		case "2": trueFalse(part, true, true, false, true, false, true); break;
+		case "3": trueFalse(part, false, false, true, false, false, true); break;
+		case "4": trueFalse(part, true, true, false, true, false, true); break;
+		case "5": trueFalse(part, true, true, true, true, true, true); break;
+		case "6": trueFalse(part, false, false, true, false, false, true);
+		  document.getElementById("res"+part).value="";
+	}
+	Extract();
+}
+
+function AutoTempl() {
+	var i=0, j=0;
+	if (!AllTemplFlag) {
+		var text=document.getElementById("MsgText").value;
+		for (i=1; i<=AutoT.length; i++) {
+			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
+			if (text.match(re)) {//alert(text.match(re))
+				for (j=0; j<Templates.length; j++) {
+					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
+						document.getElementById("Info").innerHTML=Templates[j];
+						ClearDef();
+						SelTempl(Templates[j+1], false);
+						Extract();
+					}
+					j++;
+				}
+			}
+			i++;
+		}
+	}
+}
+
+function spinImage(ImgID) {
+	let imageToSpin = document.getElementById(ImgID);
+	setTimeout(function() {
+		imageToSpin.classList.toggle('rotated');
+	},1500);				
+	imageToSpin.classList.toggle('rotated');
+}
+
+function Normal() {
+	spinImage("NormBtn");
+	var text=document.getElementById("MsgText").value;
+	text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
+	text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
+	text=text.replace(/([\d])\,([\d\s])/g,'$1.$2');			// dd,dd dd.dd
+	text=text.replace(/ ([\d]+) ([\d])/g,' $1$2');			// d ddd dddd
+	text=text.replace(/ (\d\d)\:(\d\d) /g,' $1:$2:00 ');			// dd:dd dd:dd:00
+	text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
+	text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
+	text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
+	text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
+	text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
+	text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
+	text=text.replace(/([^\d]),([^\d\s])/g,'$1, $2');		// aaa,aaa aaa, aaa
+	text=text.replace(/([\d])\.([^\d\s])/g,'$1. $2');		// 111.aaa 111. aaa
+	//text=text.replace(/([^\d])\.([\d\s])/g,'$1. $2');		// aaa.111 aaa. 111
+	text=text.replace(/([\d])\,([^\d\s])/g,'$1, $2');		// 111,aaa 111, aaa
+	//text=text.replace(/([^\d])\,([\d\s])/g,'$1, $2');		// aaa,111 aaa, 111
+	text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
+	//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
+	document.getElementById("MsgText").value=text;
+	Extract();
+}
+
+function dataListOpt(Field, List) {
+	var i, z, t;
+	for (i=0; i<Field.length; i++) {
+		z = document.createElement("option");
+		t = document.createTextNode(Field[i]);
+		z.appendChild(t);
+		document.getElementById(List).appendChild(z);
+	}
+}
+
+function showDiv() {
+	CalcFl=true;
+	document.getElementById("CalcSp").hidden=true;
+	document.getElementById('ZoomBtn2').style.display = "none";
+	if (document.getElementById('Suc').style.display == "block") {
+		document.getElementById('Suc').style.display = "none";
+	}
+	document.getElementById("TemplFld").hidden = true;
+	document.getElementById('loadingGif').style.display = "block";
+}
+
+function showSuc() {
+	document.getElementById('loadingGif').style.display = "none";
+	document.getElementById('ZoomBtn2').style.display = "none";
+	document.getElementById('Suc').style.display = "block";
+	setTimeout(function() {
+    	document.getElementById('Suc').style.display = "none";
+  	},7000);  
+}
+
+function UseTempl() {
+	var Templ=document.getElementById("res").value;
+	if (Templ=="") {return}
+	SelTempl(Templ, true);
+	Extract();
+}
+
+function SelFile() { // where to save - set in SelFile, default: 0-PFM
+	scriptURL=document.getElementById('Files').value;
+}
+
+function ShowNote() {
+	if (document.getElementById("NoteFld").hidden) {
+		document.getElementById("NoteFld").hidden = false;
+	}
+	else { document.getElementById("NoteFld").hidden = true;
+	}
+}
+
+function ShowLog() {
+	if (document.getElementById("Log").hidden) {
+		document.getElementById("Log").hidden = false;
+		document.getElementById("MsgText").hidden = true;
+	}
+	else { 
+		document.getElementById("Log").hidden = true;
+		document.getElementById("MsgText").hidden = false;
+	}
+}
+
+function ExtClick() {
+	spinImage('ExtBtn');
+	if (document.getElementById('TemplFld').hidden) Extract()
+	else UseTempl()
+}
+
+function doSelectAll() {
+	document.getElementById("MsgText").select();
+	Clp = document.getElementById("MsgText").value;
+	document.execCommand('copy');
+}
+
+function CopyCSV() {
+	document.getElementById("CSV").select();
+	Clp = document.getElementById("CSV").value;
+	document.execCommand('copy');
+}
+
+function ClearTextArea() {
+	if (document.getElementById("Log").hidden) {
+		document.getElementById("MsgText").value="";
+		document.getElementById("Templates").options[0].selected=true;
+		SelTempl(document.getElementById('Templates').value, true); 
+		Extract();
+		document.getElementById("MsgText").focus();
+	}
+	else document.getElementById("Log").value="";
+}
+
+function ClearFld(FldID) {
+	document.getElementById(FldID).value="";
+}
+
+function ClearDef() {
+	if (!(document.getElementById("Templates").options[0]==undefined)) {
+		document.getElementById("Templates").options[0].selected=true;
+		SelTempl(document.getElementById("Templates").options[0].value, false);
+		Extract();
+	}
+}
+
+function ChangeTip(s, i) {//alert(s)
+	var T=document.getElementById("res"+i).value;
+	if (T=="") {document.getElementById(s).innerHTML="&nbsp";}
+	else	{document.getElementById(s).innerHTML=T;}
+	document.getElementById(s).style="visibility: visible";
+}
+
+function NowHide(obj) {
+	obj.style="visibility: hidden";
+}
+
+var dt;
+function InsDate() {
+	
+	function FormDate(d) {
+	var dd = d.getDate();
+		if (dd < 10) dd = '0' + dd;
+		var m = d.getMonth() + 1;
+		if (m < 10) m = '0' + m;
+		document.getElementById("res1").value = dd + "." + m + "." + d.getFullYear();
+	}
+
+	if (document.getElementById("res1").value == "") {
+		var d = new Date();
+		dt = d;
+		FormDate(d);
+		//alert("1")
+		//dt.setDate(dt.getDate() - 1);
+		//FormDate(dt);
+	} else if (document.getElementById("res3").value == "Планирани") {
+		var dsplit=document.getElementById("res1").value.split(".");
+		if (dsplit[0].length<2) dsplit[0]='0' + dsplit[0];
+		if (dsplit[1].length<2) dsplit[1]='0' + dsplit[1];
+		if (dsplit[2].length==2) dsplit[2]='20' + dsplit[2];
+		var devent=dsplit[2]+dsplit[1]+dsplit[0];
+		devent=devent+"/"+(+devent+1); // next date - new Date(86400000 + +new Date())
+		window.open("https://www.google.com/calendar/render?action=TEMPLATE&text="+
+		encodeURI(document.getElementById("res4").value)+" "+document.getElementById("res2").value+
+		" ("+document.getElementById("res5").value+")"+
+		"&dates="+devent+"&details="
+		);
+	}
+	else {
+		dt.setDate(dt.getDate() - 1);
+		FormDate(dt);
+	}
+}
+
+function CZoom () {
+	Z100=!Z100;
+	if (Z100) {document.body.style.zoom=ZoomL2;
+		document.getElementById("ZoomBtn").src="Zoom2.png";
+		document.getElementById('ZoomBtn2').style.display = "block";
+	}
+	else {document.body.style.zoom=ZoomL1;
+		document.getElementById("ZoomBtn").src="Zoom.png";
+		document.getElementById('ZoomBtn2').style.display = "none";
+	}
+}
+
+function AddCfg() {
+	document.getElementById('Author').innerHTML=
+		document.getElementById('Author').innerHTML+CfgDate;
+}
+
+var BArea;
+function switchSheet() {
+  let theme = document.getElementById("theme");
+  if (theme.getAttribute("href") == "First.css") {
+		BArea = document.getElementById("TRow").innerHTML;
+    theme.href = "Second.css";
+    document.getElementById("Cell1").innerHTML=
+		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
+    document.getElementById("Cell2").innerHTML=
+		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+    document.getElementById("Cell3").innerHTML=
+		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowNote()">&nbsp';
+    document.getElementById("Cell4").innerHTML=
+		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+  } else {
+    theme.href = "First.css";
+    document.getElementById("TRow").innerHTML=BArea;
+  }
+}
+
+function setColor() {
+	var SC=document.getElementById("colorPicker").value;
+	var root = document.documentElement;
+  root.style.setProperty(document.getElementById("Colors").value, SC);
+  document.getElementById("Log").value+=
+    document.getElementById("Colors").value+": "+SC+"\n";
+  document.getElementById("Colors").selectedIndex=0;
+}
+
+function Calc (SF) {
+	document.getElementById("CalcSp").hidden=
+		!document.getElementById("CalcSp").hidden;
+	CalcFl=!CalcFl;
+	if (CalcFl)	{
+		document.getElementById("CalcSp").scrollIntoView();
+		// alert(obj.value);
+		if (document.getElementById("result").value != "") dis (';');
+		dis (document.getElementById('res2').value); // SF
+	}
+	else {document.getElementById("Main").scrollIntoView(); solve()}
+}
+
+function ShowColors() {
+	if (document.getElementById("colorPicker").hidden) {
+		document.getElementById("colorPicker").hidden = false;
+		document.getElementById("Colors").hidden = false;
+	} else {
+		document.getElementById("colorPicker").hidden = true;
+		document.getElementById("Colors").hidden = true;
+	}
+}
+
+function detectSwipe(id, func) {
+	const swipe_det = {sX: 0, sY: 0, eX: 0, eY: 0}
+	const directions = Object.freeze({
+		UP: 'd',
+		DOWN: 'u',
+		RIGHT: 'r',
+		LEFT: 'l'
+	})
+	// Tune deltaMin according to your needs. Near 0 it will almost always trigger, 
+	// with a big value it can never trigger
+	const deltaMin = 90
+	let direction = null
+	const el = document.getElementById(id)
+	el.addEventListener('touchstart', function(e) {
+		const t = e.touches[0]
+		swipe_det.sX = t.screenX
+		swipe_det.sY = t.screenY
+	}, false)
+	el.addEventListener('touchmove', function(e) {
+		// Prevent default will stop user from scrolling, use with care
+		// e.preventDefault();
+		const t = e.touches[0]
+		swipe_det.eX = t.screenX
+		swipe_det.eY = t.screenY
+	}, false)
+	el.addEventListener('touchend', function(e) {
+		const deltaX = swipe_det.eX - swipe_det.sX
+		const deltaY = swipe_det.eY - swipe_det.sY
+		if (deltaX ** 2 + deltaY ** 2 < deltaMin ** 2) return // Min swipe distance
+		if (deltaY === 0 || Math.abs(deltaX / deltaY) > 1) // horizontal
+			direction = deltaX > 0 ? directions.RIGHT : directions.LEFT
+		else // vertical
+			direction = deltaY > 0 ? directions.UP : directions.DOWN
+		if (direction && typeof func === 'function') func(id, direction)
+		direction = null
+	}, false)
+}
+
+function zoomfunction(el, d) {
+	if (d=="r") CZoom();
+}
+
+// function hisfunction(el, d) {
+	// if (d=="r") doSelectAll();
+	// if (d=="d") ClearHist();
+	// if (d=="l") Normal();
+// }
+
+//function myPaste() {
+//	navigator.clipboard.readText()
+//	.then(text => {
+//		document.getElementById("Field2").innerHTML = text;
+//	alert ('text: '+text);
+//	})
+//	.catch(err => {
+//		document.getElementById("MsgText").innerHTML = 'Failed to read clipboard contents: '+err;
+//	alert ('err');
+//	});
+//}
+
+function init() {
+	getTempls();
+	createSels();
+	//createCats();
+	dataListOpt(Notes, "combo-options");
+	dataListOpt(Accs, "acc-options");
+	ClearTextArea();
+	// document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
+	// document.getElementById("MsgText").select()
+	AddCfg();
+	document.getElementById('Yes').style.display = "inline";
+	var ww=window.innerWidth;
+	document.getElementById("Info").innerHTML="SW: "+ww;
+	if (ww<501) {
+		document.getElementById("Top").hidden = false;
+		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
+		//document.getElementById("Bottom").hidden = true;
+		document.getElementById("CatsTop").hidden = false;
+		//document.getElementById("CatsBottom").hidden = true;
+		document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
+	}
+	else {
+		//document.getElementById("Top").hidden = true;
+		document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
+		document.getElementById("Bottom").hidden = false;
+		//document.getElementById("CatsTop").hidden = false;
+		document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
+		//document.getElementById("CatsTop").removeChild(document.getElementById("Cats"));
+		//document.getElementById("CatsTop").removeChild(document.getElementById("SubCats"));
+		document.getElementById("CatsBottom").hidden = false;
+	}
+	createCats();
+	document.getElementById("Log").value="";
+	document.getElementById("PwdFld").hidden = true;
+	CZoom ();
+	detectSwipe('MsgText', zoomfunction);
+	if (Encrypted) {
+		document.getElementById("PwdFld").hidden = false;
+		document.getElementById("Password").focus();
+	} else {
+		createFiles();
+		SelFile();
+	}
+	//myPaste();
+}	
+
+function init2() {
+	createFilesDec(document.getElementById("Password").value);
+	SelFile();
+	document.getElementById("PwdFld").hidden = true;
+}	
+
+</script>
+
+<script> 
+// Calc
+	//function that display value 
+	function dis(val) {
+		document.getElementById("result").value+=val
+	} 
+		
+	//function that evaluates the digit and return result 
+	function solve() {
+		let x = document.getElementById("result").value;
+		let y = eval(x).toFixed(2);
+		if (y!=undefined && y!=Infinity) {
+			document.getElementById("result").value = y;
+			document.getElementById(OpenFrom).value = y;
+		}
+		if (x == "") document.getElementById(OpenFrom).value = "";
+	} 
+		
+	//function that clear the display 
+	function clr() {
+		document.getElementById("result").value = "";
+	} 
+</script> 
+
+</head>
+
+<body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
+	onload="init()">
+	<div class="parent">
+	<fieldset ID="Main" class="child">
+
+		<div ID="PwdFld">
+			<input id="Password" type="password" style="width: 158px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
+			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'>
+			<script>
+			var input = document.getElementById("Password");
+			input.addEventListener("keyup", function(event) {
+				if (event.keyCode === 13) {
+					event.preventDefault();
+					document.getElementById("Suc2").click();
+				}
+			});
+			</script>
+		</div>
+
+		<SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
+		</SELECT>
+		&nbsp;
+		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
+		&nbsp;&nbsp;
+		<a><img src="Copy.png" width="20px" onclick="doSelectAll()" title="Copy"></a>
+		<!-- <script>
+		document.getElementById("Pst").addEventListener('click', async e => {
+			let text;
+			if (navigator.clipboard) {
+				text = await navigator.clipboard.readText()
+			}
+			else {
+				text = e.clipboardData.getData('text/plain');
+			}
+			document.getElementById("MsgText").value=text;
+			AutoTempl();
+		});
+		</script -->
+		
+		&nbsp;&nbsp;
+		<a><img src="Palette.png" width="15px" style="vertical-align: super" onclick="switchSheet()" title="Тема"></a>
+		&nbsp;&nbsp;
+		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
+		&nbsp;
+		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom()" title="Увеличи"></a>
+		<br>
+		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
+			onFocus="AutoTempl()" onInput="AutoTempl()">
+		</textarea>
+		<textarea ID="Log" rows="5" style="width: 320px" hidden>
+		</textarea>
+		<br>
+		Шаблони 
+		<span ID="Sel"></span>&nbsp;Авто
+		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
+			onclick="NoAuto()" title="Авто"></a> 
+		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
+			onclick="NoAuto()" title="Авто"></a> 
+		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
+			align="center" title="Нормализация"></a><br>
+		<span ID="Info"></span>
+		<br>
+		<span ID="Sels"></span>
+		<br>
+		
+		<!-- Calc -->
+		<div style="margin-left: 1px; text-align: center;">
+		<span ID="CalcSp"><br>
+			<table border="0" width="90%"> 
+				<tr> 
+					<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
+					<!-- clr() function will call clr to clear all value -->
+					<td><input type="button" class="cbutton" value="C" onclick="clr()"/> </td> 
+				</tr> 
+				<tr> 
+					<!-- create button and assign value to each button -->
+					<!-- dis("1") will call function dis to display value -->
+					<td><input type="button" class="cbutton" value="1" onclick="dis('1')"/> </td> 
+					<td><input type="button" class="cbutton" value="2" onclick="dis('2')"/> </td> 
+					<td><input type="button" class="cbutton" value="3" onclick="dis('3')"/> </td> 
+					<td><input type="button" class="cbutton" value="/" onclick="dis('/')"/> </td> 
+				</tr> 
+				<tr> 
+					<td><input type="button" class="cbutton" value="4" onclick="dis('4')"/> </td> 
+					<td><input type="button" class="cbutton" value="5" onclick="dis('5')"/> </td> 
+					<td><input type="button" class="cbutton" value="6" onclick="dis('6')"/> </td> 
+					<td><input type="button" class="cbutton" value="-" onclick="dis('-')"/> </td> 
+				</tr> 
+				<tr> 
+					<td><input type="button" class="cbutton" value="7" onclick="dis('7')"/> </td> 
+					<td><input type="button" class="cbutton" value="8" onclick="dis('8')"/> </td> 
+					<td><input type="button" class="cbutton" value="9" onclick="dis('9')"/> </td> 
+					<td><input type="button" class="cbutton" value="+" onclick="dis('+')"/> </td> 
+				</tr> 
+				<tr> 
+					<td><input type="button" class="cbutton" value="." onclick="dis('.')"/> </td> 
+					<td><input type="button" class="cbutton" value="0" onclick="dis('0')"/> </td> 
+					<!-- solve function call function solve to evaluate value -->
+					<td><input type="button" class="cbutton" value="=" onclick="solve()"/> </td> 
+					<td><input type="button" class="cbutton" value="*" onclick="dis('*')"/> </td> 
+				</tr> 
+			</table>
+			<br>
+		</span>
+		</div>
+
+		<form name="submit-to-google-sheet" onsubmit="return false;">
+			<table ID="Top" hidden><tr ID="TRow">
+				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowNote()" 
+					title="Бележка"></td>
+				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+					title="Шаблон">
+				</td>
+				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
+					onclick="ExtClick()">
+				</td>
+				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
+				<td><div class="spinner-4" id="loadingGif" style="display:none"></div>
+					<!-- img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
+						onclick='style="display: none"'-->
+					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
+						onclick='style="display: none"'>
+					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
+						style="display:none" title="Намали"></a>
+				</td></tr>
+			</table>
+			<span ID="CatsTop" hidden>
+				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
+				onChange="createSubCat('SubCat'+this.selectedIndex)">
+				<option value="" selected>Категория</option>
+			</SELECT>
+			<img src="Remove.png" width="30px" onclick="NoCat()"
+					align="center" title="Изтриване">
+			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
+				<option value="" selected>Подкатегория</option>
+			</SELECT>
+			<img src="Remove.png" width="30px" title="Изтриване" align="center"
+				 onclick="NoCat()">
+			</span>
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
+			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
+         		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
+				ID=res2 value="">
+			<img src="Calculator.png" width="30px" align="center" title="Калкулатор"
+        		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
+				list="acc-options">
+				<datalist id="acc-options">
+				</datalist>
+			<img src="Remove.png" width="30px" onclick="ClearFld('res3')"
+					align="center" title="Изтриване">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field4" ID=res4 value="">
+				<img src="Remove.png" width="30px" onclick="ClearFld('res4')"
+					align="center" title="Изтриване">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 
+				value="">
+				<img src="Remove.png" width="30px" onclick="ClearFld('res5')"
+					align="center" title="Изтриване">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 
+				value="">
+				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
+					align="center" title="Изтриване">
+			<span ID="CatsBottom">
+				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
+				onChange="createSubCat('SubCat'+this.selectedIndex)">
+				<option value="" selected>Категория</option>
+			</SELECT>
+			<img src="Remove.png" width="30px" onclick="NoCat()"
+					align="center" title="Изтриване">
+			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
+				<option value="" selected>Подкатегория</option>
+			</SELECT>
+			<img src="Remove.png" width="30px" title="Изтриване" align="center"
+				 onclick="NoCat()">
+			</span>
+			<span ID="NoteFld">
+				Бележка: 
+				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
+					list="combo-options" value="">
+				<datalist class="inputMessage" id="combo-options">
+				</datalist>
+				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
+					align="center" title="Изтриване"></a>
+			</span><br>
+			<table ID="Bottom"><tr ID="TRow">
+				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
+				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
+					onclick="ExtClick()">
+				</td>
+				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowNote()" 
+					title="Бележка"></td>
+				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+					title="Шаблон">
+				</td>
+				<td><div class="spinner-4" id="loadingGif" style="display:none"></div>
+					<!-- img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
+						onclick='style="display: none"'-->
+					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
+						onclick='style="display: none"'>
+					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
+						style="display:none" title="Намали"></a>
+				</td></tr>
+			</table>
+
+		</form>
+
+		<script>
+			const form = document.forms['submit-to-google-sheet']
+			var Total=0, Cnt=0
+			var formatter = new Intl.NumberFormat(undefined, {
+				style: 'currency',
+				currency: 'BGN',
+				// These options are needed to round to whole numbers if that's what you want.
+				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+			});
+			form.addEventListener('submit', e => {
+				e.preventDefault()
+				fetch(
+					scriptURL, {method: 'POST', body: new FormData(form)})
+					.then(response => {
+						showSuc();
+						Total+=+document.getElementById("res2").value
+						Cnt+=1
+						document.getElementById("Log").value=document.getElementById("Log").value+
+						  Cnt+". "+document.getElementById("res3").value+" "+
+						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
+					})
+					.catch(error => alert('Грешка! ' + error.message))
+				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
+					var WM=1, N;
+					if (document.getElementById("res4").value.substr(3,1)=="/") {
+						WM=document.getElementById("res5").value
+					}
+					var S=document.getElementById("res2").value
+					N=parseFloat(S)*parseFloat(WM)
+					if (document.getElementById("res4").value.substr(0,4)=="BGN/") {
+							N=parseFloat(S)/parseFloat(WM)
+					}
+					if (!isNaN(N)) {
+						S=N.toString()
+						S=parseFloat(S).toFixed(2)
+					}
+					if (S.substr(0,1)=="-") {S=S.substr(1,S.length-1)}
+					else {S="-"+S}
+					document.getElementById("res2").value=S
+					var AccSave=document.getElementById("res3").value
+					document.getElementById("res3").value=
+						document.getElementById("SubCats").value
+					document.getElementById("SubCats").value=AccSave
+					document.getElementById("SubCats").selected
+					fetch(scriptURL, {method: 'POST', body: new FormData(form)})
+						.then(res => { 
+							if(res.ok) {
+								return res;
+							} else {
+							throw Error(`Request rejected with status ${res.status}`);
+							}
+						})
+						.catch(error => alert('Грешка! ' + error.message))
+				}
+			})
+		</script>
+		
+		<span ID="TemplFld">
+			Шаблон: <input style="text-align:left; width: 18em" ID="res" class="inputMessage" value="">
+			<a><img src="Remove.png" width="20px" onclick="ClearFld('res')"
+				align="center" title="Изтриване"></a>
+			<br>
+			CSV: <input style="text-align:left; width: 19.8em" ID="CSV" class="inputMessage" value=""> 
+			<a><img src="Copy.png" width="20px" align="top" onclick="CopyCSV()" title="Copy"></a>
+		</span>
+		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
+			&nbsp;&nbsp;
+			<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
+			&nbsp;
+			<input type="color" value="#FFFFFF" id="colorPicker" hidden>
+			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
+				<option value="--FormBgrd">- Оцвети -</option>
+				<option value="--FormBgrd">Фон</option>
+				<option value="--FormColor">Форма</option>
+				<option value="--BtnColor">Бутони</option>
+				<option value="--InpBgrd">Полета</option>
+				<option value="--LblColor">Етикети</option>
+				<option value="--InpText">Текст</option>
+			</SELECT>
+			&nbsp;&nbsp;&nbsp;
+			© 2021 CX Extractor 1.05 / 
+		</span>
+	</fieldset>
+	</div>
+</body>
+</html>
+<!--
+Steps: 
+
+1.Create a directory on the local file system.
+2.Create a repo on Github.
+3.Select Clone "Clone or download" on Github, copy the link
+4.In Visual Studio Code, sect File -> Add Folder to Workspace -> Select the newly created directory
+5.Select Terminal Window
+6.In the window, type:
+
+git config --global user.name <github userID>
+git clone <URL from github link copied earlier>
+
+Any newly created file should be available on github after stage/commit/push.
+-->

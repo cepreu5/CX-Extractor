@@ -7,6 +7,24 @@
 <link rel="shortcut icon" type="image/png" href="Fav.png" />
 <link rel="stylesheet" href="Common.css" />
 <link rel="stylesheet" href="First.css" id="theme" />
+
+<style>
+    .spinner {
+      width:20px;
+      height:20px;
+      border-radius:50%;
+      padding:1px;
+      background:conic-gradient(#0000 10%,#f03355) content-box;
+      -webkit-mask:
+        repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+        radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 calc(100% - 8px));
+      -webkit-mask-composite: destination-in;
+      mask-composite: intersect;
+      animation:s4 1s infinite steps(10);
+    }
+    @keyframes s4 {to{transform: rotate(1turn)}}
+</style>
+
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
 
@@ -1052,9 +1070,7 @@ function init2() {
 				</td>
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td>
-					<img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'>
+				<td><div class="spinner" id="loadingGif" style="display:none"></div>
 					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
@@ -1131,9 +1147,7 @@ function init2() {
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
-				<td>
-					<img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'>
+				<td><div class="spinner" id="loadingGif" style="display:none"></div>
 					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
@@ -1224,7 +1238,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 1.05 / 
+			© 2021 CX Extractor 13.05 / 
 		</span>
 	</fieldset>
 	</div>
