@@ -876,6 +876,29 @@ function zoomfunction(el, d) {
 //	});
 //}
 
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires=" + d.toGMTString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
 function init() {
 	getTempls();
 	createSels();
@@ -914,6 +937,9 @@ function init() {
 	detectSwipe('MsgText', zoomfunction);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
+		var pwd = getCookie("CXpass");
+		//var pwd = localStorage.getItem("CXpass");
+  		if (pwd != "") document.getElementById("Password").value=getCookie("CXpass");
 		document.getElementById("Password").focus();
 	} else {
 		createFiles();
@@ -923,6 +949,15 @@ function init() {
 }	
 
 function init2() {
+	if (document.getElementById("Cookie").checked) {
+	  document.cookie = setCookie("CXpass", document.getElementById("Password").value, 90);
+	  //localStorage.setItem("CXpass", document.getElementById("Password").value);
+	}  
+	if (document.getElementById("FgtCookie").checked) {
+	  document.cookie = "CXpass=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	  //localStorage.setItem("CXpass", "");
+	}  
+	// document.cookie = "CXpass"+document.getElementById("Password").value;
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
@@ -962,8 +997,10 @@ function init2() {
 	<fieldset ID="Main" class="child">
 
 		<div ID="PwdFld">
-			<input id="Password" type="password" style="width: 158px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
-			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'>
+			<input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
+			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'><br>
+			<input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
+			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label>&nbsp;&nbsp;
 			<script>
 			var input = document.getElementById("Password");
 			input.addEventListener("keyup", function(event) {
@@ -1241,7 +1278,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 18.05 / 
+			© 2021 CX Extractor 23.05 / 
 		</span>
 	</fieldset>
 	</div>
