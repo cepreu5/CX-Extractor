@@ -42,6 +42,7 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	Total=0, Cnt=0, // log counter and total
 	SelectSheet=0, // selected sheet
 	AllTemplFlag=false, // don't get Auto templates	
+	Author = "© 2021 CX Extractor",
 	OpenFrom = 'res2'; // calculator OpenFrom which field
 
 RegExp.quote = function(str) {
@@ -937,9 +938,13 @@ function init() {
 	detectSwipe('MsgText', zoomfunction);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
-		var pwd = getCookie("CXpass");
+		var pwd = getCookie("CXpass"); alert(pwd);
 		//var pwd = localStorage.getItem("CXpass");
-  		if (pwd != "") document.getElementById("Password").value=getCookie("CXpass");
+  		if (pwd != "") {
+			// Decrypt
+			var bytes  = CryptoJS.AES.decrypt(pwd, Author); pwd = bytes.toString(CryptoJS.enc.Utf8);
+			document.getElementById("Password").value = pwd;
+		}
 		document.getElementById("Password").focus();
 	} else {
 		createFiles();
@@ -950,14 +955,15 @@ function init() {
 
 function init2() {
 	if (document.getElementById("Cookie").checked) {
-	  document.cookie = setCookie("CXpass", document.getElementById("Password").value, 90);
-	  //localStorage.setItem("CXpass", document.getElementById("Password").value);
+		// Encrypt
+		var ciphertext = CryptoJS.AES.encrypt(document.getElementById("Password").value, Author).toString();
+		document.cookie = setCookie("CXpass", ciphertext, 90);
+		//localStorage.setItem("CXpass", document.getElementById("Password").value);
 	}  
 	if (document.getElementById("FgtCookie").checked) {
 	  document.cookie = "CXpass=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 	  //localStorage.setItem("CXpass", "");
 	}  
-	// document.cookie = "CXpass"+document.getElementById("Password").value;
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
