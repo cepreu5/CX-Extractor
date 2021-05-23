@@ -938,8 +938,8 @@ function init() {
 	detectSwipe('MsgText', zoomfunction);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
-		var pwd = getCookie("CXpass");
-		//var pwd = localStorage.getItem("CXpass");
+		//var pwd = getCookie("CXpass");
+		var pwd = localStorage.getItem("CXpass"); //alert(pwd2);
   		if (pwd != "") {
 			// Decrypt
 			var bytes  = CryptoJS.AES.decrypt(pwd, Author); pwd = bytes.toString(CryptoJS.enc.Utf8);
@@ -958,11 +958,11 @@ function init2() {
 		// Encrypt
 		var ciphertext = CryptoJS.AES.encrypt(document.getElementById("Password").value, Author).toString();
 		document.cookie = setCookie("CXpass", ciphertext, 90);
-		//localStorage.setItem("CXpass", document.getElementById("Password").value);
+		localStorage.setItem("CXpass", ciphertext);
 	}  
 	if (document.getElementById("FgtCookie").checked) {
-	  document.cookie = "CXpass=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-	  //localStorage.setItem("CXpass", "");
+	  // document.cookie = "CXpass=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+	  localStorage.setItem("CXpass", "");
 	}  
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
