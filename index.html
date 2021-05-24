@@ -930,13 +930,15 @@ function init() {
 }	
 
 function init2() {
-	if (document.getElementById("Cookie").checked) {
+	// if (document.getElementById("Cookie").checked) .value="Remember"
+	if (document.getElementById("RCookie").checked) {
 		// Encrypt
 		var ciphertext = CryptoJS.AES.encrypt(document.getElementById("Password").value, Author).toString();
 		localStorage.setItem("CXpass", ciphertext);
 	}  
-	if (document.getElementById("FgtCookie").checked) {
-	  localStorage.setItem("CXpass", "");
+	// if (document.getElementById("FgtCookie").checked) { .value="DontRemember"
+	if (document.getElementById("RFgtCookie").checked) {
+		localStorage.setItem("CXpass", "");
 	}  
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
@@ -979,8 +981,11 @@ function init2() {
 		<div ID="PwdFld">
 			<input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
 			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'><br>
-			<input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
-			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label>&nbsp;&nbsp;
+			<!-- input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
+			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label><br-->
+			<input type = "radio" name="OptRadio" id="RCookie"> <label for="RCookie">Запомни</label>
+			<input type = "radio" name="OptRadio" id="RFgtCookie"> <label for="RFgtCookie">Забрави</label>
+			&nbsp;&nbsp;
 			<script>
 			var input = document.getElementById("Password");
 			input.addEventListener("keyup", function(event) {
@@ -1258,7 +1263,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 23.05 / 
+			© 2021 CX Extractor 25.05 / 
 		</span>
 	</fieldset>
 	</div>
