@@ -9,17 +9,7 @@
 <link rel="stylesheet" href="First.css" id="theme" />
 
 <style>
-    .spinner-3 {
-        width:20px;
-        height:20px;
-        border-radius:50%;
-        background:conic-gradient(#0000 10%,#25b09b);
-        -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-        animation:s3 1s infinite linear;
-    }
-    @keyframes s3 {to{transform: rotate(1turn)}}
-
-    .spinner-4 {
+    .spinner { 
       width:20px;
       height:20px;
       border-radius:50%;
@@ -45,13 +35,14 @@
 var Encrypted=true; // false uncomment crypto-js above and use the correct TableFilesEnc.txt
 
 var ReplaceF, // Replace Field calculated in getTempls and used in Extract
-		Z100=true, // zoom level
-		CalcFl=false,
-		LTempl=8, // elements in template (without optional replace field and selected sheet)
-		val="", // initial calc display value
-		SelectSheet=0, // selected sheet
-		AllTemplFlag=false, // don't get Auto templates	
-		OpenFrom = 'res2'; // calculator OpenFrom which field
+	Z100=true, // zoom level
+	CalcFl=false,
+	LTempl=8, // elements in template (without optional replace field and selected sheet)
+	val="", // initial calculator display value
+	Total=0, Cnt=0, // log counter and total
+	SelectSheet=0, // selected sheet
+	AllTemplFlag=false, // don't get Auto templates	
+	OpenFrom = 'res2'; // calculator OpenFrom which field
 
 RegExp.quote = function(str) {
      return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
@@ -690,7 +681,10 @@ function ClearTextArea() {
 		Extract();
 		document.getElementById("MsgText").focus();
 	}
-	else document.getElementById("Log").value="";
+	else {
+		document.getElementById("Log").value="";
+		Total=0; Cnt=0; // log counter and total
+	}
 }
 
 function ClearFld(FldID) {
@@ -1080,9 +1074,7 @@ function init2() {
 				</td>
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td><div class="spinner-4" id="loadingGif" style="display:none"></div>
-					<!-- img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'-->
+				<td><div class="spinner" id="loadingGif" style="display:none"></div>
 					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
@@ -1159,9 +1151,7 @@ function init2() {
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
-				<td><div class="spinner-4" id="loadingGif" style="display:none"></div>
-					<!-- img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'-->
+				<td><div class="spinner" id="loadingGif" style="display:none"></div>
 					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
@@ -1173,7 +1163,6 @@ function init2() {
 
 		<script>
 			const form = document.forms['submit-to-google-sheet']
-			var Total=0, Cnt=0
 			var formatter = new Intl.NumberFormat(undefined, {
 				style: 'currency',
 				currency: 'BGN',
@@ -1252,7 +1241,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 1.05 / 
+			© 2021 CX Extractor 18.05 / 
 		</span>
 	</fieldset>
 	</div>
