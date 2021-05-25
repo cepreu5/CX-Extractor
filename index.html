@@ -550,7 +550,7 @@ function AutoTempl() {
 			if (text.match(re)) {//alert(text.match(re))
 				for (j=0; j<Templates.length; j++) {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
-						document.getElementById("Info").innerHTML=Templates[j];
+						document.getElementById("Info").innerHTML="Шаблон: "+Templates[j];
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
