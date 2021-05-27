@@ -573,7 +573,6 @@ function spinImage(ImgID) {
 
 function Normal() {
 	spinImage("NormBtn");
-	LetToDig();
 	var text=document.getElementById("MsgText").value;
 	text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
 	text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
@@ -796,7 +795,23 @@ function setColor() {
   document.getElementById("Colors").selectedIndex=0;
 }
 
+function LetToDig() {
+		var Converted = false;
+		var toConv=document.getElementById("res2").value;
+		var res = '';
+		for (var i=0; i<toConv.length; i++) {
+			if (Lets.indexOf(toConv[i].toUpperCase())>=0) {
+				res = res + digi[Lets.indexOf(toConv[i].toUpperCase())];
+				Converted = true;
+			}	
+			else res = res + toConv[i];
+		}	
+		document.getElementById("res2").value = res;
+		return Converted;
+	}
+
 function Calc (SF) {
+	if (LetToDig()) return;
 	document.getElementById("CalcSp").hidden=
 		!document.getElementById("CalcSp").hidden;
 	CalcFl=!CalcFl;
@@ -946,7 +961,6 @@ function init2() {
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
 }	
-
 </script>
 
 <script> 
@@ -970,18 +984,6 @@ function init2() {
 	//function that clear the display 
 	function clr() {
 		document.getElementById("result").value = "";
-	}
-
-	function LetToDig() {
-		var toConv=document.getElementById("res2").value;
-		const Lets = 'QWERTYUIOPЯВЕРТЪУИОП,';
-		const digi = '12345678901234567890.';
-		var res = '';
-		for (var i=0; i<toConv.length; i++) {
-			if (Lets.indexOf(toConv[i].toUpperCase())>=0)	res = res + digi[Lets.indexOf(toConv[i].toUpperCase())]
-			else res = res + toConv[i];
-		}	
-		document.getElementById("res2").value = res;
 	}
 </script> 
 
@@ -1135,7 +1137,7 @@ function init2() {
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
-			<img src="Calculator.png" width="30px" align="center" title="Калкулатор&#13;Изтриване"
+			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
         		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
