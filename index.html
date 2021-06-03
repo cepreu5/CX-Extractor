@@ -367,7 +367,7 @@ function MakeTempl() {
 }
 
 function SelTempl(str, clear) {
-	if (clear) {document.getElementById("Info").innerHTML=""} //<br>
+	if (clear) {document.getElementById("Info").innerHTML="»"} //<br>
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
@@ -550,7 +550,7 @@ function AutoTempl() {
 			if (text.match(re)) {//alert(text.match(re))
 				for (j=0; j<Templates.length; j++) {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
-						document.getElementById("Info").innerHTML="Шаблон: "+Templates[j];
+						document.getElementById("Info").innerHTML="» Шаблон: "+Templates[j];
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
@@ -906,7 +906,7 @@ function init() {
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
 	var ww=window.innerWidth;
-	document.getElementById("Info").innerHTML="SW: "+ww;
+	document.getElementById("Info").innerHTML="» SW: "+ww;
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
 		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
@@ -1054,9 +1054,26 @@ function init2() {
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Нормализация"></a><br>
-		<span ID="Info"></span>
-		<br>
-		<span ID="Sels"></span>
+		<!--span ID="Info"></span>
+		<br-->
+
+		<button type="button" class="collapsible" ID="Info">Дефиниции</button>
+		<div class="content">
+			<span ID="Sels"></span>
+		</div>
+		<script>
+			var coll = document.getElementsByClassName("collapsible");
+			coll[0].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.display === "block") {
+				  content.style.display = "none";
+				} else {
+				  content.style.display = "block";
+				}
+			})
+		</script>
+			
 		<br>
 		
 		<!-- Calc -->
@@ -1279,7 +1296,7 @@ function init2() {
 				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 27.05 / 
+			© 2021 CX Extractor 4.06 / 
 		</span>
 	</fieldset>
 	</div>
