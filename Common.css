@@ -1,10 +1,13 @@
-input, select, fieldset {
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
+input,
+select,
+fieldset {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
   background: var(--FormBgrd, black);
 }
 
@@ -13,10 +16,14 @@ body {
   padding: 0;
 }
 
+fieldset {
+  width: 340px;
+}
+
 .parent {
   display: grid;
   place-items: start center;
-  width: (device-width)/2px; 
+  width: (device-width)/2px;
   /* 349
   height: 625px; (device-height)/2
   resize: both; 
@@ -30,18 +37,18 @@ body {
 }
 
 .rotated {
-  transition: all 1.0s ease-in-out 0s;
+  transition: all 1s ease-in-out 0s;
   transform: rotate(360deg);
 }
 
 .cbutton {
   background-image: url("CalcBtn.png");
   background-color: transparent;
-  border: solid black 0px; 
-  color: white; 
+  border: solid black 0px;
+  color: white;
   width: 60px;
   height: 60px;
-  font-size:30px; 
+  font-size: 30px;
 }
 
 /* Color picker */
@@ -67,8 +74,8 @@ input[type="color"] {
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
-	
-/* Position the tooltip */
+
+  /* Position the tooltip */
   position: absolute;
   z-index: 1;
   bottom: 100%;
@@ -80,6 +87,8 @@ select option {
   background: rgba(0, 0, 0, 0.3);
   color: #000;
 }
-  
-img {cursor: pointer; border: 0}
 
+img {
+  cursor: pointer;
+  border: 0;
+}
