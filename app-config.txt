@@ -2,7 +2,7 @@ const
 CfgDate="27.05",
 Lets = 'QWERTYUIOPЯВЕРТЪУИОП,'
 digi = '12345678901234567890.';
-ZoomL1="100%",
+ZoomL1="105%",
 ZoomL2="150%",
 
 Templates = [
