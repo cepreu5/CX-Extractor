@@ -14,7 +14,6 @@ html {
 
 body {
   margin: 0;
-  padding: 0;
 }
 
 fieldset {
@@ -38,6 +37,7 @@ fieldset {
   text-align: left;
   border-radius: 5px;
   border : 1px solid gray;
+  padding: 5px;
 }
 
 .rotated {
