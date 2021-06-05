@@ -842,7 +842,7 @@ function detectSwipe(id, func) {
 	})
 	// Tune deltaMin according to your needs. Near 0 it will almost always trigger, 
 	// with a big value it can never trigger
-	const deltaMin = 90
+	const deltaMin = 150
 	let direction = null
 	const el = document.getElementById(id)
 	el.addEventListener('touchstart', function(e) {
