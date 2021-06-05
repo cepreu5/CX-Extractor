@@ -812,16 +812,14 @@ function LetToDig() {
 function Calc (SF) {
 	if (LetToDig()) return;
 	ShowAnim("CalcSp");
-	//document.getElementById("CalcSp").hidden=
-	//	!document.getElementById("CalcSp").hidden;
+	document.getElementById("CalcSp").scrollIntoView();
 	CalcFl=!CalcFl;
 	if (CalcFl)	{
-		document.getElementById("CalcSp").scrollIntoView();
 		// alert(obj.value);
 		if (document.getElementById("result").value != "") dis (';');
 		dis (document.getElementById('res2').value); // SF
 	}
-	else {document.getElementById("Main").scrollIntoView(); solve()}
+	//else {document.getElementById("Main").scrollIntoView(); } //solve()
 }
 
 function ShowColors() {
@@ -972,6 +970,7 @@ function init2() {
 		if (y!=undefined && y!=Infinity) {
 			document.getElementById("result").value = y;
 			document.getElementById(OpenFrom).value = y;
+			ShowAnim("CalcSp");
 		}
 		if (x == "") document.getElementById(OpenFrom).value = "";
 	} 
