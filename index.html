@@ -842,7 +842,7 @@ function detectSwipe(id, func) {
 	})
 	// Tune deltaMin according to your needs. Near 0 it will almost always trigger, 
 	// with a big value it can never trigger
-	const deltaMin = 150
+	const deltaMin = 90
 	let direction = null
 	const el = document.getElementById(id)
 	el.addEventListener('touchstart', function(e) {
@@ -872,8 +872,8 @@ function detectSwipe(id, func) {
 
 function Gestures(el, d) {
 	if (d=="r") CZoom();
-	if (d=="l") switchSheet();
-	//if (d=="u") ClearTextArea();
+	//if (d=="l") switchSheet();
+	if (d=="u") ClearTextArea();
 }
 
 // function hisfunction(el, d) {
