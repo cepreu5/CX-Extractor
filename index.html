@@ -847,8 +847,8 @@ function detectSwipe(id, func) {
 	const el = document.getElementById(id)
 	el.addEventListener('touchstart', function(e) {
 		const t = e.touches[0]
-		swipe_det.sX = t.screenX
-		swipe_det.sY = t.screenY
+		swipe_det.sX = swipe_det.eX = t.screenX
+		swipe_det.sY = swipe_det.eY = t.screenY
 	}, false)
 	el.addEventListener('touchmove', function(e) {
 		// Prevent default will stop user from scrolling, use with care
