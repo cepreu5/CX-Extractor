@@ -872,7 +872,7 @@ function detectSwipe(id, func) {
 
 function Gestures(el, d) {
 	if (d=="r") CZoom();
-	//if (d=="l") switchSheet();
+	if (d=="l") switchSheet();
 	//if (d=="u") ClearTextArea();
 }
 
@@ -941,13 +941,11 @@ function init() {
 }	
 
 function init2() {
-	// if (document.getElementById("Cookie").checked) .value="Remember"
 	if (document.getElementById("RCookie").checked) {
 		// Encrypt
 		var ciphertext = CryptoJS.AES.encrypt(document.getElementById("Password").value, Author).toString();
 		localStorage.setItem("CXpass", ciphertext);
 	}  
-	// if (document.getElementById("FgtCookie").checked) { .value="DontRemember"
 	if (document.getElementById("RFgtCookie").checked) {
 		localStorage.setItem("CXpass", "");
 	}  
