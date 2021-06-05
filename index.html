@@ -872,8 +872,9 @@ function detectSwipe(id, func) {
 	}, false)
 }
 
-function zoomfunction(el, d) {
+function Gestures(el, d) {
 	if (d=="r") CZoom();
+	if (d=="l") switchSheet();
 }
 
 // function hisfunction(el, d) {
@@ -910,26 +911,20 @@ function init() {
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
 		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
-		//document.getElementById("Bottom").hidden = true;
-		document.getElementById("CatsTop").hidden = false;
-		//document.getElementById("CatsBottom").hidden = true;
-		document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
+	//	document.getElementById("CatsTop").hidden = false;
+	//	document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
 	}
 	else {
-		//document.getElementById("Top").hidden = true;
 		document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
 		document.getElementById("Bottom").hidden = false;
-		//document.getElementById("CatsTop").hidden = false;
-		document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
-		//document.getElementById("CatsTop").removeChild(document.getElementById("Cats"));
-		//document.getElementById("CatsTop").removeChild(document.getElementById("SubCats"));
-		document.getElementById("CatsBottom").hidden = false;
+		//document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
+		//document.getElementById("CatsBottom").hidden = false;
 	}
 	createCats();
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
 	CZoom ();
-	detectSwipe('MsgText', zoomfunction);
+	detectSwipe('MsgText', Gestures);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
 		var pwd = localStorage.getItem("CXpass");
@@ -1120,7 +1115,7 @@ function init2() {
 						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
-			<span ID="CatsTop" hidden>
+			<span ID="CatsTop">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
 				<option value="" selected>Категория</option>
@@ -1157,7 +1152,7 @@ function init2() {
 				value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
-			<span ID="CatsBottom">
+			<!--span ID="CatsBottom">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
 				<option value="" selected>Категория</option>
@@ -1169,7 +1164,7 @@ function init2() {
 			</SELECT>
 			<img src="Remove.png" width="30px" title="Изтриване" align="center"
 				 onclick="NoCat()">
-			</span>
+			</span-->
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
@@ -1273,11 +1268,12 @@ function init2() {
 			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
 				<option value="--FormBgrd">- Оцвети -</option>
 				<option value="--FormBgrd">Фон</option>
+				<option value="--LblColor">Етикети</option>
+				<option value="--InpText">Текст</option>
+				<option value="--InpText">-------------</option>
 				<option value="--FormColor">Форма</option>
 				<option value="--BtnColor">Бутони</option>
 				<option value="--InpBgrd">Полета</option>
-				<option value="--LblColor">Етикети</option>
-				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
 			© 2021 CX Extractor 4.06 / 

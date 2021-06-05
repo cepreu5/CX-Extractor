@@ -48,6 +48,7 @@ fieldset {
 .cbutton {
   background-image: url("CalcBtn.png");
   background-color: transparent;
+  cursor: pointer;
   border: solid black 0px;
   color: white;
   width: 60px;
