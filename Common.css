@@ -98,19 +98,40 @@ img {
   border: 0;
 }
 
-.collapsible {
-  color: var(--LblColor, white);
-  cursor: pointer;
-  padding: 0px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 14px;
+.spinner { 
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  padding:1px;
+  background:conic-gradient(#0000 10%,#f03355) content-box;
+  -webkit-mask:
+    repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+    radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 calc(100% - 8px));
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+  animation:s4 1s infinite steps(10);
+}
+@keyframes s4 {to{transform: rotate(1turn)}}
+
+.active {
+  display: block;
+  transform: scale(1);
+  opacity: 1;
+  animation: anim .3s ease-in-out;
 }
 
-.content {
-  padding: 0 0px;
-  display: none;
-  overflow: hidden;
+@keyframes anim {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
