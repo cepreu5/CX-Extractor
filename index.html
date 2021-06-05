@@ -23,6 +23,30 @@
       animation:s4 1s infinite steps(10);
     }
     @keyframes s4 {to{transform: rotate(1turn)}}
+
+	.active {
+		display: block;
+		transform: scale(1);
+		opacity: 1;
+		animation: anim .3s ease-in-out;
+	}
+
+	@keyframes anim {
+	0% {
+		display: none;
+		opacity: 0;
+	}
+	1% {
+		display: block;
+		opacity: 0;
+		transform: scale(0);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
 </style>
 
 <script type="text/javascript" src="app-config.txt"></script>
@@ -31,6 +55,7 @@
 <!-- script src="../js/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
  integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
 
 var Encrypted=true; // false uncomment crypto-js above and use the correct TableFilesEnc.txt
@@ -319,12 +344,13 @@ function MakeTempl() {
 	var Tmpl='';
 	var i, L, C, S; 
 	document.getElementById("res").value="";
-	if (document.getElementById("TemplFld").hidden) {
-		document.getElementById("TemplFld").hidden = false;
-	}
-	else { document.getElementById("TemplFld").hidden = true;
-		return;
-	}
+	//if (document.getElementById("TemplFld").hidden) {
+	//	document.getElementById("TemplFld").hidden = false;
+	//}
+	//else { document.getElementById("TemplFld").hidden = true;
+	//	return;
+	//}
+	ShowAnim("TemplFld")
 	for (i=1; i<=(LTempl-2); i++) {
 		S='';
 		Tmpl=Tmpl+i+'-';
@@ -654,6 +680,11 @@ function ShowSels() {
 	}
 }
 
+function ShowAnim(BoxEl) {
+	element = document.getElementById(BoxEl)
+	element.classList.toggle('active');
+}
+
 function ShowLog() {
 	if (document.getElementById("Log").hidden) {
 		document.getElementById("Log").hidden = false;
@@ -786,7 +817,7 @@ function switchSheet() {
     document.getElementById("Cell2").innerHTML=
 		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
     document.getElementById("Cell3").innerHTML=
-		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowNote()">&nbsp';
+		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
     document.getElementById("Cell4").innerHTML=
 		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
   } else {
@@ -821,11 +852,12 @@ function LetToDig() {
 
 function Calc (SF) {
 	if (LetToDig()) return;
-	document.getElementById("CalcSp").hidden=
-		!document.getElementById("CalcSp").hidden;
+	ShowAnim("CalcSp");
+	//document.getElementById("CalcSp").hidden=
+	//	!document.getElementById("CalcSp").hidden;
 	CalcFl=!CalcFl;
 	if (CalcFl)	{
-		document.getElementById("CalcSp").scrollIntoView();
+		// document.getElementById("CalcSp").scrollIntoView();
 		// alert(obj.value);
 		if (document.getElementById("result").value != "") dis (';');
 		dis (document.getElementById('res2').value); // SF
@@ -1064,14 +1096,14 @@ function init2() {
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Нормализация"></a><br>
-		<span ID="Info" style="cursor: pointer;" onclick="ShowSels()"></span>
+		<span ID="Info" style="cursor: pointer;" onclick="ShowAnim('Sels')"></span>
 		<br>
 		<span ID="Sels" hidden></span>
 		<br>
 		
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
-		<span ID="CalcSp"><br>
+		<span ID="CalcSp" hidden><br>
 			<table border="0" width="90%"> 
 				<tr> 
 					<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
@@ -1112,7 +1144,7 @@ function init2() {
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<table ID="Top" hidden><tr ID="TRow">
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowNote()" 
+				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
@@ -1194,7 +1226,7 @@ function init2() {
 				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowNote()" 
+				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
