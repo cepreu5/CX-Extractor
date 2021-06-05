@@ -30,10 +30,6 @@ input[type="text"] {
   height: 65px;
 }
 
-.collapsible {
-  background-color: var(--FormColor, #990000);
-}
-
-.content {
-  background-color: var(--FormColor, #990000);
+.block {
+  background-color: var(--InpBgrd, #990000);
 }

@@ -1051,10 +1051,10 @@ function init2() {
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Нормализация"></a><br>
-		<span ID="Info" style="cursor: pointer;" onclick="ShowAnim('Sels')"></span>
+		<!--span ID="Info" style="cursor: pointer; width: 100%;   text-align: right;		" onclick="ShowAnim('Sels')"></span-->
+		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')">Дефиниции</button>
 		<br>
 		<span ID="Sels" hidden></span>
-		<br>
 		
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
@@ -1174,7 +1174,7 @@ function init2() {
 				</datalist>
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
 					align="center" title="Изтриване"></a>
-			</span><br>
+			</span>
 			<table ID="Bottom"><tr ID="TRow">
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>

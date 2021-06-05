@@ -23,10 +23,6 @@ input[type="text"] {
   background: url(0-FBgrd.jpg) repeat;
 }
 
-.collapsible {
-  background-image: url("0-Bgrd.jpg");
-}
-
-.content {
-  background-image: url("0-Bgrd.jpg");
+.block {
+  background-image: url("0-FBgrd.jpg");
 }
