@@ -144,3 +144,7 @@ img {
   cursor: pointer;
   text-align: left;
 }
+
+select option:first-child {
+	color: #C7C7C7;
+}
