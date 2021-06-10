@@ -752,10 +752,12 @@ function CZoom () {
 	Z100=!Z100;
 	if (Z100) {document.body.style.zoom=ZoomL2;
 		document.getElementById("ZoomBtn").src="Zoom2.png";
+		document.getElementById("ZoomBtn").title="Намали";
 		document.getElementById('ZoomBtn2').style.display = "block";
 	}
 	else {document.body.style.zoom=ZoomL1;
 		document.getElementById("ZoomBtn").src="Zoom.png";
+		document.getElementById("ZoomBtn").title="Увеличи";
 		document.getElementById('ZoomBtn2').style.display = "none";
 	}
 }
