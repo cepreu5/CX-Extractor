@@ -993,7 +993,7 @@ function init2() {
 
 		<div ID="PwdFld">
 			<input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
-			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" title="OK" onclick='init2()'><br>
+			<img id="Suc2" src="Suc.png" title="OK" onclick='init2()'><br>
 			<!-- input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
 			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label><br-->
 			<input type = "radio" name="OptRadio" id="RCookie"> <label for="RCookie">Запомни</label>
@@ -1040,11 +1040,11 @@ function init2() {
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
 			onFocus="AutoTempl()" onInput="AutoTempl()">
 		</textarea>
-		<textarea ID="Log" rows="5" style="width: 320px" hidden>
+		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" hidden>
 		</textarea>
 		<br>
 		Шаблони 
-		<span ID="Sel"></span>&nbsp;Авто
+		<span ID="Sel"></span>&nbsp;Авто 
 		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
@@ -1110,9 +1110,9 @@ function init2() {
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
 				<td><div class="spinner" id="loadingGif" style="display:none"></div>
-					<img id="Suc" style="width: 20px; display:none" title="OK" src="Suc.png"
+					<img id="Suc" style="display:none" title="OK" src="Suc.png"
 						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
+					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
@@ -1187,9 +1187,9 @@ function init2() {
 					title="Шаблон">
 				</td>
 				<td><div class="spinner" id="loadingGif" style="display:none"></div>
-					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
+					<img id="Suc" style="display:none" src="Suc.png"
 						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
+					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
@@ -1277,7 +1277,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 4.06 / 
+			© 2021 CX Extractor 4.07 / 
 		</span>
 	</fieldset>
 	</div>

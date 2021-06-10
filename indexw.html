@@ -1,57 +1,34 @@
 <!DOCTYPE html>
-<html>
-<meta http-equiv="content-type" content="text/html; charset=Utf8">
+<html lang="bg">
+<meta http-equiv="content-type" content="text/html" charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head> 
 <title>CX Extractor</title>
 <link rel="shortcut icon" type="image/png" href="Fav.png" />
-<link rel="stylesheet" href="Common.css" />
+<link rel="stylesheet" href="Commonw.css" />
 <link rel="stylesheet" href="First.css" id="theme" />
-
-<style>
-    .spinner-3 {
-        width:20px;
-        height:20px;
-        border-radius:50%;
-        background:conic-gradient(#0000 10%,#25b09b);
-        -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-        animation:s3 1s infinite linear;
-    }
-    @keyframes s3 {to{transform: rotate(1turn)}}
-
-    .spinner-4 {
-      width:20px;
-      height:20px;
-      border-radius:50%;
-      padding:1px;
-      background:conic-gradient(#0000 10%,#f03355) content-box;
-      -webkit-mask:
-        repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
-        radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 calc(100% - 8px));
-      -webkit-mask-composite: destination-in;
-      mask-composite: intersect;
-      animation:s4 1s infinite steps(10);
-    }
-    @keyframes s4 {to{transform: rotate(1turn)}}
-</style>
 
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
 
 <!-- script src="../js/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
+ integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
 
 var Encrypted=true; // false uncomment crypto-js above and use the correct TableFilesEnc.txt
 
 var ReplaceF, // Replace Field calculated in getTempls and used in Extract
-		Z100=true, // zoom level
-		CalcFl=false,
-		LTempl=8, // elements in template (without optional replace field and selected sheet)
-		val="", // initial calc display value
-		SelectSheet=0, // selected sheet
-		AllTemplFlag=false, // don't get Auto templates	
-		OpenFrom = 'res2'; // calculator OpenFrom which field
+	Z100=true, // zoom level
+	CalcFl=false,
+	LTempl=8, // elements in template (without optional replace field and selected sheet)
+	val="", // initial calculator display value
+	Total=0, Cnt=0, // log counter and total
+	SelectSheet=0, // selected sheet
+	AllTemplFlag=false, // don't get Auto templates	
+	Author = "© 2021 CX Extractor",
+	OpenFrom = 'res2'; // calculator OpenFrom which field
 
 RegExp.quote = function(str) {
      return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
@@ -326,12 +303,13 @@ function MakeTempl() {
 	var Tmpl='';
 	var i, L, C, S; 
 	document.getElementById("res").value="";
-	if (document.getElementById("TemplFld").hidden) {
-		document.getElementById("TemplFld").hidden = false;
-	}
-	else { document.getElementById("TemplFld").hidden = true;
-		return;
-	}
+	//if (document.getElementById("TemplFld").hidden) {
+	//	document.getElementById("TemplFld").hidden = false;
+	//}
+	//else { document.getElementById("TemplFld").hidden = true;
+	//	return;
+	//}
+	ShowAnim("TemplFld")
 	for (i=1; i<=(LTempl-2); i++) {
 		S='';
 		Tmpl=Tmpl+i+'-';
@@ -375,7 +353,7 @@ function MakeTempl() {
 }
 
 function SelTempl(str, clear) {
-	if (clear) {document.getElementById("Info").innerHTML=""} //<br>
+	if (clear) {document.getElementById("Info").innerHTML="»"} //<br>
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
@@ -558,7 +536,7 @@ function AutoTempl() {
 			if (text.match(re)) {//alert(text.match(re))
 				for (j=0; j<Templates.length; j++) {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
-						document.getElementById("Info").innerHTML=Templates[j];
+						document.getElementById("Info").innerHTML="» Шаблон: "+Templates[j];
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
@@ -653,6 +631,19 @@ function ShowNote() {
 	}
 }
 
+function ShowSels() {
+	if (document.getElementById("Sels").hidden) {
+		document.getElementById("Sels").hidden = false;
+	}
+	else { document.getElementById("Sels").hidden = true;
+	}
+}
+
+function ShowAnim(BoxEl) {
+	element = document.getElementById(BoxEl)
+	element.classList.toggle('active');
+}
+
 function ShowLog() {
 	if (document.getElementById("Log").hidden) {
 		document.getElementById("Log").hidden = false;
@@ -666,6 +657,7 @@ function ShowLog() {
 
 function ExtClick() {
 	spinImage('ExtBtn');
+	if (!document.getElementById("PwdFld").hidden) {init2(); return}
 	if (document.getElementById('TemplFld').hidden) Extract()
 	else UseTempl()
 }
@@ -690,7 +682,10 @@ function ClearTextArea() {
 		Extract();
 		document.getElementById("MsgText").focus();
 	}
-	else document.getElementById("Log").value="";
+	else {
+		document.getElementById("Log").value="";
+		Total=0; Cnt=0; // log counter and total
+	}
 }
 
 function ClearFld(FldID) {
@@ -781,7 +776,7 @@ function switchSheet() {
     document.getElementById("Cell2").innerHTML=
 		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
     document.getElementById("Cell3").innerHTML=
-		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowNote()">&nbsp';
+		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
     document.getElementById("Cell4").innerHTML=
 		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
   } else {
@@ -799,17 +794,32 @@ function setColor() {
   document.getElementById("Colors").selectedIndex=0;
 }
 
+function LetToDig() {
+		var Converted = false;
+		var toConv=document.getElementById("res2").value;
+		var res = '';
+		for (var i=0; i<toConv.length; i++) {
+			if (Lets.indexOf(toConv[i].toUpperCase())>=0) {
+				res = res + digi[Lets.indexOf(toConv[i].toUpperCase())];
+				Converted = true;
+			}	
+			else res = res + toConv[i];
+		}	
+		document.getElementById("res2").value = res;
+		return Converted;
+	}
+
 function Calc (SF) {
-	document.getElementById("CalcSp").hidden=
-		!document.getElementById("CalcSp").hidden;
+	if (LetToDig()) return;
+	ShowAnim("CalcSp");
+	document.getElementById("CalcSp").scrollIntoView();
 	CalcFl=!CalcFl;
 	if (CalcFl)	{
-		document.getElementById("CalcSp").scrollIntoView();
 		// alert(obj.value);
 		if (document.getElementById("result").value != "") dis (';');
 		dis (document.getElementById('res2').value); // SF
 	}
-	else {document.getElementById("Main").scrollIntoView(); solve()}
+	//else {document.getElementById("Main").scrollIntoView(); } //solve()
 }
 
 function ShowColors() {
@@ -837,8 +847,8 @@ function detectSwipe(id, func) {
 	const el = document.getElementById(id)
 	el.addEventListener('touchstart', function(e) {
 		const t = e.touches[0]
-		swipe_det.sX = t.screenX
-		swipe_det.sY = t.screenY
+		swipe_det.sX = swipe_det.eX = t.screenX
+		swipe_det.sY = swipe_det.eY = t.screenY
 	}, false)
 	el.addEventListener('touchmove', function(e) {
 		// Prevent default will stop user from scrolling, use with care
@@ -850,6 +860,9 @@ function detectSwipe(id, func) {
 	el.addEventListener('touchend', function(e) {
 		const deltaX = swipe_det.eX - swipe_det.sX
 		const deltaY = swipe_det.eY - swipe_det.sY
+		//alert("Start: "+swipe_det.sX+", "+swipe_det.sY)
+		//alert("End: "+swipe_det.eX+", "+swipe_det.eY)
+		//alert("Delta: "+deltaX+", "+deltaY)
 		if (deltaX ** 2 + deltaY ** 2 < deltaMin ** 2) return // Min swipe distance
 		if (deltaY === 0 || Math.abs(deltaX / deltaY) > 1) // horizontal
 			direction = deltaX > 0 ? directions.RIGHT : directions.LEFT
@@ -860,8 +873,10 @@ function detectSwipe(id, func) {
 	}, false)
 }
 
-function zoomfunction(el, d) {
+function Gestures(el, d) {
 	if (d=="r") CZoom();
+	if (d=="l") switchSheet();
+	if (d=="u") ClearTextArea();
 }
 
 // function hisfunction(el, d) {
@@ -894,32 +909,32 @@ function init() {
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
 	var ww=window.innerWidth;
-	document.getElementById("Info").innerHTML="SW: "+ww;
+	document.getElementById("Info").innerHTML="» SW: "+ww;
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
 		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
-		//document.getElementById("Bottom").hidden = true;
-		document.getElementById("CatsTop").hidden = false;
-		//document.getElementById("CatsBottom").hidden = true;
-		document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
+	//	document.getElementById("CatsTop").hidden = false;
+	//	document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
 	}
 	else {
-		//document.getElementById("Top").hidden = true;
 		document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
 		document.getElementById("Bottom").hidden = false;
-		//document.getElementById("CatsTop").hidden = false;
-		document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
-		//document.getElementById("CatsTop").removeChild(document.getElementById("Cats"));
-		//document.getElementById("CatsTop").removeChild(document.getElementById("SubCats"));
-		document.getElementById("CatsBottom").hidden = false;
+		//document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
+		//document.getElementById("CatsBottom").hidden = false;
 	}
 	createCats();
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
 	CZoom ();
-	detectSwipe('MsgText', zoomfunction);
+	detectSwipe('MsgText', Gestures);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
+		var pwd = localStorage.getItem("CXpass");
+  		if (pwd != "") {
+			// Decrypt
+			var bytes  = CryptoJS.AES.decrypt(pwd, Author); pwd = bytes.toString(CryptoJS.enc.Utf8);
+			document.getElementById("Password").value = pwd;
+		}
 		document.getElementById("Password").focus();
 	} else {
 		createFiles();
@@ -929,11 +944,18 @@ function init() {
 }	
 
 function init2() {
+	if (document.getElementById("RCookie").checked) {
+		// Encrypt
+		var ciphertext = CryptoJS.AES.encrypt(document.getElementById("Password").value, Author).toString();
+		localStorage.setItem("CXpass", ciphertext);
+	}  
+	if (document.getElementById("RFgtCookie").checked) {
+		localStorage.setItem("CXpass", "");
+	}  
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
 }	
-
 </script>
 
 <script> 
@@ -950,6 +972,7 @@ function init2() {
 		if (y!=undefined && y!=Infinity) {
 			document.getElementById("result").value = y;
 			document.getElementById(OpenFrom).value = y;
+			ShowAnim("CalcSp");
 		}
 		if (x == "") document.getElementById(OpenFrom).value = "";
 	} 
@@ -957,19 +980,25 @@ function init2() {
 	//function that clear the display 
 	function clr() {
 		document.getElementById("result").value = "";
-	} 
+	}
 </script> 
 
 </head>
 
 <body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
 	onload="init()">
-	<div class="parent">
-	<fieldset ID="Main" class="child">
+<section class="outer-container">
+	<div class="inner-container">
+	<fieldset ID="Main" class="centered-content">
 
 		<div ID="PwdFld">
-			<input id="Password" type="password" style="width: 158px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
-			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" onclick='init2()'>
+			<input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
+			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" title="OK" onclick='init2()'><br>
+			<!-- input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
+			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label><br-->
+			<input type = "radio" name="OptRadio" id="RCookie"> <label for="RCookie">Запомни</label>
+			<input type = "radio" name="OptRadio" id="RFgtCookie"> <label for="RFgtCookie">Забрави</label>
+			&nbsp;&nbsp;
 			<script>
 			var input = document.getElementById("Password");
 			input.addEventListener("keyup", function(event) {
@@ -1022,14 +1051,14 @@ function init2() {
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Нормализация"></a><br>
-		<span ID="Info"></span>
+		<!--span ID="Info" style="cursor: pointer; width: 100%;   text-align: right;		" onclick="ShowAnim('Sels')"></span-->
+		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')">Дефиниции</button>
 		<br>
-		<span ID="Sels"></span>
-		<br>
+		<span ID="Sels" hidden></span>
 		
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
-		<span ID="CalcSp"><br>
+		<span ID="CalcSp" hidden><br>
 			<table border="0" width="90%"> 
 				<tr> 
 					<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
@@ -1070,7 +1099,7 @@ function init2() {
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<table ID="Top" hidden><tr ID="TRow">
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowNote()" 
+				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
@@ -1079,17 +1108,15 @@ function init2() {
 					onclick="ExtClick()">
 				</td>
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
-					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td><div class="spinner-4" id="loadingGif" style="display:none"></div>
-					<!-- img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'-->
-					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
+					title="Изпрати" onclick="showDiv()"></td>
+				<td><div class="spinner" id="loadingGif" style="display:none"></div>
+					<img id="Suc" style="width: 20px; display:none" title="OK" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
 						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
-			<span ID="CatsTop" hidden>
+			<span ID="CatsTop">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
 				<option value="" selected>Категория</option>
@@ -1107,7 +1134,7 @@ function init2() {
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
-			<img src="Calculator.png" width="30px" align="center" title="Калкулатор"
+			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
         		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
@@ -1126,7 +1153,7 @@ function init2() {
 				value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
-			<span ID="CatsBottom">
+			<!--span ID="CatsBottom">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
 				<option value="" selected>Категория</option>
@@ -1138,7 +1165,7 @@ function init2() {
 			</SELECT>
 			<img src="Remove.png" width="30px" title="Изтриване" align="center"
 				 onclick="NoCat()">
-			</span>
+			</span-->
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
@@ -1147,21 +1174,19 @@ function init2() {
 				</datalist>
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
 					align="center" title="Изтриване"></a>
-			</span><br>
+			</span>
 			<table ID="Bottom"><tr ID="TRow">
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
 				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowNote()" 
+				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
-				<td><div class="spinner-4" id="loadingGif" style="display:none"></div>
-					<!-- img id="loadingGif" style="width: 20px; display:none" src="Progress.gif"
-						onclick='style="display: none"'-->
+				<td><div class="spinner" id="loadingGif" style="display:none"></div>
 					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
@@ -1173,7 +1198,6 @@ function init2() {
 
 		<script>
 			const form = document.forms['submit-to-google-sheet']
-			var Total=0, Cnt=0
 			var formatter = new Intl.NumberFormat(undefined, {
 				style: 'currency',
 				currency: 'BGN',
@@ -1245,17 +1269,19 @@ function init2() {
 			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
 				<option value="--FormBgrd">- Оцвети -</option>
 				<option value="--FormBgrd">Фон</option>
+				<option value="--LblColor">Етикети</option>
+				<option value="--InpText">Текст</option>
+				<option value="--InpText">-------------</option>
 				<option value="--FormColor">Форма</option>
 				<option value="--BtnColor">Бутони</option>
 				<option value="--InpBgrd">Полета</option>
-				<option value="--LblColor">Етикети</option>
-				<option value="--InpText">Текст</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 1.05 / 
+			© 2021 CX Extractor 4.06 / 
 		</span>
 	</fieldset>
 	</div>
+</section>
 </body>
 </html>
 <!--
@@ -1272,4 +1298,40 @@ git config --global user.name <github userID>
 git clone <URL from github link copied earlier>
 
 Any newly created file should be available on github after stage/commit/push.
+-->
+
+<!--
+.collapsible {
+  color: var(--LblColor, white);
+  cursor: pointer;
+  padding: 0px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 14px;
+}
+
+.content {
+  padding: 0 0px;
+  display: none;
+  overflow: hidden;
+}
+
+<button type="button" class="collapsible">Дефиниции</button>
+<div class="content">
+</div>
+<script>
+	var coll = document.getElementsByClassName("collapsible");
+	for (let i=0; i<coll.length; i++) {
+		coll[i].addEventListener("click", function() {
+			this.classList.toggle("active");
+			var content = this.nextElementSibling;
+			if (content.style.display === "block") {
+				content.style.display = "none";
+			} else {
+				content.style.display = "block";
+			}
+		})
+	}	
 -->
