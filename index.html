@@ -17,7 +17,7 @@
 
 <script type="text/javascript">
 
-var Encrypted=true; // false uncomment crypto-js above and use the correct TableFilesEnc.txt
+var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
 
 var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	Z100=true, // zoom level
@@ -156,7 +156,6 @@ function createFilesDec(passphrase) {
 		} else {
 			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
 			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
-			document.getElementById("ResBtn").hidden = false;
 		}
 		i++;
 	}
@@ -601,6 +600,10 @@ function dataListOpt(Field, List) {
 }
 
 function showDiv() {
+
+	var x = (Files.length/2) - 1; // remove ShowSaldo option at first use
+	document.getElementById("Files").remove(x);
+
 	CalcFl=true;
 	document.getElementById("CalcSp").hidden=true;
 	document.getElementById('ZoomBtn2').style.display = "none";
@@ -627,8 +630,15 @@ function UseTempl() {
 	Extract();
 }
 
-function SelFile() { // where to save - set in SelFile, default: 0-PFM
-	scriptURL=document.getElementById('Files').value;
+function SelFile() {
+	// alert(Files.length/2);
+	var x = document.getElementById("Files");
+	scriptURL=x.value;  // URL of selected file (table)
+	if (x.selectedIndex == ((Files.length/2) - 1)) { // if it is last option
+		window.open(scriptURL);
+		x.remove(x.selectedIndex); // remove last option
+		x.selectedIndex = 0; scriptURL=x.value; // set to first option
+	};
 }
 
 function ShowNote() {
@@ -969,7 +979,7 @@ function init2() {
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
-}	
+}
 </script>
 
 <script> 
@@ -1159,14 +1169,11 @@ function init2() {
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field4" ID=res4 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res4')"
 					align="center" title="Изтриване">
-			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 
-				value="">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res5')"
 					align="center" title="Изтриване">
-			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 
-				value="">
-				<img src="Log.png" width="30px" ID="ResBtn" hidden
-				    onclick="window.open('https://script.google.com/macros/s/AKfycbxZLD5M_4fLX10Sk9ez1Qtskx7ekDas9S9hzWO8S98AzgRx4cLz6golYrUCmYToeY2pag/exec')"
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 value="">
+				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
 			<!--span ID="CatsBottom">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
