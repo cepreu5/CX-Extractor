@@ -156,6 +156,7 @@ function createFilesDec(passphrase) {
 		} else {
 			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
 			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
+			document.getElementById("ResBtn").hidden = false;
 		}
 		i++;
 	}
@@ -1164,7 +1165,8 @@ function init2() {
 					align="center" title="Изтриване">
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 
 				value="">
-				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
+				<img src="Log.png" width="30px" ID="ResBtn" hidden
+				    onclick="window.open('https://script.google.com/macros/s/AKfycbxZLD5M_4fLX10Sk9ez1Qtskx7ekDas9S9hzWO8S98AzgRx4cLz6golYrUCmYToeY2pag/exec')"
 					align="center" title="Изтриване">
 			<!--span ID="CatsBottom">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
@@ -1290,7 +1292,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 23.08 / 
+			© 2021 CX Extractor 15.10 / 
 		</span>
 	</fieldset>
 	</div>
