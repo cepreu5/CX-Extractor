@@ -1054,9 +1054,9 @@ function init2() {
 		});
 		</script -->
 		
-		&nbsp;&nbsp;
-		<a><img src="Palette.png" width="15px" style="vertical-align: super" onclick="switchSheet()" title="Тема"></a>
-		&nbsp;&nbsp;
+		&nbsp;
+		<a><img src="Palette.png" width="20px" onclick="switchSheet()" title="Тема"></a>
+		&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
 		&nbsp;
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom()" title="Увеличи"></a>
@@ -1239,7 +1239,7 @@ function init2() {
 						  Cnt+". "+document.getElementById("res3").value+" "+
 						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
 					})
-					.catch(error => alert('Грешка! ' + error.message))
+					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
@@ -1270,7 +1270,7 @@ function init2() {
 							throw Error(`Request rejected with status ${res.status}`);
 							}
 						})
-						.catch(error => alert('Грешка! ' + error.message))
+						.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
 				}
 			})
 		</script>
@@ -1299,7 +1299,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 15.10 / 
+			© 2021 CX Extractor 08.11 / 
 		</span>
 	</fieldset>
 	</div>
