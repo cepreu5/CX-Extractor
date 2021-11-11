@@ -810,7 +810,7 @@ function setColor() {
 	var root = document.documentElement;
   root.style.setProperty(document.getElementById("Colors").value, SC);
   document.getElementById("Log").value+=
-    document.getElementById("Colors").value+": "+SC+"\n";
+    document.getElementById("Colors").value+": "+SC+";\n";
   document.getElementById("Colors").selectedIndex=0;
 }
 
@@ -963,8 +963,8 @@ function init() {
 	}
 	//myPaste();
 	MsgData = processUser();
-  	if (MsgData != "undefined")
-  	  document.getElementById("MsgText").value = MsgData;
+  	if (MsgData != "undefined") document.getElementById("MsgText").value = MsgData;
+	if (cfgTheme=="2") switchSheet();
 }	
 
 function init2() {
