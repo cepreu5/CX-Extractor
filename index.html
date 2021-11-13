@@ -1076,7 +1076,7 @@ function init2() {
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Нормализация"></a><br>
 		<!--span ID="Info" style="cursor: pointer; width: 100%;   text-align: right;		" onclick="ShowAnim('Sels')"></span-->
-		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')">Дефиниции</button>
+		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
 		<br>
 		<span ID="Sels" hidden></span>
 		
@@ -1133,7 +1133,7 @@ function init2() {
 				</td>
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
-				<td><div class="loader" id="loadingGif" style="display:none"></div>  <!-- spinner -->
+				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
 					<img id="Suc" style="display:none" title="OK" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
