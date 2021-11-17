@@ -1,0 +1,179 @@
+input,
+select,
+fieldset {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  background: var(--FormBgrd, black);
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+fieldset {
+  width: 330px;
+}
+
+.outer-container {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.inner-container {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.centered-content {
+  display: inline-block;
+  text-align: left;
+  border-radius: 5px;
+  border : 1px solid gray;
+  padding: 5px;
+}
+
+.rotated {
+  transition: all 1s ease-in-out 0s;
+  transform: rotate(360deg);
+}
+
+.cbutton {
+  background-image: url("CalcBtn.png");
+  background-color: transparent;
+  cursor: pointer;
+  border: solid black 0px;
+  color: white;
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+}
+
+/* Color picker */
+input[type="color"] {
+  background-color: #999999;
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  border-radius: 3px;
+  border: 0px solid #000;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: var(--TipColor, Yellow);
+  color: var(--TipText, black);
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  cursor: pointer;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+select option {
+  background: rgba(0, 0, 0, 0.3);
+  color: #000;
+}
+
+img {
+  cursor: pointer;
+  border: 0;
+}
+
+.spinner { 
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  padding:1px;
+  background:conic-gradient(#0000 10%,#f03355) content-box;
+  -webkit-mask:
+    repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+    radial-gradient(farthest-side,#0000 calc(100% - 9px),#000 calc(100% - 8px));
+  -webkit-mask-composite: destination-in;
+  mask-composite: intersect;
+  animation:s4 1s infinite steps(10);
+}
+@keyframes s4 {to{transform: rotate(1turn)}}
+
+.active {
+  display: block;
+  transform: scale(1);
+  opacity: 1;
+  animation: anim .3s ease-in-out;
+}
+
+@keyframes anim {
+  0% {
+    display: none;
+    opacity: 0;
+  }
+  1% {
+    display: block;
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.block {
+  display: block;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+select {
+	font: 16px/23px;
+	color: #565E65;
+	outline: none;
+}
+
+#wrapper {
+	text-align: center;
+	margin: 40px auto;
+}
+
+select {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	padding: 3px 8px;
+	border: 1px solid black;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+select:hover {
+	background-position: right -42px;
+}
+
+select option {
+	padding: 6px 11px;
+}
+
+select option:first-child {
+	color: #C7C7C7;
+}
