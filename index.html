@@ -653,7 +653,19 @@ function ShowSels() {
 	if (document.getElementById("Sels").hidden) {
 		document.getElementById("Sels").hidden = false;
 	}
-	else { document.getElementById("Sels").hidden = true;
+	else {document.getElementById("Sels").hidden = true;
+	}
+}
+
+function ShowSplit() {
+	let S = document.getElementById('res2').value;
+	if (S.substr(0,1)=="-") {S=S.substr(1,S.length-1)}
+	document.getElementById('res2Split').value = S;
+	document.getElementById('res2').value = "";
+	if (document.getElementById("SplitArea").hidden) {
+		document.getElementById("SplitArea").hidden = false;
+	}
+	else {document.getElementById("SplitArea").hidden = true;
 	}
 }
 
@@ -1040,7 +1052,8 @@ function init2() {
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;&nbsp;
 		<a><img src="Copy.png" width="20px" onclick="doSelectAll()" title="Copy"></a>
-		<!-- <script>
+
+		<!-- Paste button <script>
 		document.getElementById("Pst").addEventListener('click', async e => {
 			let text;
 			if (navigator.clipboard) {
@@ -1156,10 +1169,20 @@ function init2() {
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
-			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
+			<input style="text-align:center; width: 7em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
+			<img src="NoteFace.png" width="30px" align="center" title="Split" onclick="ShowSplit()">
 			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
         		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
+
+			<span ID="SplitArea" hidden>
+				<img src="Spacer.png" width="161px" height="20" align="center" title="dummy">
+				<input style="text-align:center; width: 6.9em" class="inputMessage" name="Field2Split" 
+					ID=res2Split value="">&nbsp
+				<img src="Remove.png" width="30px" title="Изтриване" align="center"
+					onclick="ClearFld('res2Split')">
+			   </span>
+
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
 				<datalist id="acc-options">
@@ -1175,19 +1198,6 @@ function init2() {
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
-			<!--span ID="CatsBottom">
-				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
-				onChange="createSubCat('SubCat'+this.selectedIndex)">
-				<option value="" selected>Категория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" onclick="NoCat()"
-					align="center" title="Изтриване">
-			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
-				<option value="" selected>Подкатегория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване" align="center"
-				 onclick="NoCat()">
-			</span-->
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
@@ -1229,6 +1239,21 @@ function init2() {
 			});
 			form.addEventListener('submit', e => {
 				e.preventDefault()
+
+				if (Number(document.getElementById("res2Split").value) !== 0) {
+					if (Number(document.getElementById("res2Split").value) < 0) { // няма сплит за отрицателни стойности
+						ShowSplit();
+					} else {
+						if (Number(document.getElementById("res2Split").value) < Number(document.getElementById("res2").value)) {
+							document.getElementById("res2").value = document.getElementById("res2Split").value;
+						}
+						document.getElementById("res3").value = ""; // сплит сумите да не се отразяват в сметката
+						document.getElementById("res2Split").value = 
+						  (Number(document.getElementById("res2Split").value) - Number(document.getElementById("res2").value)).toFixed(2)
+						document.getElementById("res2").value = "-" + document.getElementById("res2").value
+					}	
+				}
+
 				fetch(
 					scriptURL, {method: 'POST', body: new FormData(form)})
 					.then(response => {
@@ -1240,6 +1265,15 @@ function init2() {
 						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
 					})
 					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
+
+				if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
+					(document.getElementById("res2Split").value === "0.00")) {
+					document.getElementById("res2").value = "";	
+				}
+				if (document.getElementById("res2Split").value === "0.00") {
+					ShowSplit();	
+				}
+
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
@@ -1299,7 +1333,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 22.11 / 
+			© 2021 CX Extractor 23.11 / 
 		</span>
 	</fieldset>
 	</div>
