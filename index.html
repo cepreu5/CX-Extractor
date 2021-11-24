@@ -28,6 +28,9 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	SelectSheet=0, // selected sheet
 	AllTemplFlag=false, // don't get Auto templates	
 	Author = "© 2021 CX Extractor",
+	BArea, // buttons save area
+	cfgTheme="1", // initial values
+	cfgZoom=ZoomL1,
 	OpenFrom = 'res2'; // calculator OpenFrom which field
 
 function processUser() {
@@ -566,18 +569,49 @@ function spinImage(ImgID) {
 
 function Config() {
 	ShowAnim("ConfigFld");
-	if (cfgTheme==="2") document.getElementById("Theme2").checked = true;
+	if (cfgTheme=="2") document.getElementById("Theme2").checked = true;
 	else document.getElementById("Theme1").checked = true;
-	if (cfgZoom===ZoomL2) document.getElementById("Zoom2").checked = true;
+	if (cfgZoom==ZoomL2) document.getElementById("Zoom2").checked = true;
 	else document.getElementById("Zoom1").checked = true;
 }
 
 function SaveConfig() {
 	ShowAnim("ConfigFld");
-	if (document.getElementById("Theme1").checked) cfgTheme="1";
-	else cfgTheme="2";
+	if (document.getElementById("Theme1").checked) {
+		cfgTheme="1";
+		document.getElementById("theme").href = "First.css";
+	}
+	else {
+		cfgTheme="2";
+		document.getElementById("theme").href = "Second.css";
+	}
+	localStorage.setItem("cfgTheme", cfgTheme);
+	let theme = document.getElementById("theme");
+	if (theme.getAttribute("href") == "Second.css") {
+		document.getElementById("Cell1").innerHTML=
+			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
+		document.getElementById("Cell2").innerHTML=
+			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+		document.getElementById("Cell3").innerHTML=
+			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
+		document.getElementById("Cell4").innerHTML=
+			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+	} else {
+		document.getElementById("TRow").innerHTML=BArea;
+	}
+
 	if (document.getElementById("Zoom1").checked) cfgZoom=ZoomL1;
 	else cfgZoom=ZoomL2;
+	localStorage.setItem("cfgZoom", cfgZoom);
+	if (cfgZoom==ZoomL2) {document.body.style.zoom=ZoomL2;
+		document.getElementById("ZoomBtn").src="Zoom2.png";
+		document.getElementById("ZoomBtn").title="Намали";
+		document.getElementById('ZoomBtn2').style.display = "block";
+	}	else {document.body.style.zoom=ZoomL1;
+		document.getElementById("ZoomBtn").src="Zoom.png";
+		document.getElementById("ZoomBtn").title="Увеличи";
+		document.getElementById('ZoomBtn2').style.display = "none";
+	}
 }
 
 
@@ -801,11 +835,15 @@ function InsDate() {
 function CZoom () {
 	Z100=!Z100;
 	if (Z100) {document.body.style.zoom=ZoomL2;
+		cfgZoom=ZoomL2;
+		document.getElementById("Zoom2").checked = true;
 		document.getElementById("ZoomBtn").src="Zoom2.png";
 		document.getElementById("ZoomBtn").title="Намали";
 		document.getElementById('ZoomBtn2').style.display = "block";
 	}
 	else {document.body.style.zoom=ZoomL1;
+		cfgZoom=ZoomL1;
+		document.getElementById("Zoom1").checked = true;
 		document.getElementById("ZoomBtn").src="Zoom.png";
 		document.getElementById("ZoomBtn").title="Увеличи";
 		document.getElementById('ZoomBtn2').style.display = "none";
@@ -817,11 +855,10 @@ function AddCfg() {
 		document.getElementById('Author').innerHTML+CfgDate;
 }
 
-var BArea;
 function switchSheet() {
   let theme = document.getElementById("theme");
   if (theme.getAttribute("href") == "First.css") {
-		BArea = document.getElementById("TRow").innerHTML;
+		// BArea = document.getElementById("TRow").innerHTML;
     theme.href = "Second.css";
     document.getElementById("Cell1").innerHTML=
 		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
@@ -996,7 +1033,18 @@ function init() {
 	//myPaste();
 	MsgData = processUser();
   	if (MsgData != "undefined") document.getElementById("MsgText").value = MsgData;
-	if (cfgTheme=="2") switchSheet();
+	BArea = document.getElementById("TRow").innerHTML;
+
+	if (localStorage.getItem("cfgTheme")!=null) cfgTheme=localStorage.getItem("cfgTheme");
+	if (cfgTheme=="2") {
+		switchSheet();
+		document.getElementById("Theme2").checked = true;
+	}	
+	if (localStorage.getItem("cfgZoom")!=null) cfgZoom=localStorage.getItem("cfgZoom");
+	if (cfgZoom==ZoomL2) {
+		CZoom();
+		document.getElementById("Zoom2").checked = true;
+	}
 }	
 
 function init2() {
