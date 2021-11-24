@@ -564,29 +564,52 @@ function spinImage(ImgID) {
 	imageToSpin.classList.toggle('rotated');
 }
 
+function Config() {
+	ShowAnim("ConfigFld");
+	if (cfgTheme==="2") document.getElementById("Theme2").checked = true;
+	else document.getElementById("Theme1").checked = true;
+	if (cfgZoom===ZoomL2) document.getElementById("Zoom2").checked = true;
+	else document.getElementById("Zoom1").checked = true;
+}
+
+function SaveConfig() {
+	ShowAnim("ConfigFld");
+	if (document.getElementById("Theme1").checked) cfgTheme="1";
+	else cfgTheme="2";
+	if (document.getElementById("Zoom1").checked) cfgZoom=ZoomL1;
+	else cfgZoom=ZoomL2;
+}
+
+
 function Normal() {
 	spinImage("NormBtn");
 	var text=document.getElementById("MsgText").value;
-	text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
-	text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
-	text=text.replace(/([\d])\,([\d\s])/g,'$1.$2');			// dd,dd dd.dd
-	text=text.replace(/ ([\d]+) ([\d])/g,' $1$2');			// d ddd dddd
-	text=text.replace(/ (\d\d)\:(\d\d) /g,' $1:$2:00 ');			// dd:dd dd:dd:00
-	text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
-	text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
-	text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
-	text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
-	text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
-	text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
-	text=text.replace(/([^\d]),([^\d\s])/g,'$1, $2');		// aaa,aaa aaa, aaa
-	text=text.replace(/([\d])\.([^\d\s])/g,'$1. $2');		// 111.aaa 111. aaa
-	//text=text.replace(/([^\d])\.([\d\s])/g,'$1. $2');		// aaa.111 aaa. 111
-	text=text.replace(/([\d])\,([^\d\s])/g,'$1, $2');		// 111,aaa 111, aaa
-	//text=text.replace(/([^\d])\,([\d\s])/g,'$1, $2');		// aaa,111 aaa, 111
-	text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
-	//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
-	document.getElementById("MsgText").value=text;
-	Extract();
+	if (text === "") {
+		if (document.getElementById("ConfigFld").classList.length>0) SaveConfig()
+		else Config();
+	}
+	else {
+		text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
+		text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
+		text=text.replace(/([\d])\,([\d\s])/g,'$1.$2');			// dd,dd dd.dd
+		text=text.replace(/ ([\d]+) ([\d])/g,' $1$2');			// d ddd dddd
+		text=text.replace(/ (\d\d)\:(\d\d) /g,' $1:$2:00 ');			// dd:dd dd:dd:00
+		text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
+		text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
+		text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
+		text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
+		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
+		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
+		text=text.replace(/([^\d]),([^\d\s])/g,'$1, $2');		// aaa,aaa aaa, aaa
+		text=text.replace(/([\d])\.([^\d\s])/g,'$1. $2');		// 111.aaa 111. aaa
+		//text=text.replace(/([^\d])\.([\d\s])/g,'$1. $2');		// aaa.111 aaa. 111
+		text=text.replace(/([\d])\,([^\d\s])/g,'$1, $2');		// 111,aaa 111, aaa
+		//text=text.replace(/([^\d])\,([\d\s])/g,'$1, $2');		// aaa,111 aaa, 111
+		text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
+		//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
+		document.getElementById("MsgText").value=text;
+		Extract();
+	}
 }
 
 function dataListOpt(Field, List) {
@@ -618,9 +641,9 @@ function showSuc() {
 	document.getElementById('loadingGif').style.display = "none";
 	document.getElementById('ZoomBtn2').style.display = "none";
 	document.getElementById('Suc').style.display = "block";
-	setTimeout(function() {
-    	document.getElementById('Suc').style.display = "none";
-  	},7000);  
+	//setTimeout(function() {
+    //	document.getElementById('Suc').style.display = "none";
+  	//},7000);  
 }
 
 function UseTempl() {
@@ -658,15 +681,12 @@ function ShowSels() {
 }
 
 function ShowSplit() {
+	document.getElementById("res3").value = ""; // сплит сумите да не се отразяват в сметката
 	let S = document.getElementById('res2').value;
 	if (S.substr(0,1)=="-") {S=S.substr(1,S.length-1)}
 	document.getElementById('res2Split').value = S;
 	document.getElementById('res2').value = "";
-	if (document.getElementById("SplitArea").hidden) {
-		document.getElementById("SplitArea").hidden = false;
-	}
-	else {document.getElementById("SplitArea").hidden = true;
-	}
+	ShowAnim("SplitArea");
 }
 
 function ShowAnim(BoxEl) {
@@ -1079,6 +1099,21 @@ function init2() {
 		</textarea>
 		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" hidden>
 		</textarea>
+
+		<div ID="ConfigFld" hidden>
+			<br>
+			Тема:
+			<input type = "radio" name="OptTheme" id="Theme1" value="1"> <label for="Theme1">1</label>
+			<input type = "radio" name="OptTheme" id="Theme2" value="2"> <label for="Theme2">2</label>
+			&nbsp;&nbsp;
+			&nbsp;&nbsp;&nbsp;&nbsp;
+			Мащаб:
+			<input type = "radio" name="OptZoom" id="Zoom1" value="Zoom1"> <label for="Zoom1">Норм.</label>
+			<input type = "radio" name="OptZoom" id="Zoom2" value="Zoom2" > <label for="Zoom2">Увел.</label>
+			<!--a><img src="Space.png" width="20px" onclick="SaveConfig()"
+				align="center" title="Save"></a-->
+		</div>
+
 		<br>
 		Шаблони 
 		<span ID="Sel"></span>&nbsp;Авто 
@@ -1247,7 +1282,6 @@ function init2() {
 						if (Number(document.getElementById("res2Split").value) < Number(document.getElementById("res2").value)) {
 							document.getElementById("res2").value = document.getElementById("res2Split").value;
 						}
-						document.getElementById("res3").value = ""; // сплит сумите да не се отразяват в сметката
 						document.getElementById("res2Split").value = 
 						  (Number(document.getElementById("res2Split").value) - Number(document.getElementById("res2").value)).toFixed(2)
 						document.getElementById("res2").value = "-" + document.getElementById("res2").value
