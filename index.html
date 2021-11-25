@@ -31,7 +31,7 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	BArea, // buttons save area
 	cfgTheme="1", // initial values
 	cfgZoom=ZoomL1,
-	ZoomL1="105%",
+	ZoomL1="100%",
 	ZoomL2="160%",
 
 	OpenFrom = 'res2'; // calculator OpenFrom which field
@@ -1006,7 +1006,7 @@ function init() {
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
 	var ww=window.innerWidth;
-	document.getElementById("Info").innerHTML="» SW: "+ww;
+	document.getElementById("Info").innerHTML="» SW: "+ww+",      "+((100*ww/330)-6).toFixed(0)+"%";
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
 		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
@@ -1029,9 +1029,10 @@ function init() {
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
 		var pwd = localStorage.getItem("CXpass");
-  		if (pwd != "") {
+  		if (pwd != null) {
 			// Decrypt
-			var bytes  = CryptoJS.AES.decrypt(pwd, Author); pwd = bytes.toString(CryptoJS.enc.Utf8);
+			var bytes = CryptoJS.AES.decrypt(pwd, Author); 
+			pwd = bytes.toString(CryptoJS.enc.Utf8);
 			document.getElementById("Password").value = pwd;
 		}
 		document.getElementById("Password").focus();
@@ -1063,7 +1064,11 @@ function init2() {
 		localStorage.setItem("CXpass", ciphertext);
 	}  
 	if (document.getElementById("RFgtCookie").checked) {
-		localStorage.setItem("CXpass", "");
+		localStorage.removeItem("CXpass");
+		localStorage.removeItem("ZoomL1");
+		localStorage.removeItem("ZoomL2");
+		localStorage.removeItem("cfgTheme");
+		localStorage.removeItem("cfgZoom");
 	}  
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
@@ -1171,6 +1176,8 @@ function init2() {
 			&nbsp;Норм.&nbsp;&nbsp;&nbsp;&nbsp;
 			<input style="text-align:center; width: 4em" class="inputMessage" ID="MaxZoom" value="">
 			&nbsp;Увел.
+			<hr>
+			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!
 			<hr>
 		</div>
 
