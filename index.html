@@ -31,6 +31,9 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	BArea, // buttons save area
 	cfgTheme="1", // initial values
 	cfgZoom=ZoomL1,
+	ZoomL1="105%",
+	ZoomL2="160%",
+
 	OpenFrom = 'res2'; // calculator OpenFrom which field
 
 function processUser() {
@@ -573,6 +576,8 @@ function Config() {
 	else document.getElementById("Theme1").checked = true;
 	if (cfgZoom==ZoomL2) document.getElementById("Zoom2").checked = true;
 	else document.getElementById("Zoom1").checked = true;
+	document.getElementById("NormZoom").value=ZoomL1;
+	document.getElementById("MaxZoom").value=ZoomL2;
 }
 
 function SaveConfig() {
@@ -612,6 +617,9 @@ function SaveConfig() {
 		document.getElementById("ZoomBtn").title="Увеличи";
 		document.getElementById('ZoomBtn2').style.display = "none";
 	}
+
+	localStorage.setItem("ZoomL1", document.getElementById("NormZoom").value);
+	localStorage.setItem("ZoomL2", document.getElementById("MaxZoom").value);
 }
 
 
@@ -990,7 +998,6 @@ function init() {
 	var MsgData;
 	getTempls();
 	createSels();
-	//createCats();
 	dataListOpt(Notes, "combo-options");
 	dataListOpt(Accs, "acc-options");
 	ClearTextArea();
@@ -1015,6 +1022,8 @@ function init() {
 	createCats();
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
+	if (localStorage.getItem("ZoomL1")!=null) ZoomL1=localStorage.getItem("ZoomL1");
+	if (localStorage.getItem("ZoomL2")!=null) ZoomL2=localStorage.getItem("ZoomL2");
 	CZoom ();
 	detectSwipe('MsgText', Gestures);
 	if (Encrypted) {
@@ -1149,20 +1158,23 @@ function init2() {
 		</textarea>
 
 		<div ID="ConfigFld" hidden>
-			<br>
 			Тема:
 			<input type = "radio" name="OptTheme" id="Theme1" value="1"> <label for="Theme1">1</label>
 			<input type = "radio" name="OptTheme" id="Theme2" value="2"> <label for="Theme2">2</label>
 			&nbsp;&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;&nbsp;
 			Мащаб:
 			<input type = "radio" name="OptZoom" id="Zoom1" value="Zoom1"> <label for="Zoom1">Норм.</label>
 			<input type = "radio" name="OptZoom" id="Zoom2" value="Zoom2" > <label for="Zoom2">Увел.</label>
-			<!--a><img src="Space.png" width="20px" onclick="SaveConfig()"
-				align="center" title="Save"></a-->
+			<br>
+			Изглед:&nbsp;&nbsp;&nbsp;&nbsp;
+			<input style="text-align:center; width: 4em" class="inputMessage" ID="NormZoom" value="">
+			&nbsp;Норм.&nbsp;&nbsp;&nbsp;&nbsp;
+			<input style="text-align:center; width: 4em" class="inputMessage" ID="MaxZoom" value="">
+			&nbsp;Увел.
+			<hr>
 		</div>
 
-		<br>
 		Шаблони 
 		<span ID="Sel"></span>&nbsp;Авто 
 		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
@@ -1415,7 +1427,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 23.11 / 
+			© 2021 CX Extractor 25.11 / 
 		</span>
 	</fieldset>
 	</div>
