@@ -541,6 +541,7 @@ function Combo(part) {
 }
 
 function AutoTempl() {
+	document.getElementById("NormBtn").title="Нормализация";
 	var i=0, j=0;
 	if (!AllTemplFlag) {
 		var text=document.getElementById("MsgText").value;
@@ -620,6 +621,8 @@ function SaveConfig() {
 
 	localStorage.setItem("ZoomL1", document.getElementById("NormZoom").value);
 	localStorage.setItem("ZoomL2", document.getElementById("MaxZoom").value);
+
+	location.reload();
 }
 
 
@@ -778,6 +781,7 @@ function ClearTextArea() {
 		document.getElementById("Log").value="";
 		Total=0; Cnt=0; // log counter and total
 	}
+	document.getElementById("NormBtn").title="Параметри";
 }
 
 function ClearFld(FldID) {
@@ -1163,21 +1167,23 @@ function init2() {
 		</textarea>
 
 		<div ID="ConfigFld" hidden>
-			Тема:
+			<b>Тема:</b>
 			<input type = "radio" name="OptTheme" id="Theme1" value="1"> <label for="Theme1">1</label>
 			<input type = "radio" name="OptTheme" id="Theme2" value="2"> <label for="Theme2">2</label>
 			&nbsp;&nbsp;
-			Мащаб:
+			<b>Мащаб:</b>
 			<input type = "radio" name="OptZoom" id="Zoom1" value="Zoom1"> <label for="Zoom1">Норм.</label>
 			<input type = "radio" name="OptZoom" id="Zoom2" value="Zoom2" > <label for="Zoom2">Увел.</label>
 			<br>
-			Изглед:&nbsp;&nbsp;&nbsp;&nbsp;
-			<input style="text-align:center; width: 4em" class="inputMessage" ID="NormZoom" value="">
-			&nbsp;Норм.&nbsp;&nbsp;&nbsp;&nbsp;
-			<input style="text-align:center; width: 4em" class="inputMessage" ID="MaxZoom" value="">
-			&nbsp;Увел.
-			<hr>
-			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!
+			<b>Изглед:</b>
+			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="NormZoom" value="">
+			Норм.
+			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="MaxZoom" value="">
+			Увел.&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
+			  onclick="SaveConfig()" value="Запис">
+			<!--hr>
+			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!-->
 			<hr>
 		</div>
 
@@ -1188,7 +1194,7 @@ function init2() {
 		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
-			align="center" title="Нормализация"></a><br>
+			align="center" title="Параметри"></a><br>
 		<!--span ID="Info" style="cursor: pointer; width: 100%;   text-align: right;		" onclick="ShowAnim('Sels')"></span-->
 		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
 		<br>
