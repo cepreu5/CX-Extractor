@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="bg">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head> 
+  <title>CX Extractor</title>
+  <link rel="shortcut icon" type="image/png" href="Fav.png" />
+  <link rel="stylesheet" href="Common.css" />
+  <link rel="stylesheet" href="NewLook.css" />
+  <link rel="stylesheet" href="First.css" id="theme" />
+
+  <script type="text/javascript" src="app-config.txt"></script>
+  <script type="text/javascript" src="TableFiles.txt"></script>
+  <script src="NewLook.js"></script>
+  <script src="Calc.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
+    integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+</head>
+
+<body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
+	onload="init()">
+  <!--div id="header">
+    <h1>CX Extractor</h1>
+    <p>Автоматизация за Вашите финанси</p>
+  </div-->
+    
+  <div class="container">
+    <div class="card">
+
+      <div class="card-image">
+        <img src="W1.jpg">
+      </div>
+
+      <div class="card-text">
+        <section class="outer-container">
+          <div class="inner-container">
+            <fieldset ID="Main" class="centered-content">
+          
+              <div ID="PwdFld">
+                <input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
+                <img id="Suc2" src="ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'><br>
+                <input type = "radio" name="OptRadio" id="RCookie"> <label for="RCookie">Запомни</label>
+                <input type = "radio" name="OptRadio" id="RFgtCookie"> <label for="RFgtCookie">Забрави</label>
+                &nbsp;&nbsp;
+                <script>
+                var input = document.getElementById("Password");
+                input.addEventListener("keyup", function(event) {
+                  if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("Suc2").click();
+                  }
+                });
+                </script>
+              </div>
+          
+              <SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
+              </SELECT>
+              &nbsp;
+              <a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
+              &nbsp;
+              <a><img src="Copy.png" width="20px" onclick="doSelectAll()" title="Copy"></a>
+              &nbsp;
+              <a><img src="Palette.png" width="20px" onclick="switchSheet()" title="Тема"></a>
+              &nbsp;
+              <a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
+              &nbsp;
+              <a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom()" title="Увеличи"></a>
+              <br>
+              <textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
+                onFocus="AutoTempl()" onInput="AutoTempl()">
+              </textarea>
+              <textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" hidden>
+              </textarea>
+          
+              <div ID="ConfigFld" hidden>
+                <b>Тема:</b>
+                <input type = "radio" name="OptTheme" id="Theme1" value="1"> <label for="Theme1">1</label>
+                <input type = "radio" name="OptTheme" id="Theme2" value="2"> <label for="Theme2">2</label>
+                &nbsp;&nbsp;
+                <b>Мащаб:</b>
+                <input type = "radio" name="OptZoom" id="Zoom1" value="Zoom1"> <label for="Zoom1">Норм.</label>
+                <input type = "radio" name="OptZoom" id="Zoom2" value="Zoom2" > <label for="Zoom2">Увел.</label>
+                <br>
+                <b>Изглед:</b>
+                <input style="text-align:center; width: 3.5em" class="inputMessage" ID="NormZoom" value="">
+                Норм.
+                <input style="text-align:center; width: 3.5em" class="inputMessage" ID="MaxZoom" value="">
+                Увел.&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
+                  onclick="SaveConfig()" value="Запис"><br>
+                <hr>
+              </div>
+          
+              Шаблони 
+              <span ID="Sel"></span>&nbsp;Авто 
+              <a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
+                onclick="NoAuto()" title="Авто"></a> 
+              <a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
+                onclick="NoAuto()" title="Авто"></a> 
+              <a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
+                align="center" title="Параметри"></a><br>
+              <button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
+              <br>
+            </fieldset>
+          </div>
+        </section>
+      </div>  <!--div class="card"-->
+          
+      <div class="card-calc" ID="CalcSp" hidden>
+        <!-- Calc -->
+          <div style="margin-left: 1px; text-align: center;">
+            <span>
+              <table border="0" width="90%"> 
+                <tr> 
+                  <td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
+                  <td><input type="button" class="cbutton" value="C" onclick="clr()"/></td> 
+                </tr> 
+                <tr> 
+                  <td><input type="button" class="cbutton" value="1" onclick="dis('1')"/> </td> 
+                  <td><input type="button" class="cbutton" value="2" onclick="dis('2')"/> </td> 
+                  <td><input type="button" class="cbutton" value="3" onclick="dis('3')"/> </td> 
+                  <td><input type="button" class="cbutton" value="/" onclick="dis('/')"/> </td> 
+                </tr> 
+                <tr> 
+                  <td><input type="button" class="cbutton" value="4" onclick="dis('4')"/> </td> 
+                  <td><input type="button" class="cbutton" value="5" onclick="dis('5')"/> </td> 
+                  <td><input type="button" class="cbutton" value="6" onclick="dis('6')"/> </td> 
+                  <td><input type="button" class="cbutton" value="-" onclick="dis('-')"/> </td> 
+                </tr> 
+                <tr> 
+                  <td><input type="button" class="cbutton" value="7" onclick="dis('7')"/> </td> 
+                  <td><input type="button" class="cbutton" value="8" onclick="dis('8')"/> </td> 
+                  <td><input type="button" class="cbutton" value="9" onclick="dis('9')"/> </td> 
+                  <td><input type="button" class="cbutton" value="+" onclick="dis('+')"/> </td> 
+                </tr> 
+                <tr> 
+                  <td><input type="button" class="cbutton" value="." onclick="dis('.')"/> </td> 
+                  <td><input type="button" class="cbutton" value="0" onclick="dis('0')"/> </td> 
+                  <!-- solve function call function solve to evaluate value -->
+                  <td><input type="button" class="cbutton" value="=" onclick="solve()"/> </td> 
+                  <td><input type="button" class="cbutton" value="*" onclick="dis('*')"/> </td> 
+                </tr> 
+              </table>
+            </span>
+          </div>
+      </div><!--div class="card-calc"-->
+
+      <!--div class="container"-->
+
+        <div class="card-templDef" ID="Sels" hidden>
+        </div> <!--div class="card-price"-->
+
+        <div class="card-resFields">
+          <div class="card">
+              <form name="submit-to-google-sheet" onsubmit="return false;">
+                <table ID="Top" hidden>
+                  <tr ID="TRow">
+                  <td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
+                    title="Бележка">
+                  </td>
+                  <td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+                    title="Шаблон">
+                  </td>
+                  <td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
+                    onclick="ExtClick()">
+                  </td>
+                  <td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+                    title="Изпрати" onclick="showDiv()">
+                  </td>
+                  <td><snap class="loader" id="loadingGif" style="display:none;">
+                    <img id="Suc" style="display:none" title="OK" src="Suc.png"
+                      onclick='style="display: none"'>
+                    <a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
+                      style="display:none" title="Намали"></a>
+                  </td>
+                  </tr>
+                </table>
+                <span ID="CatsTop">
+                  <SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
+                  onChange="createSubCat('SubCat'+this.selectedIndex)">
+                  <option value="" selected>Категория</option>
+                  </SELECT>
+                  <img src="Remove.png" width="30px" onclick="NoCat()"
+                      align="center" title="Изтриване">
+                  <SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
+                    <option value="" selected>Подкатегория</option>
+                  </SELECT>
+                  <img src="Remove.png" width="30px" title="Изтриване ↓" align="center"
+                    onclick="ClearFld('res2')">
+                </span>
+                <input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
+                <img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
+                      onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
+                <input style="text-align:center; width: 7em" class="inputMessage" name="Field2" 
+                  ID=res2 value="">
+                <img src="NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
+                <img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
+                      onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
+
+                <span ID="SplitArea" hidden>
+                  <img src="Spacer.png" width="161px" height="20" align="center">
+                  <input style="text-align:center; width: 6.9em" class="inputMessage" name="Field2Split" 
+                    ID=res2Split value="">&nbsp
+                  <img src="Remove.png" width="30px" title="Изтриване" align="center"
+                    onclick="ClearFld('res2Split')">
+                </span>
+
+                <input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
+                  list="acc-options">
+                  <datalist id="acc-options">
+                  </datalist>
+                <img src="Remove.png" width="30px" onclick="ClearFld('res3')"
+                    align="center" title="Изтриване">
+                <input style="text-align:center; width: 9.5em" class="inputMessage" name="Field4" ID=res4 value="">
+                  <img src="Remove.png" width="30px" onclick="ClearFld('res4')"
+                    align="center" title="Изтриване">
+                <input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 value="">
+                  <img src="Remove.png" width="30px" onclick="ClearFld('res5')"
+                    align="center" title="Изтриване">
+                <input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 value="">
+                  <img src="Remove.png" width="30px" onclick="ClearFld('res6')"
+                    align="center" title="Изтриване">
+                <span ID="NoteFld">
+                  Бележка: 
+                  <input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
+                    list="combo-options" value="">
+                  <datalist class="inputMessage" id="combo-options">
+                  </datalist>
+                  <a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
+                    align="center" title="Изтриване"></a>
+                </span>
+                <table ID="Bottom">
+                <tr ID="TRow">
+                  <td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+                    title="Изпрати" onclick="showDiv()" alt="Изпрати">
+                  </td>
+                  <td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"  name="ExtBtn"
+                    onclick="ExtClick()">
+                  </td>
+                  <td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
+                    title="Бележка">
+                  </td>
+                  <td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+                    title="Шаблон">
+                  </td>
+                  <td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
+                    <img id="Suc" style="display:none" src="Suc.png"
+                      onclick='style="display: none"'>
+                    <a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
+                      style="display:none" title="Намали"></a>
+                  </td>
+                  <tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
+                    <td>Изпрати</td><td>Екстракт</td><td>Бележка</td><td>Шаблон</td>
+                  </tr>
+                </tr>
+                </table>
+
+              </form>
+
+              <script>
+                const form = document.forms['submit-to-google-sheet']
+                var formatter = new Intl.NumberFormat(undefined, {
+                  style: 'currency',
+                  currency: 'BGN',
+                });
+                form.addEventListener('submit', e => {
+                  e.preventDefault()
+
+                  if (Number(document.getElementById("res2Split").value) !== 0) {
+                    if (Number(document.getElementById("res2Split").value) < 0) { // няма сплит за отрицателни стойности
+                      ShowSplit();
+                    } else {
+                      if (Number(document.getElementById("res2Split").value) < Number(document.getElementById("res2").value)) {
+                        document.getElementById("res2").value = document.getElementById("res2Split").value;
+                      }
+                      document.getElementById("res2Split").value = 
+                        (Number(document.getElementById("res2Split").value) - Number(document.getElementById("res2").value)).toFixed(2)
+                      document.getElementById("res2").value = "-" + document.getElementById("res2").value
+                    }	
+                  }
+
+                  fetch(
+                    scriptURL, {method: 'POST', body: new FormData(form)})
+                    .then(response => {
+                      showSuc();
+                      Total += +document.getElementById("res2").value
+                      Cnt+=1
+                      document.getElementById("Log").value=document.getElementById("Log").value+
+                        Cnt+". "+document.getElementById("res3").value+" "+
+                        document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
+                    })
+                    .catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
+
+                  if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
+                    (document.getElementById("res2Split").value === "0.00")) {
+                    document.getElementById("res2").value = "";	
+                  }
+                  if (document.getElementById("res2Split").value === "0.00") {
+                    ShowSplit();	
+                  }
+
+                  if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
+                    var WM=1, N;
+                    if (document.getElementById("res4").value.substr(3,1)=="/") {
+                      WM=document.getElementById("res5").value
+                    }
+                    var S=document.getElementById("res2").value
+                    N=parseFloat(S)*parseFloat(WM)
+                    if (document.getElementById("res4").value.substr(0,4)=="BGN/") {
+                        N=parseFloat(S)/parseFloat(WM)
+                    }
+                    if (!isNaN(N)) {
+                      S=N.toString()
+                      S=parseFloat(S).toFixed(2)
+                    }
+                    if (S.substr(0,1)=="-") {S=S.substr(1,S.length-1)}
+                    else {S="-"+S}
+                    document.getElementById("res2").value=S
+                    var AccSave=document.getElementById("res3").value
+                    document.getElementById("res3").value=
+                      document.getElementById("SubCats").value
+                    document.getElementById("SubCats").value=AccSave
+                    document.getElementById("SubCats").selected
+                    fetch(scriptURL, {method: 'POST', body: new FormData(form)})
+                      .then(res => { 
+                        if(res.ok) {
+                          return res;
+                        } else {
+                        throw Error(`Request rejected with status ${res.status}`);
+                        }
+                      })
+                      .catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
+                  }
+                })
+              </script>
+              
+              <span ID="TemplFld">
+                Шаблон: <input style="text-align:left; width: 18em" ID="res" class="inputMessage" value="">
+                <a><img src="Remove.png" width="20px" onclick="ClearFld('res')"
+                  align="center" title="Изтриване"></a>
+                <br>
+                CSV: <input style="text-align:left; width: 19.8em" ID="CSV" class="inputMessage" value=""> 
+                <a><img src="Copy.png" width="20px" align="top" onclick="CopyCSV()" title="Copy"></a>
+              </span>
+              <span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
+                &nbsp;&nbsp;
+                <a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
+                &nbsp;
+                <input type="color" value="#FFFFFF" id="colorPicker" hidden>
+                <SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
+                  <option value="--FormBgrd">- Оцвети -</option>
+                  <option value="--FormBgrd">Фон</option>
+                  <option value="--LblColor">Етикети</option>
+                  <option value="--InpText">Текст</option>
+                  <option value="--InpText">-------------</option>
+                  <option value="--FormColor">Форма</option>
+                  <option value="--BtnColor">Бутони</option>
+                  <option value="--InpBgrd">Полета</option>
+                </SELECT>
+                &nbsp;&nbsp;&nbsp;
+                © 2021 CX Extractor 25.11 / 
+              </span>
+          </div>  <!--div class="card"-->
+        </div> <!--div class="card-text"-->
+      </divdiv class="container"-->
+    </div>  <!--div class="card"-->
+  </div>  <!--div class="container"-->
+</body>
+</html>

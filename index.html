@@ -1195,10 +1195,8 @@ function init2() {
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Параметри"></a><br>
-		<!--span ID="Info" style="cursor: pointer; width: 100%;   text-align: right;		" onclick="ShowAnim('Sels')"></span-->
 		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
-		<br>
-		<span ID="Sels" hidden></span>
+		<span ID="Sels" hidden><br></span><br>
 		
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
@@ -1207,7 +1205,7 @@ function init2() {
 				<tr> 
 					<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
 					<!-- clr() function will call clr to clear all value -->
-					<td><input type="button" class="cbutton" value="C" onclick="clr()"/> </td> 
+					<td><input type="button" class="cbutton" value="C" onclick="clr()"/></td> 
 				</tr> 
 				<tr> 
 					<!-- create button and assign value to each button -->
@@ -1242,7 +1240,11 @@ function init2() {
 		</div>
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
-			<table ID="Top" hidden><tr ID="TRow">
+			<table ID="Top" hidden>
+				<tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
+					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><td>Шаблон</td>
+				</tr>
+				<tr ID="TRow">
 				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
@@ -1270,7 +1272,7 @@ function init2() {
 			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
 				<option value="" selected>Подкатегория</option>
 			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване" align="center"
+			<img src="Remove.png" width="30px" title="Изтриване ↓" align="center"
 				 onclick="ClearFld('res2')">
 			</span>
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
@@ -1278,12 +1280,12 @@ function init2() {
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
 			<input style="text-align:center; width: 7em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
-			<img src="NoteFace.png" width="30px" align="center" title="Split" onclick="ShowSplit()">
+			<img src="NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
 			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
         		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
 
 			<span ID="SplitArea" hidden>
-				<img src="Spacer.png" width="161px" height="20" align="center" title="dummy">
+				<img src="Spacer.png" width="161px" height="20" align="center">
 				<input style="text-align:center; width: 6.9em" class="inputMessage" name="Field2Split" 
 					ID=res2Split value="">&nbsp
 				<img src="Remove.png" width="30px" title="Изтриване" align="center"
@@ -1314,15 +1316,15 @@ function init2() {
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
 					align="center" title="Изтриване"></a>
 			</span>
-			<table ID="Bottom"><tr ID="TRow">
-				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+			<table ID="Bottom"><tr ID="TRow" style="width: 70px;">
+				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
+				<td ID="Cell2"><img src="0-Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
+				<td ID="Cell3"><img src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+				<td ID="Cell4"><img src="0-Template.png" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
 				<td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
@@ -1331,6 +1333,9 @@ function init2() {
 					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a>
 				</td></tr>
+				<tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
+					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><td>Шаблон</td>
+				</tr>
 			</table>
 
 		</form>
@@ -1340,7 +1345,7 @@ function init2() {
 			var formatter = new Intl.NumberFormat(undefined, {
 				style: 'currency',
 				currency: 'BGN',
-				// These options are needed to round to whole numbers if that's what you want.
+				//These options are needed to round to whole numbers if that's what you want.
 				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
 				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 			});
