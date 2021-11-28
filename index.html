@@ -1078,6 +1078,7 @@ function init2() {
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
+	document.getElementById("Main").style = "display: inline;";
 }
 </script>
 
@@ -1110,13 +1111,15 @@ function init2() {
 
 <body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
 	onload="init()">
-<section class="outer-container">
-	<div class="inner-container">
-	<fieldset ID="Main" class="centered-content">
 
-		<div ID="PwdFld">
-			<input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
-			<img id="Suc2" src="ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'><br>
+	<section class="outer-container">
+	<div class="inner-container">
+
+		<div ID="PwdFld" class="splash">
+			<label for="Password">Парола:</label>
+			<input id="Password" type="password" style="width: 170px;" class="inputMessage" name="Password"/>&nbsp;&nbsp;
+			<img id="Suc2" src="ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'>
+			<br>&nbsp;&nbsp;&nbsp;&nbsp;
 			<!-- input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
 			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label><br-->
 			<input type = "radio" name="OptRadio" id="RCookie"> <label for="RCookie">Запомни</label>
@@ -1132,7 +1135,8 @@ function init2() {
 			});
 			</script>
 		</div>
-
+	
+		<fieldset ID="Main" class="centered-content" style="display:none;">
 		<SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
 		</SELECT>
 		&nbsp;
@@ -1457,7 +1461,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 25.11 / 
+			© 2021 CX Extractor 28.11 / 
 		</span>
 	</fieldset>
 	</div>

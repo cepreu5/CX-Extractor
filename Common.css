@@ -199,6 +199,16 @@ select option {
 	padding: 6px 11px;
 }
 
+.splash {
+  background-image: url("Wallet.jpg");
+  //background-color: #cccccc;
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  //background-size: cover;
+  position: relative;
+  color: white;
+}
 /*
 select option:first-child {
 	color: #C70000;
