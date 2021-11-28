@@ -7,6 +7,7 @@
 <link rel="shortcut icon" type="image/png" href="Fav.png" />
 <link rel="stylesheet" href="Common.css" />
 <link rel="stylesheet" href="First.css" id="theme" />
+<link rel="stylesheet" href="Accordion.css" />
 
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
@@ -1195,9 +1196,21 @@ function init2() {
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Параметри"></a><br>
-		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
-		<span ID="Sels" hidden><br></span><br>
-		
+
+		<!--button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button-->
+		<!--span ID="Sels" hidden><br></span><br-->
+
+		<span class="container">
+			<div class="accordion">
+				<dt>
+				  <a href="#Sels" aria-expanded="false" aria-controls="Sels" ID="Info"
+					class="accordion-title accordionTitle js-accordionTrigger"></a>
+				</dt>
+				<div class="accordion-content accordionItem is-collapsed" id="Sels" aria-hidden="true"><br></div><br>
+			</div>
+		</span>
+		<script src="Accordion.js"></script>
+
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
 		<span ID="CalcSp" hidden><br>

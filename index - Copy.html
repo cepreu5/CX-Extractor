@@ -5,8 +5,9 @@
 <head> 
 <title>CX Extractor</title>
 <link rel="shortcut icon" type="image/png" href="Fav.png" />
-<link rel="stylesheet" href="Commonw.css" />
+<link rel="stylesheet" href="Common.css" />
 <link rel="stylesheet" href="First.css" id="theme" />
+<link rel="stylesheet" href="Accordion.css" />
 
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
@@ -17,7 +18,7 @@
 
 <script type="text/javascript">
 
-var Encrypted=true; // false uncomment crypto-js above and use the correct TableFilesEnc.txt
+var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
 
 var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	Z100=true, // zoom level
@@ -28,7 +29,20 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	SelectSheet=0, // selected sheet
 	AllTemplFlag=false, // don't get Auto templates	
 	Author = "© 2021 CX Extractor",
+	BArea, // buttons save area
+	cfgTheme="1", // initial values
+	cfgZoom=ZoomL1,
+	ZoomL1="100%",
+	ZoomL2="160%",
+
 	OpenFrom = 'res2'; // calculator OpenFrom which field
+
+function processUser() {
+	var parameters = location.search.substring(1).split("&");
+	var temp = parameters[0].split("=");
+	l = unescape(temp[1]);
+	return l;
+}
 
 RegExp.quote = function(str) {
      return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
@@ -528,6 +542,7 @@ function Combo(part) {
 }
 
 function AutoTempl() {
+	document.getElementById("NormBtn").title="Нормализация";
 	var i=0, j=0;
 	if (!AllTemplFlag) {
 		var text=document.getElementById("MsgText").value;
@@ -557,29 +572,90 @@ function spinImage(ImgID) {
 	imageToSpin.classList.toggle('rotated');
 }
 
+function Config() {
+	ShowAnim("ConfigFld");
+	if (cfgTheme=="2") document.getElementById("Theme2").checked = true;
+	else document.getElementById("Theme1").checked = true;
+	if (cfgZoom==ZoomL2) document.getElementById("Zoom2").checked = true;
+	else document.getElementById("Zoom1").checked = true;
+	document.getElementById("NormZoom").value=ZoomL1;
+	document.getElementById("MaxZoom").value=ZoomL2;
+}
+
+function SaveConfig() {
+	ShowAnim("ConfigFld");
+	if (document.getElementById("Theme1").checked) {
+		cfgTheme="1";
+		document.getElementById("theme").href = "First.css";
+	}
+	else {
+		cfgTheme="2";
+		document.getElementById("theme").href = "Second.css";
+	}
+	localStorage.setItem("cfgTheme", cfgTheme);
+	let theme = document.getElementById("theme");
+	if (theme.getAttribute("href") == "Second.css") {
+		document.getElementById("Cell1").innerHTML=
+			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
+		document.getElementById("Cell2").innerHTML=
+			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+		document.getElementById("Cell3").innerHTML=
+			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
+		document.getElementById("Cell4").innerHTML=
+			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+	} else {
+		document.getElementById("TRow").innerHTML=BArea;
+	}
+
+	if (document.getElementById("Zoom1").checked) cfgZoom=ZoomL1;
+	else cfgZoom=ZoomL2;
+	localStorage.setItem("cfgZoom", cfgZoom);
+	if (cfgZoom==ZoomL2) {document.body.style.zoom=ZoomL2;
+		document.getElementById("ZoomBtn").src="Zoom2.png";
+		document.getElementById("ZoomBtn").title="Намали";
+		document.getElementById('ZoomBtn2').style.display = "block";
+	}	else {document.body.style.zoom=ZoomL1;
+		document.getElementById("ZoomBtn").src="Zoom.png";
+		document.getElementById("ZoomBtn").title="Увеличи";
+		document.getElementById('ZoomBtn2').style.display = "none";
+	}
+
+	localStorage.setItem("ZoomL1", document.getElementById("NormZoom").value);
+	localStorage.setItem("ZoomL2", document.getElementById("MaxZoom").value);
+
+	location.reload();
+}
+
+
 function Normal() {
 	spinImage("NormBtn");
 	var text=document.getElementById("MsgText").value;
-	text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
-	text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
-	text=text.replace(/([\d])\,([\d\s])/g,'$1.$2');			// dd,dd dd.dd
-	text=text.replace(/ ([\d]+) ([\d])/g,' $1$2');			// d ddd dddd
-	text=text.replace(/ (\d\d)\:(\d\d) /g,' $1:$2:00 ');			// dd:dd dd:dd:00
-	text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
-	text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
-	text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
-	text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
-	text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
-	text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
-	text=text.replace(/([^\d]),([^\d\s])/g,'$1, $2');		// aaa,aaa aaa, aaa
-	text=text.replace(/([\d])\.([^\d\s])/g,'$1. $2');		// 111.aaa 111. aaa
-	//text=text.replace(/([^\d])\.([\d\s])/g,'$1. $2');		// aaa.111 aaa. 111
-	text=text.replace(/([\d])\,([^\d\s])/g,'$1, $2');		// 111,aaa 111, aaa
-	//text=text.replace(/([^\d])\,([\d\s])/g,'$1, $2');		// aaa,111 aaa, 111
-	text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
-	//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
-	document.getElementById("MsgText").value=text;
-	Extract();
+	if (text === "") {
+		if (document.getElementById("ConfigFld").classList.length>0) SaveConfig()
+		else Config();
+	}
+	else {
+		text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
+		text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
+		text=text.replace(/([\d])\,([\d\s])/g,'$1.$2');			// dd,dd dd.dd
+		text=text.replace(/ ([\d]+) ([\d])/g,' $1$2');			// d ddd dddd
+		text=text.replace(/ (\d\d)\:(\d\d) /g,' $1:$2:00 ');			// dd:dd dd:dd:00
+		text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
+		text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
+		text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
+		text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
+		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
+		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
+		text=text.replace(/([^\d]),([^\d\s])/g,'$1, $2');		// aaa,aaa aaa, aaa
+		text=text.replace(/([\d])\.([^\d\s])/g,'$1. $2');		// 111.aaa 111. aaa
+		//text=text.replace(/([^\d])\.([\d\s])/g,'$1. $2');		// aaa.111 aaa. 111
+		text=text.replace(/([\d])\,([^\d\s])/g,'$1, $2');		// 111,aaa 111, aaa
+		//text=text.replace(/([^\d])\,([\d\s])/g,'$1, $2');		// aaa,111 aaa, 111
+		text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
+		//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
+		document.getElementById("MsgText").value=text;
+		Extract();
+	}
 }
 
 function dataListOpt(Field, List) {
@@ -593,6 +669,10 @@ function dataListOpt(Field, List) {
 }
 
 function showDiv() {
+
+	var x = (Files.length/2) - 1; // remove ShowSaldo option at first use
+	document.getElementById("Files").remove(x);
+
 	CalcFl=true;
 	document.getElementById("CalcSp").hidden=true;
 	document.getElementById('ZoomBtn2').style.display = "none";
@@ -607,9 +687,9 @@ function showSuc() {
 	document.getElementById('loadingGif').style.display = "none";
 	document.getElementById('ZoomBtn2').style.display = "none";
 	document.getElementById('Suc').style.display = "block";
-	setTimeout(function() {
-    	document.getElementById('Suc').style.display = "none";
-  	},7000);  
+	//setTimeout(function() {
+    //	document.getElementById('Suc').style.display = "none";
+  	//},7000);  
 }
 
 function UseTempl() {
@@ -619,8 +699,15 @@ function UseTempl() {
 	Extract();
 }
 
-function SelFile() { // where to save - set in SelFile, default: 0-PFM
-	scriptURL=document.getElementById('Files').value;
+function SelFile() {
+	// alert(Files.length/2);
+	var x = document.getElementById("Files");
+	scriptURL=x.value;  // URL of selected file (table)
+	if (x.selectedIndex == ((Files.length/2) - 1)) { // if it is last option
+		window.open(scriptURL);
+		x.remove(x.selectedIndex); // remove last option
+		x.selectedIndex = 0; scriptURL=x.value; // set to first option
+	};
 }
 
 function ShowNote() {
@@ -635,8 +722,17 @@ function ShowSels() {
 	if (document.getElementById("Sels").hidden) {
 		document.getElementById("Sels").hidden = false;
 	}
-	else { document.getElementById("Sels").hidden = true;
+	else {document.getElementById("Sels").hidden = true;
 	}
+}
+
+function ShowSplit() {
+	document.getElementById("res3").value = ""; // сплит сумите да не се отразяват в сметката
+	let S = document.getElementById('res2').value;
+	if (S.substr(0,1)=="-") {S=S.substr(1,S.length-1)}
+	document.getElementById('res2Split').value = S;
+	document.getElementById('res2').value = "";
+	ShowAnim("SplitArea");
 }
 
 function ShowAnim(BoxEl) {
@@ -686,6 +782,7 @@ function ClearTextArea() {
 		document.getElementById("Log").value="";
 		Total=0; Cnt=0; // log counter and total
 	}
+	document.getElementById("NormBtn").title="Параметри";
 }
 
 function ClearFld(FldID) {
@@ -751,11 +848,17 @@ function InsDate() {
 function CZoom () {
 	Z100=!Z100;
 	if (Z100) {document.body.style.zoom=ZoomL2;
+		cfgZoom=ZoomL2;
+		document.getElementById("Zoom2").checked = true;
 		document.getElementById("ZoomBtn").src="Zoom2.png";
+		document.getElementById("ZoomBtn").title="Намали";
 		document.getElementById('ZoomBtn2').style.display = "block";
 	}
 	else {document.body.style.zoom=ZoomL1;
+		cfgZoom=ZoomL1;
+		document.getElementById("Zoom1").checked = true;
 		document.getElementById("ZoomBtn").src="Zoom.png";
+		document.getElementById("ZoomBtn").title="Увеличи";
 		document.getElementById('ZoomBtn2').style.display = "none";
 	}
 }
@@ -765,11 +868,10 @@ function AddCfg() {
 		document.getElementById('Author').innerHTML+CfgDate;
 }
 
-var BArea;
 function switchSheet() {
   let theme = document.getElementById("theme");
   if (theme.getAttribute("href") == "First.css") {
-		BArea = document.getElementById("TRow").innerHTML;
+		// BArea = document.getElementById("TRow").innerHTML;
     theme.href = "Second.css";
     document.getElementById("Cell1").innerHTML=
 		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
@@ -790,7 +892,7 @@ function setColor() {
 	var root = document.documentElement;
   root.style.setProperty(document.getElementById("Colors").value, SC);
   document.getElementById("Log").value+=
-    document.getElementById("Colors").value+": "+SC+"\n";
+    document.getElementById("Colors").value+": "+SC+";\n";
   document.getElementById("Colors").selectedIndex=0;
 }
 
@@ -898,9 +1000,9 @@ function Gestures(el, d) {
 //}
 
 function init() {
+	var MsgData;
 	getTempls();
 	createSels();
-	//createCats();
 	dataListOpt(Notes, "combo-options");
 	dataListOpt(Accs, "acc-options");
 	ClearTextArea();
@@ -909,7 +1011,7 @@ function init() {
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
 	var ww=window.innerWidth;
-	document.getElementById("Info").innerHTML="» SW: "+ww;
+	document.getElementById("Info").innerHTML="» SW: "+ww+",      "+((100*ww/330)-6).toFixed(0)+"%";
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
 		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
@@ -925,14 +1027,17 @@ function init() {
 	createCats();
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
+	if (localStorage.getItem("ZoomL1")!=null) ZoomL1=localStorage.getItem("ZoomL1");
+	if (localStorage.getItem("ZoomL2")!=null) ZoomL2=localStorage.getItem("ZoomL2");
 	CZoom ();
 	detectSwipe('MsgText', Gestures);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
 		var pwd = localStorage.getItem("CXpass");
-  		if (pwd != "") {
+  		if (pwd != null) {
 			// Decrypt
-			var bytes  = CryptoJS.AES.decrypt(pwd, Author); pwd = bytes.toString(CryptoJS.enc.Utf8);
+			var bytes = CryptoJS.AES.decrypt(pwd, Author); 
+			pwd = bytes.toString(CryptoJS.enc.Utf8);
 			document.getElementById("Password").value = pwd;
 		}
 		document.getElementById("Password").focus();
@@ -941,6 +1046,20 @@ function init() {
 		SelFile();
 	}
 	//myPaste();
+	MsgData = processUser();
+  	if (MsgData != "undefined") document.getElementById("MsgText").value = MsgData;
+	BArea = document.getElementById("TRow").innerHTML;
+
+	if (localStorage.getItem("cfgTheme")!=null) cfgTheme=localStorage.getItem("cfgTheme");
+	if (cfgTheme=="2") {
+		switchSheet();
+		document.getElementById("Theme2").checked = true;
+	}	
+	if (localStorage.getItem("cfgZoom")!=null) cfgZoom=localStorage.getItem("cfgZoom");
+	if (cfgZoom==ZoomL2) {
+		CZoom();
+		document.getElementById("Zoom2").checked = true;
+	}
 }	
 
 function init2() {
@@ -950,12 +1069,16 @@ function init2() {
 		localStorage.setItem("CXpass", ciphertext);
 	}  
 	if (document.getElementById("RFgtCookie").checked) {
-		localStorage.setItem("CXpass", "");
+		localStorage.removeItem("CXpass");
+		localStorage.removeItem("ZoomL1");
+		localStorage.removeItem("ZoomL2");
+		localStorage.removeItem("cfgTheme");
+		localStorage.removeItem("cfgZoom");
 	}  
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
-}	
+}
 </script>
 
 <script> 
@@ -993,7 +1116,7 @@ function init2() {
 
 		<div ID="PwdFld">
 			<input id="Password" type="password" style="width: 170px;" class="inputMessage" placeholder="Парола"/>&nbsp;&nbsp;
-			<img id="Suc2" style="width: 20px; height: 14px;" src="Suc.png" title="OK" onclick='init2()'><br>
+			<img id="Suc2" src="ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'><br>
 			<!-- input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
 			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label><br-->
 			<input type = "radio" name="OptRadio" id="RCookie"> <label for="RCookie">Запомни</label>
@@ -1016,7 +1139,8 @@ function init2() {
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;&nbsp;
 		<a><img src="Copy.png" width="20px" onclick="doSelectAll()" title="Copy"></a>
-		<!-- <script>
+
+		<!-- Paste button <script>
 		document.getElementById("Pst").addEventListener('click', async e => {
 			let text;
 			if (navigator.clipboard) {
@@ -1030,9 +1154,9 @@ function init2() {
 		});
 		</script -->
 		
-		&nbsp;&nbsp;
-		<a><img src="Palette.png" width="15px" style="vertical-align: super" onclick="switchSheet()" title="Тема"></a>
-		&nbsp;&nbsp;
+		&nbsp;
+		<a><img src="Palette.png" width="20px" onclick="switchSheet()" title="Тема"></a>
+		&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
 		&nbsp;
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom()" title="Увеличи"></a>
@@ -1040,21 +1164,40 @@ function init2() {
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
 			onFocus="AutoTempl()" onInput="AutoTempl()">
 		</textarea>
-		<textarea ID="Log" rows="5" style="width: 320px" hidden>
+		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" hidden>
 		</textarea>
-		<br>
+
+		<div ID="ConfigFld" hidden>
+			<b>Тема:</b>
+			<input type = "radio" name="OptTheme" id="Theme1" value="1"> <label for="Theme1">1</label>
+			<input type = "radio" name="OptTheme" id="Theme2" value="2"> <label for="Theme2">2</label>
+			&nbsp;&nbsp;
+			<b>Мащаб:</b>
+			<input type = "radio" name="OptZoom" id="Zoom1" value="Zoom1"> <label for="Zoom1">Норм.</label>
+			<input type = "radio" name="OptZoom" id="Zoom2" value="Zoom2" > <label for="Zoom2">Увел.</label>
+			<br>
+			<b>Изглед:</b>
+			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="NormZoom" value="">
+			Норм.
+			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="MaxZoom" value="">
+			Увел.&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
+			  onclick="SaveConfig()" value="Запис">
+			<!--hr>
+			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!-->
+			<hr>
+		</div>
+
 		Шаблони 
-		<span ID="Sel"></span>&nbsp;Авто
+		<span ID="Sel"></span>&nbsp;Авто 
 		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
-			align="center" title="Нормализация"></a><br>
-		<!--span ID="Info" style="cursor: pointer; width: 100%;   text-align: right;		" onclick="ShowAnim('Sels')"></span-->
-		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')">Дефиниции</button>
-		<br>
-		<span ID="Sels" hidden></span>
+			align="center" title="Параметри"></a><br>
+		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
+		<span ID="Sels" hidden><br></span><br>
 		
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
@@ -1063,7 +1206,7 @@ function init2() {
 				<tr> 
 					<td colspan="3"><input type="text" id="result" style="font-size: 24px;"/></td> 
 					<!-- clr() function will call clr to clear all value -->
-					<td><input type="button" class="cbutton" value="C" onclick="clr()"/> </td> 
+					<td><input type="button" class="cbutton" value="C" onclick="clr()"/></td> 
 				</tr> 
 				<tr> 
 					<!-- create button and assign value to each button -->
@@ -1098,7 +1241,11 @@ function init2() {
 		</div>
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
-			<table ID="Top" hidden><tr ID="TRow">
+			<table ID="Top" hidden>
+				<tr style="text-align: center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
+					<td>Бележка</td><td>Шаблон</td><td>Екстракт</td><td>Изпрати</td>
+				</tr>
+				<tr ID="TRow">
 				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
@@ -1109,10 +1256,10 @@ function init2() {
 				</td>
 				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
-				<td><div class="spinner" id="loadingGif" style="display:none"></div>
-					<img id="Suc" style="width: 20px; display:none" title="OK" src="Suc.png"
+				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
+					<img id="Suc" style="display:none" title="OK" src="Suc.png"
 						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
+					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a>
 				</td></tr>
 			</table>
@@ -1126,16 +1273,26 @@ function init2() {
 			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
 				<option value="" selected>Подкатегория</option>
 			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване" align="center"
-				 onclick="NoCat()">
+			<img src="Remove.png" width="30px" title="Изтриване ↓" align="center"
+				 onclick="ClearFld('res2')">
 			</span>
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
-			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field2" 
+			<input style="text-align:center; width: 7em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
+			<img src="NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
 			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
         		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
+
+			<span ID="SplitArea" hidden>
+				<img src="Spacer.png" width="161px" height="20" align="center">
+				<input style="text-align:center; width: 6.9em" class="inputMessage" name="Field2Split" 
+					ID=res2Split value="">&nbsp
+				<img src="Remove.png" width="30px" title="Изтриване" align="center"
+					onclick="ClearFld('res2Split')">
+			   </span>
+
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
 				<datalist id="acc-options">
@@ -1145,27 +1302,12 @@ function init2() {
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field4" ID=res4 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res4')"
 					align="center" title="Изтриване">
-			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 
-				value="">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field5" ID=res5 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res5')"
 					align="center" title="Изтриване">
-			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 
-				value="">
+			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
-			<!--span ID="CatsBottom">
-				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
-				onChange="createSubCat('SubCat'+this.selectedIndex)">
-				<option value="" selected>Категория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" onclick="NoCat()"
-					align="center" title="Изтриване">
-			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
-				<option value="" selected>Подкатегория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване" align="center"
-				 onclick="NoCat()">
-			</span-->
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
@@ -1176,22 +1318,25 @@ function init2() {
 					align="center" title="Изтриване"></a>
 			</span>
 			<table ID="Bottom"><tr ID="TRow">
-				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+				<td ID="Cell1"><input type="image" style="width: 70px;" name="submit" src="0-Send.png" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
+				<td ID="Cell2"><img src="0-Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
+				<td ID="Cell3"><img src="0-Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
-				<td><div class="spinner" id="loadingGif" style="display:none"></div>
-					<img id="Suc" style="width: 20px; display:none" src="Suc.png"
+				<td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
+					<img id="Suc" style="display:none" src="Suc.png"
 						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" onclick="CZoom()" 
+					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a>
 				</td></tr>
+				<tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
+					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><td>Шаблон</td>
+				</tr>
 			</table>
 
 		</form>
@@ -1201,23 +1346,46 @@ function init2() {
 			var formatter = new Intl.NumberFormat(undefined, {
 				style: 'currency',
 				currency: 'BGN',
-				// These options are needed to round to whole numbers if that's what you want.
+				//These options are needed to round to whole numbers if that's what you want.
 				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
 				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 			});
 			form.addEventListener('submit', e => {
 				e.preventDefault()
+
+				if (Number(document.getElementById("res2Split").value) !== 0) {
+					if (Number(document.getElementById("res2Split").value) < 0) { // няма сплит за отрицателни стойности
+						ShowSplit();
+					} else {
+						if (Number(document.getElementById("res2Split").value) < Number(document.getElementById("res2").value)) {
+							document.getElementById("res2").value = document.getElementById("res2Split").value;
+						}
+						document.getElementById("res2Split").value = 
+						  (Number(document.getElementById("res2Split").value) - Number(document.getElementById("res2").value)).toFixed(2)
+						document.getElementById("res2").value = "-" + document.getElementById("res2").value
+					}	
+				}
+
 				fetch(
 					scriptURL, {method: 'POST', body: new FormData(form)})
 					.then(response => {
 						showSuc();
-						Total+=+document.getElementById("res2").value
+						Total += +document.getElementById("res2").value
 						Cnt+=1
 						document.getElementById("Log").value=document.getElementById("Log").value+
 						  Cnt+". "+document.getElementById("res3").value+" "+
 						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
 					})
-					.catch(error => alert('Грешка! ' + error.message))
+					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
+
+				if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
+					(document.getElementById("res2Split").value === "0.00")) {
+					document.getElementById("res2").value = "";	
+				}
+				if (document.getElementById("res2Split").value === "0.00") {
+					ShowSplit();	
+				}
+
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
@@ -1248,7 +1416,7 @@ function init2() {
 							throw Error(`Request rejected with status ${res.status}`);
 							}
 						})
-						.catch(error => alert('Грешка! ' + error.message))
+						.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
 				}
 			})
 		</script>
@@ -1277,7 +1445,7 @@ function init2() {
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 4.06 / 
+			© 2021 CX Extractor 25.11 / 
 		</span>
 	</fieldset>
 	</div>
@@ -1333,5 +1501,9 @@ Any newly created file should be available on github after stage/commit/push.
 				content.style.display = "block";
 			}
 		})
-	}	
+	}
+
+Object.assign(document.createElement('a'), {target: '_blank', href: scriptURL}).click();
+<a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFwBlS8X7CvTlJ3sNHvZ4mcoky34spCoThaN1BWeQJPgW-87ocHZRaBjdNvoWvtXFnt8vG0M9KdpeA/pubhtml?gid=1231932610&amp;single=true&amp;widget=true&amp;headers=false">Link</a>
+<iframe width=”500” and height=”500” src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFwBlS8X7CvTlJ3sNHvZ4mcoky34spCoThaN1BWeQJPgW-87ocHZRaBjdNvoWvtXFnt8vG0M9KdpeA/pubhtml?gid=1231932610&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
 -->
