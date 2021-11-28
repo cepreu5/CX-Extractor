@@ -753,7 +753,7 @@ function ShowLog() {
 
 function ExtClick() {
 	spinImage('ExtBtn');
-	if (!document.getElementById("PwdFld").hidden) {init2(); return}
+	//if (!document.getElementById("PwdFld").hidden) {init2(); return}
 	if (document.getElementById('TemplFld').hidden) Extract()
 	else UseTempl()
 }
@@ -1044,6 +1044,7 @@ function init() {
 	} else {
 		createFiles();
 		SelFile();
+		document.getElementById("Main").style = "display: inline;";
 	}
 	//myPaste();
 	MsgData = processUser();
