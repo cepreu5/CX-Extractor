@@ -199,6 +199,7 @@ select option {
 	padding: 6px 11px;
 }
 
+/*
 .splash {
   background-image: url("Wallet.jpg");
   //background-color: #cccccc;
@@ -209,7 +210,7 @@ select option {
   position: relative;
   color: white;
 }
-/*
+
 select option:first-child {
 	color: #C70000;
 }

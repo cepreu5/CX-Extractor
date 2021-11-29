@@ -1116,7 +1116,7 @@ function init2() {
 	<section class="outer-container">
 	<div class="inner-container">
 
-		<div ID="PwdFld" class="splash">
+		<div ID="PwdFld"" style="color: white">
 			<label for="Password">Парола:</label>
 			<input id="Password" type="password" style="width: 170px;" class="inputMessage" name="Password"/>&nbsp;&nbsp;
 			<img id="Suc2" src="ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'>
@@ -1126,8 +1126,8 @@ function init2() {
 			<input type = "radio" name="OptRadio" id="RCookie" style="cursor: pointer;">
 			<label for="RCookie" style="cursor: pointer;">Запомни</label>
 			<input type = "radio" name="OptRadio" id="RFgtCookie" style="cursor: pointer;">
-			<label for="RFgtCookie" style="cursor: pointer;">Забрави</label>
-			&nbsp;&nbsp;
+			<label for="RFgtCookie" style="cursor: pointer;">Забрави</label><br><br><br>
+			<a><img src="Wallet.jpg" title="OK" onclick='init2()'></a>
 			<script>
 			var input = document.getElementById("Password");
 			input.addEventListener("keyup", function(event) {
@@ -1389,22 +1389,26 @@ function init2() {
 					scriptURL, {method: 'POST', body: new FormData(form)})
 					.then(response => {
 						showSuc();
-						Total += +document.getElementById("res2").value
+						if (!document.getElementById("SplitArea").classList.length>0) Total += +document.getElementById("res2").value
+						else Cnt-=1
 						Cnt+=1
 						document.getElementById("Log").value=document.getElementById("Log").value+
 						  Cnt+". "+document.getElementById("res3").value+" "+
-						  document.getElementById("res2").value+" "+document.getElementById("Cats").value+" "+formatter.format(Total)+"\n";
+						  Number(document.getElementById("res2").value).toFixed(2)+" "+document.getElementById("Cats").value+" "+
+						  Total.toFixed(2)+"\n";
+
+						if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
+							(document.getElementById("res2Split").value === "0.00")) {
+							document.getElementById("res2").value = "";	
+						}
+						if (document.getElementById("res2Split").value === "0.00") {
+							ShowSplit();	
+						}
+
 					})
-					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
-
-				if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
-					(document.getElementById("res2Split").value === "0.00")) {
-					document.getElementById("res2").value = "";	
-				}
-				if (document.getElementById("res2Split").value === "0.00") {
-					ShowSplit();	
-				}
-
+					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)}
+				)
+					
 				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
