@@ -32,7 +32,11 @@
 		if (y!=undefined && y!=Infinity) {
 			document.getElementById("result").value = y;
 			document.getElementById(OpenFrom).value = y;
-			ShowAnim("CalcSp");
+			//ShowAnim("CalcSp");
+			//oned.onclick = function () {
+			//let tl = gsap.timeline();
+			//tl.to("#CalcSp", 3, { opacity: 0 });
+			//tl.to("#CalcSp", 0.75, { height: 0 });}
 		}
 		if (x == "") document.getElementById(OpenFrom).value = "";
 	} 
