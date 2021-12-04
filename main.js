@@ -876,19 +876,19 @@ function setColor() {
 }
 
 function LetToDig() {
-		var Converted = false;
-		var toConv=document.getElementById("res2").value;
-		var res = '';
-		for (var i=0; i<toConv.length; i++) {
-			if (Lets.indexOf(toConv[i].toUpperCase())>=0) {
-				res = res + digi[Lets.indexOf(toConv[i].toUpperCase())];
-				Converted = true;
-			}	
-			else res = res + toConv[i];
-		}	
-		document.getElementById("res2").value = res;
-		return Converted;
-	}
+    var Converted = false;
+    var toConv=document.getElementById("res2").value;
+    var res = '';
+    for (var i=0; i<toConv.length; i++) {
+        if (Lets.indexOf(toConv[i].toUpperCase())>=0) {
+            res = res + digi[Lets.indexOf(toConv[i].toUpperCase())];
+            Converted = true;
+        }	
+        else res = res + toConv[i];
+    }	
+    document.getElementById("res2").value = res;
+    return Converted;
+}
 
 function Calc (SF) {
 	if (LetToDig()) return;
