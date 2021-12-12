@@ -47,24 +47,8 @@
 	}
 
 	function paste() {
-		//var pasteText = document.querySelector("#MsgText");
-		//pasteText.focus();
-		//document.execCommand("paste");
-		//console.log(pasteText.textContent);
-		//const queryOpts = { name: 'clipboard-read', allowWithoutGesture: false };
-		//const permissionStatus = await navigator.permissions.query(queryOpts);
-		//permissionStatus.onchange = () => {
-  		//	alert(permissionStatus.state); }
 		navigator.clipboard.readText().then(
   			clipText => document.getElementById("MsgText").value = clipText);
-		//navigator.clipboard.readText()
-		//.then(text => {
-		//	document.getElementById("MsgText").value = text;
-		//})
-		//.catch(() => {
-		//	document.getElementById("MsgText").value = 'Failed to read clipboard';
-		//});
-
 	}
 </script> 
 
@@ -105,37 +89,12 @@
 		&nbsp;
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;&nbsp;
-		<a><img src="Copy.png" width="20px" onclick="doSelectAll()" title="Copy"></a>
-
-		<!-- Paste button 
-		<a><img src="Copy.png" width="20px" ID="paste" onclick="paste()" title="Paste"></a>
-		<script>
-		document.getElementById("Pst").addEventListener('click', async e => {
-			let text;
-			if (navigator.clipboard) {
-				text = await navigator.clipboard.readText()
-			}
-			else {
-				text = e.clipboardData.getData('text/plain');
-			}
-			document.getElementById("MsgText").value=text;
-			AutoTempl();
-		});
-		</script>
-		<section>
-			<button id="paste"><strong>Paste</strong></button>
-		</section-->
-				&nbsp;
-		<a><img src="Palette.png" onclick="paste()" width="20px" title="Тема"></a> <!-- switchSheet -->
-		<!--script>
-		navigator.clipboard.addEventListener('clipboardchange', e => {
-			navigator.clipboard.getText().then( text => {
-				console.log('Updated clipboard contents: '+text)
-			})
-		});
-		</script-->
-		
-
+		<a><img src="Copy.png" width="20px" title="Paste&#13Copy"
+			onclick="if(event.ctrlKey) {doSelectAll(); return false} else {paste();}"></a>
+		&nbsp;
+		<!--a><img src="Paste.png" width="20px" onclick="paste()" title="Paste"></a>
+		&nbsp;-->
+		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a> <!-- switchSheet -->
 		&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
 		&nbsp;
@@ -441,7 +400,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 28.11 / 
+			© 2021 CX Extractor 13.12 / 
 		</span>
 	</fieldset>
 	</div>
