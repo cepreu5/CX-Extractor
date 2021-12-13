@@ -50,6 +50,31 @@
 		navigator.clipboard.readText().then(
   			clipText => document.getElementById("MsgText").value = clipText);
 	}
+
+	var onlongtouch; 
+	var timer;
+	var touchduration = 800; //length of time we want the user to touch before we do something
+
+	function touchstart(e) {
+		e.preventDefault();
+		if (!timer) {
+			timer = setTimeout(onlongtouch, touchduration);
+		}
+	}
+
+	function touchend() {
+		//stops short touches from firing the event
+		if (timer) {
+			clearTimeout(timer);
+			timer = null;
+		}
+	}
+
+	onlongtouch = function() { 
+		timer = null;
+		document.getElementById('MsgText').value+='ping\n'; 
+	};
+
 </script> 
 
 </head>

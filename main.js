@@ -1040,6 +1040,11 @@ function init() {
 		CZoom();
 		document.getElementById("Zoom2").checked = true;
 	}
+
+	document.addEventListener("DOMContentLoaded", function(event) { 
+		window.addEventListener("touchstart", touchstart, false);
+		window.addEventListener("touchend", touchend, false);
+	});
 }	
 
 function init2() {
