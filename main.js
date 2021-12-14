@@ -534,13 +534,13 @@ function AutoTempl() {
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
-						//stop=true;
-						//break;
+						stop=true;
+						break;
 					}
 					j++;
 				}
 			}
-			//if (stop) break;
+			if (stop) break;
 			i++;
 		}
 	}
