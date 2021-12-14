@@ -48,55 +48,12 @@
 	}
 
 	function paste() {
+		document.getElementById("MsgText").focus();
 		navigator.clipboard.readText().then(
   			clipText => document.getElementById("MsgText").value = clipText);
-		document.getElementById("MsgText").focus();
+		//AutoTempl();
+		//document.getElementById("MsgText").focus();
 	}
-
-	var myBlob, url, anchor;
-	
-    function editTemplates(mode) {
-		var Ti1;
-		if (mode=="get") {
-			ShowLog();
-			// (A) CREATE BLOB OBJECT
-			document.getElementById("Log").value = "var Templates = [\n";
-			for (let i=0; i<Templates.length; i++) {
-				Ti1 = Templates[i+1].replace(/\\/g, '\\\\');
-				Ti1 = Ti1.replace(/\{/g, '\\\{');
-				Ti1 = Ti1.replace(/\}/g, '\\\}');
-				document.getElementById("Log").value+='"'+Templates[i]+'", "'+Ti1+'",\n';
-				i=i+1;  
-			}
-			document.getElementById("Log").value+='],\n\n'
-			document.getElementById("Log").value+='AutoT = [\n// Special chars: . , / \\\n';
-			for (let i=0; i<AutoT.length; i++) {
-				document.getElementById("Log").value+='"'+AutoT[i]+'", "'+AutoT[i+1]+'",\n';
-				i=i+1;  
-			}
-			document.getElementById("Log").value+='],\n\n'
-			document.getElementById("Log").value+='Replaces = [\n';
-			for (let i=0; i<Replaces.length; i++) {
-				document.getElementById("Log").value+='"'+Replaces[i]+'", "'+Replaces[i+1]+'",\n';
-				i=i+1;  
-			}
-			document.getElementById("Log").value+=']'
-			myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
-			// (B) CREATE DOWNLOAD LINK
-			url = window.URL.createObjectURL(myBlob);
-			anchor = document.createElement("a");
-			anchor.href = url;
-			anchor.download = "Templates.txt";
-		}
-		if (mode=="save") {
-			anchor.click();
-			window.URL.revokeObjectURL(url);
-			//document.removeChild(anchor);
-			ShowLog();
-			document.getElementById("Log").value = "";
-		}
-    }
-
 </script> 
 
 </head>
@@ -176,15 +133,11 @@
 
 		Шаблони 
 		<span ID="Sel"></span>&nbsp;Авто 
-		<!--a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
+		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Space.png" width="20px" onclick="Normal()" 
-			ID="NormBtn" align="center" title="Параметри"></a><br>-->
-		<a><img src="Save.png" width="20px" onclick="editTemplates('save')" 
-			align="center" title="Параметри"></a>
-		<a><img src="Save.png" width="20px" onclick="if(event.ctrlKey) {editTemplates('save'); return false} else {editTemplates('get');}" 
 			ID="NormBtn" align="center" title="Параметри"></a><br>
 		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
 		<span ID="Sels" hidden><br></span><br>
