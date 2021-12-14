@@ -523,25 +523,29 @@ function Combo(part) {
 
 function AutoTempl() {
 	document.getElementById("NormBtn").title="Нормализация";
-	var i=0, j=0;
+	var i, j, stop=false;
 	if (!AllTemplFlag) {
 		var text=document.getElementById("MsgText").value;
 		for (i=1; i<=AutoT.length; i++) {
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
-			if (text.match(re)) {//alert(text.match(re))
+			if (text.match(re)) {
 				for (j=0; j<Templates.length; j++) {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
 						document.getElementById("Info").innerHTML="» Шаблон: "+Templates[j];
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
+						stop=true;
+						break;
 					}
 					j++;
 				}
 			}
+			if (stop) break;
 			i++;
 		}
 	}
+	//document.getElementById("Info").innerHTML="break"+i+j;
 }
 
 function spinImage(ImgID) {
