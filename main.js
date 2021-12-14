@@ -375,6 +375,7 @@ function SelTempl(str, clear) {
 			case "Ч": Combo2(I+1, "4", second, sep); break;
 			case "П": Combo2(I+1, "5", second, sep); break;
 			case "R": Combo2(I+1, "6", second, sep); break;
+			//case "К": document.getElementById("Cats").options.selectedIndex=second; break;
 			case "К": document.getElementById("Cats").value=second;	break;
 			case "О":
 				createSubCat("SubCat"+document.getElementById("Cats").options.selectedIndex);
@@ -522,29 +523,25 @@ function Combo(part) {
 
 function AutoTempl() {
 	document.getElementById("NormBtn").title="Нормализация";
-	var i, j, stop=false;
+	var i=0, j=0;
 	if (!AllTemplFlag) {
 		var text=document.getElementById("MsgText").value;
 		for (i=1; i<=AutoT.length; i++) {
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
-			if (text.match(re)) {
+			if (text.match(re)) {//alert(text.match(re))
 				for (j=0; j<Templates.length; j++) {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
 						document.getElementById("Info").innerHTML="» Шаблон: "+Templates[j];
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
-						stop=true;
-						break;
 					}
 					j++;
 				}
 			}
-			if (stop) break;
 			i++;
 		}
 	}
-	//document.getElementById("Info").innerHTML="break"+i+j;
 }
 
 function spinImage(ImgID) {
@@ -962,6 +959,24 @@ function Gestures(el, d) {
 	if (d=="l") switchSheet();
 	if (d=="u") ClearTextArea();
 }
+
+// function hisfunction(el, d) {
+	// if (d=="r") doSelectAll();
+	// if (d=="d") ClearHist();
+	// if (d=="l") Normal();
+// }
+
+//function myPaste() {
+//	navigator.clipboard.readText()
+//	.then(text => {
+//		document.getElementById("Field2").innerHTML = text;
+//	alert ('text: '+text);
+//	})
+//	.catch(err => {
+//		document.getElementById("MsgText").innerHTML = 'Failed to read clipboard contents: '+err;
+//	alert ('err');
+//	});
+//}
 
 function init() {
 	var MsgData;
