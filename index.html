@@ -47,13 +47,12 @@
 	}
 
 	function paste() {
-		//document.getElementById("Cats").focus();
 		navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
-		//AutoTempl();
+		setTimeout(function() {
+			AutoTempl();	
+		},2500);
 		//document.getElementById("MsgText").focus();
-		//setTimeout(function() {
-		//	document.getElementById("Cats").focus();
-		//},3500);				
+		//document.getElementById("Cats").focus();
 	}
 </script> 
 
@@ -405,7 +404,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 13.12 / 
+			© 2021 CX Extractor 14.12 / 
 		</span>
 	</fieldset>
 	</div>

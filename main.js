@@ -524,8 +524,9 @@ function Combo(part) {
 function AutoTempl() {
 	document.getElementById("NormBtn").title="Нормализация";
 	var i, j, stop=false;
-	if (!AllTemplFlag) {
-		var text=document.getElementById("MsgText").value;
+	var text=document.getElementById("MsgText").value;
+	if (!AllTemplFlag && (text!="")) {
+		//console.log('AutoTempl');
 		for (i=1; i<=AutoT.length; i++) {
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
 			if (text.match(re)) {
@@ -545,7 +546,6 @@ function AutoTempl() {
 			i++;
 		}
 	}
-	//document.getElementById("Info").innerHTML="break"+i+j;
 }
 
 function spinImage(ImgID) {
@@ -998,14 +998,10 @@ function init() {
 	if (ww<501) {
 		document.getElementById("Top").hidden = false;
 		document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
-	//	document.getElementById("CatsTop").hidden = false;
-	//	document.getElementById("CatsBottom").parentNode.removeChild(document.getElementById("CatsBottom"));
 	}
 	else {
 		document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
 		document.getElementById("Bottom").hidden = false;
-		//document.getElementById("CatsTop").parentNode.removeChild(document.getElementById("CatsTop"));
-		//document.getElementById("CatsBottom").hidden = false;
 	}
 	createCats();
 	document.getElementById("Log").value="";
@@ -1029,7 +1025,6 @@ function init() {
 		SelFile();
 		document.getElementById("Main").style = "display: inline;";
 	}
-	//myPaste();
 	MsgData = processUser();
   	if (MsgData != "undefined") document.getElementById("MsgText").value = MsgData;
 	BArea = document.getElementById("TRow").innerHTML;
@@ -1063,4 +1058,5 @@ function init2() {
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
 	document.getElementById("Main").style = "display: inline;";
+	paste();
 }
