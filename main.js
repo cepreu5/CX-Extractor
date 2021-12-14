@@ -534,13 +534,13 @@ function AutoTempl() {
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
-						stop=true;
-						break;
+						//stop=true;
+						//break;
 					}
 					j++;
 				}
 			}
-			if (stop) break;
+			//if (stop) break;
 			i++;
 		}
 	}
@@ -962,24 +962,6 @@ function Gestures(el, d) {
 	if (d=="l") switchSheet();
 	if (d=="u") ClearTextArea();
 }
-
-// function hisfunction(el, d) {
-	// if (d=="r") doSelectAll();
-	// if (d=="d") ClearHist();
-	// if (d=="l") Normal();
-// }
-
-//function myPaste() {
-//	navigator.clipboard.readText()
-//	.then(text => {
-//		document.getElementById("Field2").innerHTML = text;
-//	alert ('text: '+text);
-//	})
-//	.catch(err => {
-//		document.getElementById("MsgText").innerHTML = 'Failed to read clipboard contents: '+err;
-//	alert ('err');
-//	});
-//}
 
 function init() {
 	var MsgData;
