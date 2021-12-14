@@ -50,6 +50,7 @@
 	function paste() {
 		navigator.clipboard.readText().then(
   			clipText => document.getElementById("MsgText").value = clipText);
+		document.getElementById("MsgText").focus();
 	}
 
 	var myBlob, url, anchor;
@@ -175,14 +176,16 @@
 
 		Шаблони 
 		<span ID="Sel"></span>&nbsp;Авто 
-		<a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
+		<!--a><img src="On.png" ID="Yes" style="width: 60px; height: 30px; display:none" align="center"
 			onclick="NoAuto()" title="Авто"></a> 
 		<a><img src="Off.png" ID="No" style="width: 60px; height: 30px; display:none" align="center" 
 			onclick="NoAuto()" title="Авто"></a> 
-		<!--a><img src="Space.png" width="20px" onclick="Normal()" 
+		<a><img src="Space.png" width="20px" onclick="Normal()" 
 			ID="NormBtn" align="center" title="Параметри"></a><br>-->
+		<a><img src="Save.png" width="20px" onclick="editTemplates('save')" 
+			align="center" title="Параметри"></a>
 		<a><img src="Save.png" width="20px" onclick="if(event.ctrlKey) {editTemplates('save'); return false} else {editTemplates('get');}" 
-			ID="NormBtn" align="center" title="Параметри"></a><br><!--Normal()-->
+			ID="NormBtn" align="center" title="Параметри"></a><br>
 		<button type="button" ID="Info" class="block" onclick="ShowAnim('Info'); ShowAnim('Sels')"></button>
 		<span ID="Sels" hidden><br></span><br>
 
