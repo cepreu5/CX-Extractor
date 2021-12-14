@@ -55,17 +55,33 @@
 	var myBlob, url, anchor;
 	
     function editTemplates(mode) {
+		var Ti1;
 		if (mode=="get") {
 			ShowLog();
 			// (A) CREATE BLOB OBJECT
 			document.getElementById("Log").value = "var Templates = [\n";
 			for (let i=0; i<Templates.length; i++) {
-				document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1]+'",\n';
+				Ti1 = Templates[i+1].replace(/\\/g, '\\\\');
+				Ti1 = Ti1.replace(/\{/g, '\\\{');
+				Ti1 = Ti1.replace(/\}/g, '\\\}');
+				document.getElementById("Log").value+='"'+Templates[i]+'", "'+Ti1+'",\n';
+				i=i+1;  
+			}
+			document.getElementById("Log").value+='],\n\n'
+			document.getElementById("Log").value+='AutoT = [\n// Special chars: . , / \\\n';
+			for (let i=0; i<AutoT.length; i++) {
+				document.getElementById("Log").value+='"'+AutoT[i]+'", "'+AutoT[i+1]+'",\n';
+				i=i+1;  
+			}
+			document.getElementById("Log").value+='],\n\n'
+			document.getElementById("Log").value+='Replaces = [\n';
+			for (let i=0; i<Replaces.length; i++) {
+				document.getElementById("Log").value+='"'+Replaces[i]+'", "'+Replaces[i+1]+'",\n';
 				i=i+1;  
 			}
 			document.getElementById("Log").value+=']'
-			// (B) CREATE DOWNLOAD LINK
 			myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
+			// (B) CREATE DOWNLOAD LINK
 			url = window.URL.createObjectURL(myBlob);
 			anchor = document.createElement("a");
 			anchor.href = url;
