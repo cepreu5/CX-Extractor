@@ -162,13 +162,14 @@ img {
   }
 }
 
-.block {
+/*.block {
   display: block;
   width: 100%;
   border: none;
   cursor: pointer;
   text-align: center;
 }
+*/
 
 select {
 	font: 16px/23px;
