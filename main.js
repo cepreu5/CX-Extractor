@@ -652,10 +652,8 @@ function dataListOpt(Field, List) {
 }
 
 function showDiv() {
-
 	var x = (Files.length/2) - 1; // remove ShowSaldo option at first use
 	document.getElementById("Files").remove(x);
-
 	CalcFl=true;
 	document.getElementById("CalcSp").hidden=true;
 	document.getElementById('ZoomBtn2').style.display = "none";
