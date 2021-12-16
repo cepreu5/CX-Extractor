@@ -1,5 +1,5 @@
 var 
-CfgDate="15.12",
+CfgDate="16.12",
 Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП'
 digi = '1234567890--.1234567890.1234567890';
 
@@ -153,7 +153,6 @@ AutoT = [
   "pokupka",      "SMS",
   "BGN s null",   "ВноскаN",
   "Grajdanska",   "ВноскаГр",
-  "Visa Classic", "EndVisa",
   "VISA Billa",   "EndBilla",
   "Pogashenie",   "Pogashenie",  
   "kraya",        "EndMaster",
@@ -222,6 +221,7 @@ AutoT = [
   "Бобо ток",      "БобоП",
   "Бобо Телефон",  "БобоТ",
   "A1",            "БобоТВ",
+  //"Visa Classic", "EndVisa",
   //"s null",       "CardSMS",
   //" epay",        "epaysms",
   //"план-ток",     "план-ток",

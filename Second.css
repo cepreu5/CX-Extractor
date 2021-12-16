@@ -1,4 +1,4 @@
-@import "Colors2.css";
+@import "Skin/Colors2.css";
 
 fieldset {
   background-color: var(--FormColor, #990000);
@@ -30,6 +30,18 @@ input[type="text"] {
   height: 65px;
 }
 
-.block {
+/*.block {
   background-color: var(--InpBgrd, #990000);
+}*/
+
+button {
+  background-color: var(--InpBgrd, white);
+  border: solid black 2px;
+  cursor: pointer;
+  transition: 0.1s ease;
+  outline-color: #ccc;
+  width: 100%;
+  margin-bottom: 5px;
+  color: var(--InpText, black);
 }
+

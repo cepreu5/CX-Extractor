@@ -8,44 +8,6 @@
 <link rel="stylesheet" href="Common.css" />
 <link rel="stylesheet" href="First.css" id="theme" />
 <!--link rel="stylesheet" href="Accordion.css" /-->
-
-<style>
-	button {
-	  border: none;
-	  cursor: pointer;
-	  transition: 0.1s ease;
-	  outline-color: #ccc;
-	  width: 100%
-	}
-	button > span {
-	  display: block;
-	  //text-transform: uppercase;
-	}
-	button.solo:hover {
-	  transform: scale(0.99) translateY(1px);
-	}
-	button.solo:active {
-	  outline: none;
-	  transform: scale(0.97) translateY(3px);
-	}
-	.typewriter-yellow {
-	  border-radius: 80px;
-	  padding: 3px;
-	  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.65), 0 20px 25px rgba(0, 0, 0, 0.12);
-	  background: linear-gradient(75deg, #989797, #f3f3f3 25%, #ffffff 38%, #b1b1b1 87%, rgba(60, 58, 58, 0.5));
-	  margin-bottom: 5px;
-	}
-	.typewriter-yellow span {
-	  padding: 2px 2px 2px;
-	  border-radius: 80px;
-	  background: radial-gradient(#fff383, khaki);
-	  border: 1px solid #e2d66a;
-	}
-	.typewriter-yellow:focus {
-	  outline: none;
-	  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 0 2px #222, 0 10px 15px rgba(0, 0, 0, 0.12);
-	}
-	</style>
 	
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
@@ -105,7 +67,7 @@
 		<div ID="PwdFld"" style="color: white">
 			<label for="Password">Парола:</label>
 			<input id="Password" type="password" style="width: 170px;" class="inputMessage" name="Password"/>&nbsp;&nbsp;
-			<img id="Suc2" src="ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'>
+			<img id="Suc2" src="Skin/ExtractFace.png" style="vertical-align: middle; width: 25px;" title="OK" onclick='init2()'>
 			<br>&nbsp;&nbsp;&nbsp;&nbsp;
 			<!-- input type = "checkbox" id="Cookie"> <label for="Cookie">Запомни</label>&nbsp;
 			<input type = "checkbox" id="FgtCookie"> <label for="FgtCookie">Забрави</label><br-->
@@ -240,15 +202,15 @@
 					<td>Бележка</td><td>Шаблон</td><td>Екстракт</td><td>Изпрати</td>
 				</tr>
 				<tr ID="TRow">
-				<td ID="Cell3"><img style="width: 70px;" src="0-Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
+				<td ID="Cell3"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
-				<td ID="Cell2"><img style="width: 70px;" src="0-Extract.png" title="Екстракт" ID="ExtBtn"
+				<td ID="Cell2"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
-				<td ID="Cell1"><input type="image" name="submit" src="0-Send.png" style="width: 70px;" border="0" 
+				<td ID="Cell1"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
 				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
 					<img id="Suc" style="display:none" title="OK" src="Suc.png"
@@ -275,7 +237,7 @@
          		onclick="if(event.ctrlKey) {ClearFld('res1'); return false;} else {InsDate();}">
 			<input style="text-align:center; width: 7em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
-			<img src="NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
+			<img src="Skin/NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
 			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
         		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
 
@@ -312,14 +274,14 @@
 					align="center" title="Изтриване"></a>
 			</span>
 			<table ID="Bottom"><tr ID="TRow">
-				<td ID="Cell1"><input type="image" style="width: 70px;" name="submit" src="0-Send.png" 
+				<td ID="Cell1"><input type="image" style="width: 70px;" name="submit" src="Skin/Send.png" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td ID="Cell2"><img src="0-Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
+				<td ID="Cell2"><img src="Skin/Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
 				</td>
-				<td ID="Cell3"><img src="0-Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
+				<td ID="Cell3"><img src="Skin/Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="0-Template.png" style="width: 70px;" onclick="MakeTempl()" 
+				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTempl()" 
 					title="Шаблон">
 				</td>
 				<td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
@@ -443,7 +405,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 15.12 / 
+			© 2021 CX Extractor 16.12 / 
 		</span>
 	</fieldset>
 	</div>

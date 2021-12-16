@@ -580,13 +580,13 @@ function SaveConfig() {
 	let theme = document.getElementById("theme");
 	if (theme.getAttribute("href") == "Second.css") {
 		document.getElementById("Cell1").innerHTML=
-			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
+			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'Skin/SendFace.png\');">&nbsp';
 		document.getElementById("Cell2").innerHTML=
-			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
 		document.getElementById("Cell3").innerHTML=
-			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
+			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
 		document.getElementById("Cell4").innerHTML=
-			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
 	} else {
 		document.getElementById("TRow").innerHTML=BArea;
 	}
@@ -857,13 +857,13 @@ function switchSheet() {
 		// BArea = document.getElementById("TRow").innerHTML;
     theme.href = "Second.css";
     document.getElementById("Cell1").innerHTML=
-		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'SendFace.png\');">&nbsp';
+		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'Skin/SendFace.png\');">&nbsp';
     document.getElementById("Cell2").innerHTML=
-		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
     document.getElementById("Cell3").innerHTML=
-		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
+		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
     document.getElementById("Cell4").innerHTML=
-		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
   } else {
     theme.href = "First.css";
     document.getElementById("TRow").innerHTML=BArea;
