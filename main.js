@@ -347,7 +347,7 @@ function MakeTempl() {
 }
 
 function SelTempl(str, clear) {
-	if (clear) {document.getElementById("Info").innerHTML="»"} //<br>
+	if (clear) {document.getElementById("Info").innerHTML="» Редактиране на шаблон"} //<br>
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
