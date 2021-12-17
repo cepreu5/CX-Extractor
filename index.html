@@ -94,7 +94,7 @@
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;&nbsp;
 		<a><img src="Copy.png" width="20px" title="Paste&#13Copy"
-			onclick="if(event.ctrlKey) {doSelectAll(); return false} else {paste();}"></a>
+			onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></a>
 		&nbsp;
 		<!--a><img src="Paste.png" width="20px" onclick="paste()" title="Paste"></a>
 		&nbsp;-->
@@ -383,11 +383,11 @@
 		
 		<span ID="TemplFld">
 			Шаблон: <input style="text-align:left; width: 18em" ID="res" class="inputMessage" value="">
-			<a><img src="Remove.png" width="20px" onclick="ClearFld('res')"
+			<a><img src="Remove.png" width="20px" onclick="{ClearFld('res'); ClearFld('CSV'); ClearTemplate();}"
 				align="center" title="Изтриване"></a>
 			<br>
 			CSV: <input style="text-align:left; width: 19.8em" ID="CSV" class="inputMessage" value=""> 
-			<a><img src="Copy.png" width="20px" align="top" onclick="CopyCSV()" title="Copy"></a>
+			<a><img src="Copy.png" width="20px" align="top" onclick='SelectAndCopy("CSV")' title="Copy"></a>
 		</span>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;

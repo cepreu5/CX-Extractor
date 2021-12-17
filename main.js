@@ -293,16 +293,14 @@ function createSels() { // Extract selection field
 	document.getElementById("CalcSp").hidden=true; //
 }
 
+function ShowAnim(BoxEl) {
+	document.getElementById(BoxEl).classList.toggle('active');
+}
+
 function MakeTempl() {
 	var Tmpl='';
 	var i, L, C, S; 
 	document.getElementById("res").value="";
-	//if (document.getElementById("TemplFld").hidden) {
-	//	document.getElementById("TemplFld").hidden = false;
-	//}
-	//else { document.getElementById("TemplFld").hidden = true;
-	//	return;
-	//}
 	ShowAnim("TemplFld")
 	for (i=1; i<=(LTempl-2); i++) {
 		S='';
@@ -341,13 +339,24 @@ function MakeTempl() {
 	document.getElementById("res6").value + ", " +
 	document.getElementById("Cats").value + ", " +
 	document.getElementById("SubCats").value;
-	document.getElementById("res").value='" ", "'+Tmpl+'",';
+	document.getElementById("res").value='"'+Tmpl+'",';
 	document.getElementById("res").select();
 	var CopyRes = document.execCommand('copy');
 }
 
+function UseTempl() {
+	var Templ=document.getElementById("res").value;
+	if (Templ=="") {return}
+	if (Templ[0] == '"') { // delete "s and ,
+		result=Templ.split('"');
+		Templ=result[1];
+	}	
+	SelTempl(Templ, true); //console.log(Templ);
+	Extract();
+}
+
 function SelTempl(str, clear) {
-	if (clear) {document.getElementById("Info").innerHTML="» Редактиране на шаблон"} //<br>
+	if (clear) {document.getElementById("Info").innerHTML="» Редактиране на шаблон"}
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
@@ -673,13 +682,6 @@ function showSuc() {
   	//},7000);  
 }
 
-function UseTempl() {
-	var Templ=document.getElementById("res").value;
-	if (Templ=="") {return}
-	SelTempl(Templ, true);
-	Extract();
-}
-
 function SelFile() {
 	// alert(Files.length/2);
 	var x = document.getElementById("Files");
@@ -689,14 +691,6 @@ function SelFile() {
 		x.remove(x.selectedIndex); // remove last option
 		x.selectedIndex = 0; scriptURL=x.value; // set to first option
 	};
-}
-
-function ShowNote() {
-	if (document.getElementById("NoteFld").hidden) {
-		document.getElementById("NoteFld").hidden = false;
-	}
-	else { document.getElementById("NoteFld").hidden = true;
-	}
 }
 
 function ShowSels() {
@@ -716,11 +710,6 @@ function ShowSplit() {
 	ShowAnim("SplitArea");
 }
 
-function ShowAnim(BoxEl) {
-	element = document.getElementById(BoxEl)
-	element.classList.toggle('active');
-}
-
 function ShowLog() {
 	if (document.getElementById("Log").hidden) {
 		document.getElementById("Log").hidden = false;
@@ -734,29 +723,26 @@ function ShowLog() {
 
 function ExtClick() {
 	spinImage('ExtBtn');
-	//if (!document.getElementById("PwdFld").hidden) {init2(); return}
-	if (document.getElementById('TemplFld').hidden) Extract()
-	else UseTempl()
+	if (document.getElementById("TemplFld").classList.length=0) Extract()
+	else UseTempl();
 }
 
-function doSelectAll() {
-	document.getElementById("MsgText").select();
-	Clp = document.getElementById("MsgText").value;
+function SelectAndCopy(What) {
+	document.getElementById(What).select();
+	Clp = document.getElementById(What).value;
 	document.execCommand('copy');
 }
 
-function CopyCSV() {
-	document.getElementById("CSV").select();
-	Clp = document.getElementById("CSV").value;
-	document.execCommand('copy');
+function ClearTemplate() {
+	document.getElementById("Templates").options[0].selected=true;
+	SelTempl(document.getElementById('Templates').value, true); 
+	Extract();
 }
 
 function ClearTextArea() {
 	if (document.getElementById("Log").hidden) {
 		document.getElementById("MsgText").value="";
-		document.getElementById("Templates").options[0].selected=true;
-		SelTempl(document.getElementById('Templates').value, true); 
-		Extract();
+		ClearTemplate();
 		document.getElementById("MsgText").focus();
 	}
 	else {
@@ -961,24 +947,6 @@ function Gestures(el, d) {
 	if (d=="l") switchSheet();
 	if (d=="u") ClearTextArea();
 }
-
-// function hisfunction(el, d) {
-	// if (d=="r") doSelectAll();
-	// if (d=="d") ClearHist();
-	// if (d=="l") Normal();
-// }
-
-//function myPaste() {
-//	navigator.clipboard.readText()
-//	.then(text => {
-//		document.getElementById("Field2").innerHTML = text;
-//	alert ('text: '+text);
-//	})
-//	.catch(err => {
-//		document.getElementById("MsgText").innerHTML = 'Failed to read clipboard contents: '+err;
-//	alert ('err');
-//	});
-//}
 
 function init() {
 	var MsgData;
