@@ -18,44 +18,6 @@
 
 <script src="main.js"></script>
 
-<script> 
-// Calc
-	//function that display value 
-	function dis(val) {
-		document.getElementById("result").value+=val
-	} 
-		
-	//function that evaluates the digit and return result 
-	function solve() {
-		let x = document.getElementById("result").value;
-		let y = eval(x).toFixed(2);
-		if (y!=undefined && y!=Infinity) {
-			document.getElementById("result").value = y;
-			document.getElementById(OpenFrom).value = y;
-			//ShowAnim("CalcSp");
-			//oned.onclick = function () {
-			//let tl = gsap.timeline();
-			//tl.to("#CalcSp", 3, { opacity: 0 });
-			//tl.to("#CalcSp", 0.75, { height: 0 });}
-		}
-		if (x == "") document.getElementById(OpenFrom).value = "";
-	} 
-		
-	//function that clear the display 
-	function clr() {
-		document.getElementById("result").value = "";
-	}
-
-	function paste() {
-		navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
-		setTimeout(function() {
-			AutoTempl();	
-		},2500);
-		//document.getElementById("MsgText").focus();
-		//document.getElementById("Cats").focus();
-	}
-</script> 
-
 </head>
 
 <body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
@@ -405,7 +367,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor 16.12 / 
+			© 2021 CX Extractor M18.12 / 
 		</span>
 	</fieldset>
 	</div>

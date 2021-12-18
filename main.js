@@ -1027,3 +1027,39 @@ function init2() {
 	document.getElementById("Main").style = "display: inline;";
 	paste();
 }
+
+function paste() {
+	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
+	setTimeout(function() {
+		AutoTempl();	
+	},2500);
+	//document.getElementById("MsgText").focus();
+	//document.getElementById("Cats").focus();
+}
+
+// Calc
+//function that display value 
+function dis(val) {
+	document.getElementById("result").value+=val
+} 
+	
+//function that evaluates the digit and return result 
+function solve() {
+	let x = document.getElementById("result").value;
+	let y = eval(x).toFixed(2);
+	if (y!=undefined && y!=Infinity) {
+		document.getElementById("result").value = y;
+		document.getElementById(OpenFrom).value = y;
+		//ShowAnim("CalcSp");
+		//oned.onclick = function () {
+		//let tl = gsap.timeline();
+		//tl.to("#CalcSp", 3, { opacity: 0 });
+		//tl.to("#CalcSp", 0.75, { height: 0 });}
+	}
+	if (x == "") document.getElementById(OpenFrom).value = "";
+} 
+	
+//function that clear the display 
+function clr() {
+	document.getElementById("result").value = "";
+}
