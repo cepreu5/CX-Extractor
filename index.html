@@ -19,7 +19,7 @@
 <script src="main.js"></script>
 
 <script> 
-// Calc
+	// Calc
 	//function that display value 
 	function dis(val) {
 		document.getElementById("result").value+=val
@@ -44,15 +44,6 @@
 	//function that clear the display 
 	function clr() {
 		document.getElementById("result").value = "";
-	}
-
-	function paste() {
-		navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
-		setTimeout(function() {
-			AutoTempl();	
-		},2500);
-		//document.getElementById("MsgText").focus();
-		//document.getElementById("Cats").focus();
 	}
 </script> 
 

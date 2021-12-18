@@ -1027,3 +1027,12 @@ function init2() {
 	document.getElementById("Main").style = "display: inline;";
 	paste();
 }
+
+function paste() {
+	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
+	setTimeout(function() {
+		AutoTempl();	
+	},2500);
+	//document.getElementById("MsgText").focus();
+	//document.getElementById("Cats").focus();
+}
