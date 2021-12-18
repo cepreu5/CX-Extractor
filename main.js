@@ -295,6 +295,7 @@ function createSels() { // Extract selection field
 
 function ShowAnim(BoxEl) {
 	document.getElementById(BoxEl).classList.toggle('active');
+	//if ((BoxEl=="res") && (document.getElementById("TemplFld").classList.length=0)) {ClearFld('res'); ClearFld('CSV');}
 }
 
 function MakeTempl() {
