@@ -58,8 +58,6 @@
 		<a><img src="Copy.png" width="20px" title="Paste&#13Copy"
 			onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></a>
 		&nbsp;
-		<!--a><img src="Paste.png" width="20px" onclick="paste()" title="Paste"></a>
-		&nbsp;-->
 		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a> <!-- switchSheet -->
 		&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
@@ -344,12 +342,18 @@
 		</script>
 		
 		<span ID="TemplFld">
-			Шаблон: <input style="text-align:left; width: 18em" ID="res" class="inputMessage" value="">
-			<a><img src="Remove.png" width="20px" onclick="{ClearFld('res'); ClearFld('CSV'); ClearTemplate();}"
+			Име: <input style="text-align:left; margin-top: 5px; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
+			Тригер: <input style="text-align:left; width: 7.4em" ID="Triget" class="inputMessage" value=""> 
+			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" onclick="{ClearFld('res'); ClearFld('TmplName'); ClearTemplate();}"
+			<br>
+			Шаблон: <input style="text-align:left; margin-top: 5px; width: 18em" ID="res" class="inputMessage" value="">
+			<a><img src="Save.png" width="20px" onclick="MemTemplate()"
 				align="center" title="Изтриване"></a>
 			<br>
-			CSV: <input style="text-align:left; width: 19.8em" ID="CSV" class="inputMessage" value=""> 
-			<a><img src="Copy.png" width="20px" align="top" onclick='SelectAndCopy("CSV")' title="Copy"></a>
+			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
+			с <input style="text-align:left; width: 5.4em" ID="ReplWith" class="inputMessage" value="">&nbsp;&nbsp;
+			в поле <input style="text-align:left; width: 2em" ID="ReplFld" class="inputMessage" value=""> 
+			<a><img src="Save.png" width="20px" style="vertical-align: sub;" onclick='SelectAndCopy("TmplName")' title="Copy"></a>
 		</span>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;
