@@ -336,7 +336,9 @@ function MakeTempl() {
 		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
 		+document.getElementById("Files").selectedIndex;
 	document.getElementById("res").value=Tmpl;
-	document.getElementById("res").value=Tmpl;
+	let CVal = document.getElementById("Templates").selectedIndex;
+	document.getElementById("TmplName").value=Templates[2*(CVal-1)];
+	//document.getElementById("TmplName").value=document.getElementById("Templates").options[CVal].innerHTML;
 	//document.getElementById("res").select();
 	//var CopyRes = document.execCommand('copy');
 }
@@ -1071,6 +1073,7 @@ function MemTemplate() {
 	TmplPtr++;
 	localStorage.setItem('TmplPtr', TmplPtr);
 	localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);  
+	getTempls(); //recreate template Selection
 	//console.log('key: '+'*0000'.substring(0, 5-(i/2).toString().length)+i/2+Templates[i]);
 	//console.log(i/2);
 }
