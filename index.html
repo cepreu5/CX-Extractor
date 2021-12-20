@@ -50,7 +50,7 @@
 		</div>
 	
 		<fieldset ID="Main" class="centered-content" style="display:none;">
-		<SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
+		<SELECT ID="Files" style="width: 158px;" onChange="SelFile()" class="inputMessage">
 		</SELECT>
 		&nbsp;
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
@@ -58,16 +58,16 @@
 		<a><img src="Copy.png" width="20px" title="Paste&#13Copy"
 			onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></a>
 		&nbsp;
-		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a> <!-- switchSheet -->
+		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a>
 		&nbsp;
-		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a>
+		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="editTemplates('get'); editTemplates('save')"></a> <!-- ShowLog()	 -->
 		&nbsp;
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
 		<br>
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
 			onFocus="AutoTempl()" onInput="AutoTempl()">
 		</textarea>
-		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" hidden>
+		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" wrap="off" hidden>
 		</textarea>
 
 		<div ID="ConfigFld" hidden>
@@ -342,18 +342,26 @@
 		</script>
 		
 		<span ID="TemplFld">
+			<hr>
+			Замени: <input style="text-align:left; width: 5.4em" ID="Replace" class="inputMessage" value="">
+			<!--с <input style="text-align:left; width: 5.4em" ID="ReplWith" class="inputMessage" value="">&nbsp;&nbsp;-->
+
+			с <input style="text-align:center; width: 6em" class="inputMessage" ID="ReplWith" value=""
+				list="acc-options">
+				<datalist id="acc-options">
+				</datalist>
+
+			в поле <input style="text-align:left; width: 2em" ID="ReplFld" class="inputMessage" value="3"> 
+			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
+				onclick="{ClearFld('res'); ClearFld('TmplName'); ClearFld('TmplAuto'); ClearFld('Replace'); ClearFld('ReplWith'); ClearTemplate();}"
+			<br>
 			Име: <input style="text-align:left; margin-top: 5px; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
-			Тригер: <input style="text-align:left; width: 7.4em" ID="Triget" class="inputMessage" value=""> 
-			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" onclick="{ClearFld('res'); ClearFld('TmplName'); ClearTemplate();}"
+			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value=""> 
 			<br>
 			Шаблон: <input style="text-align:left; margin-top: 5px; width: 18em" ID="res" class="inputMessage" value="">
 			<a><img src="Save.png" width="20px" onclick="MemTemplate()"
-				align="center" title="Изтриване"></a>
-			<br>
-			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
-			с <input style="text-align:left; width: 5.4em" ID="ReplWith" class="inputMessage" value="">&nbsp;&nbsp;
-			в поле <input style="text-align:left; width: 2em" ID="ReplFld" class="inputMessage" value=""> 
-			<a><img src="Save.png" width="20px" style="vertical-align: sub;" onclick='SelectAndCopy("TmplName")' title="Copy"></a>
+				align="center" title="MemTemplate"></a>
+			<hr>
 		</span>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;

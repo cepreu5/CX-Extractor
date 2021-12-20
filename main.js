@@ -15,9 +15,14 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
 	OpenFrom = 'res2', // calculator OpenFrom which field
+	AutoPtr=0, // Next free place in AutoT array
+	ReplPtr=0, // Next free place in AutoT array
 	TmplPtr=2; // Next free place in Templates array
 
-	const Templates = [];
+	const Templates = [],
+	AutoT = [],
+	Replaces = [];
+
 	Templates[0]="Изтриване",
 	Templates[1]="1-П;1#2-П;1#3-П;1#4-П;1#5-П;1#6-П;1#7-К;#8-О;";
 
@@ -337,7 +342,7 @@ function MakeTempl() {
 		+document.getElementById("Files").selectedIndex;
 	document.getElementById("res").value=Tmpl;
 	let CVal = document.getElementById("Templates").selectedIndex;
-	document.getElementById("TmplName").value=Templates[2*(CVal-1)];
+	if (CVal>0) document.getElementById("TmplName").value=Templates[2*(CVal-1)];
 	//document.getElementById("TmplName").value=document.getElementById("Templates").options[CVal].innerHTML;
 	//document.getElementById("res").select();
 	//var CopyRes = document.execCommand('copy');
@@ -1004,7 +1009,11 @@ function init() {
 	}
 	if (localStorage.getItem("TmplPtr")!=null) TmplPtr=+localStorage.getItem("TmplPtr")
 	else localStorage.setItem('TmplPtr','2')
-	console.log(GetMemTemplates());
+	if (localStorage.getItem("AutoPtr")!=null) AutoPtr=+localStorage.getItem("AutoPtr")
+	else localStorage.setItem('AutoPtr','0')
+	if (localStorage.getItem("ReplPtr")!=null) ReplPtr=+localStorage.getItem("ReplPtr")
+	else localStorage.setItem('ReplPtr','0')
+	GetMemTemplates();
 	getTempls();
 	ClearTextArea();
 }	
@@ -1065,17 +1074,71 @@ function clr() {
 	document.getElementById("result").value = "";
 }
 
+function FindInCol(Array, ToFind, Col) {
+	let Found=-1;
+	for (let i=+Col; i<Array.length; i++) {
+		if (Array[i]==ToFind) {Found=i; break}
+		i++;
+	}
+	return Found;
+}
+
+function MemTriger() {
+	let V=document.getElementById("TmplAuto").value;
+	let T=document.getElementById("TmplName").value;
+	if (V=="") return;
+	let Found=FindInCol(AutoT, V, 0);
+	if (Found>=0) {
+		AutoT[Found+1]=T; // edit existing
+		localStorage.setItem('@00000'.substring(0, 5-(Found/2).toString().length)+Found/2+AutoT[Found], AutoT[Found+1]);
+	} else {
+		AutoT.push(V);
+		AutoT.push(T);
+		AutoPtr += 2;
+		localStorage.setItem('AutoPtr', AutoPtr);
+		localStorage.setItem('@00000'.substring(0, 5-((AutoPtr-2)/2).toString().length)+(AutoPtr-2)/2+AutoT[(AutoPtr-2)], AutoT[AutoPtr-1]);
+	}
+}
+
+function MemReplace() {
+	let V=document.getElementById("Replace").value;
+	let T=document.getElementById("ReplWith").value;
+	if (V=="") return;
+	let Found=FindInCol(Replaces, V, 0);
+	if (Found>=0) {
+		Replaces[Found+1]=T; // edit existing
+		localStorage.setItem('#00000'.substring(0, 5-(Found/2).toString().length)+Found/2+Replaces[Found], Replaces[Found+1]);
+	} else {
+		Replaces.push(V);
+		Replaces.push(T);
+		ReplPtr += 2;
+		localStorage.setItem('ReplPtr', ReplPtr);
+		localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
+	}
+	T=document.getElementById("res").value;
+	V=document.getElementById("ReplFld").value;
+	if (+V>6 || +V<1) return;
+	T=T.replace("##", "#"+V+"#");
+	document.getElementById("res").value=T; console.log(T);
+}
+
 function MemTemplate() {
 	if (document.getElementById("TmplName").value=="") return;
-	Templates[TmplPtr]=document.getElementById("TmplName").value;
-	TmplPtr++;
-	Templates[TmplPtr]=document.getElementById("res").value;
-	TmplPtr++;
-	localStorage.setItem('TmplPtr', TmplPtr);
-	localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);  
+	MemReplace();
+	let Found=FindInCol(Templates, document.getElementById("TmplName").value, 0);
+	if (Found>=0) {
+		Templates[Found+1]=document.getElementById("res").value; // edit existing
+		localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
+	} else {
+		Templates[TmplPtr]=document.getElementById("TmplName").value;
+		TmplPtr++;
+		Templates[TmplPtr]=document.getElementById("res").value;
+		TmplPtr++;
+		localStorage.setItem('TmplPtr', TmplPtr);
+		localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
+	}
+	MemTriger();
 	getTempls(); //recreate template Selection
-	//console.log('key: '+'*0000'.substring(0, 5-(i/2).toString().length)+i/2+Templates[i]);
-	//console.log(i/2);
 }
 
 function GetMemTemplates() {
@@ -1084,13 +1147,64 @@ function GetMemTemplates() {
 	for (let i=0; i<localStorage.length; i++) { //localStorage.length
 		item=localStorage.getItem(localStorage.key(i)); 
 		//console.log('mem: key: '+localStorage.key(i)+' '+item);
-		if (localStorage.key(i).substring(0, 1)==='*') { //console.log(localStorage.key(i).substring(1, 5));
-			j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
-			Templates[j]=localStorage.key(i).substring(5);
-			Templates[j+1]=item;
-			tc++; 
-			//console.log(j+ ' ', Templates[j], (j+1)+' ', Templates[j+1]);
+		switch(localStorage.key(i).substring(0, 1)) {
+			case "*":
+				j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
+				Templates[j]=localStorage.key(i).substring(5);
+				Templates[j+1]=item;
+				tc++; 
+				break;
+			case "@":
+				j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
+				AutoT[j]=localStorage.key(i).substring(5);
+				AutoT[j+1]=item;
+				break;
+			case "#":
+				j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
+				Replaces[j]=localStorage.key(i).substring(5);
+				Replaces[j+1]=item;
+				break;
 		}
 	}
 	return tc;
+}
+
+var myBlob, url, anchor;
+
+function editTemplates(mode) {
+	if (mode=="get") {
+		ShowLog();
+		// (A) CREATE BLOB OBJECT
+		document.getElementById("Log").value = "var Templates = [\n";
+		for (let i=0; i<Templates.length; i++) {
+			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1]+'",\n';
+			i=i+1;  
+		}
+		document.getElementById("Log").value+='],'
+		document.getElementById("Log").value += "\n\nAutoT = [\n";
+		for (let i=0; i<AutoT.length; i++) {
+			document.getElementById("Log").value+='"'+AutoT[i]+'", "'+AutoT[i+1]+'",\n';
+			i=i+1;  
+		}
+		document.getElementById("Log").value+='],'
+		document.getElementById("Log").value += "\n\nReplaces = [\n";
+		for (let i=0; i<Replaces.length; i++) {
+			document.getElementById("Log").value+='"'+Replaces[i]+'", "'+Replaces[i+1]+'",\n';
+			i=i+1;  
+		}
+		document.getElementById("Log").value+=']'
+		// (B) CREATE DOWNLOAD LINK
+		myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
+		url = window.URL.createObjectURL(myBlob);
+		anchor = document.createElement("a");
+		anchor.href = url;
+		anchor.download = "Templates.txt";
+	}
+	if (mode=="save") {
+		anchor.click();
+		window.URL.revokeObjectURL(url);
+		//document.removeChild(anchor);
+		ShowLog();
+		document.getElementById("Log").value = "";
+	}
 }
