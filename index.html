@@ -353,10 +353,12 @@
 
 			в поле <input style="text-align:left; width: 2em" ID="ReplFld" class="inputMessage" value="3"> 
 			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
-				onclick="{ClearFld('res'); ClearFld('TmplName'); ClearFld('TmplAuto'); ClearFld('Replace'); ClearFld('ReplWith'); ClearTemplate();}"
+				onclick="GetRepl()"
 			<br>
 			Име: <input style="text-align:left; margin-top: 5px; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value=""> 
+			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
+				onclick="ClearTemplFld()"
 			<br>
 			Шаблон: <input style="text-align:left; margin-top: 5px; width: 18em" ID="res" class="inputMessage" value="">
 			<a><img src="Save.png" width="20px" onclick="MemTemplate()"

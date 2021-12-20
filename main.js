@@ -310,57 +310,76 @@ function ShowAnim(BoxEl) {
 function MakeTempl() {
 	var Tmpl='';
 	var i, L, C, S; 
-	document.getElementById("res").value="";
 	ShowAnim("TemplFld")
-	for (i=1; i<=(LTempl-2); i++) {
-		S='';
-		Tmpl=Tmpl+i+'-';
-		switch (document.getElementById("Types"+i).value) {
-			case "1":	L='С'; S="0"
-				if (document.getElementById("Exp"+i).checked) {S="1"};
-				break;
-			case "2": L='Д'; break;
-			case "3": L='Т';
-				S=document.getElementById("sep"+i).value;
-				break;
-			case "4": L='Ч'; break;
-			case "5": L='П'; break;
-			case "6": L='R';
-				S=document.getElementById("sep"+i).value;
-				S=RegExp.quote(S);
+	if (document.getElementById("res").value=="") {
+		for (i=1; i<=(LTempl-2); i++) {
+			S='';
+			Tmpl=Tmpl+i+'-';
+			switch (document.getElementById("Types"+i).value) {
+				case "1":	L='С'; S="0"
+					if (document.getElementById("Exp"+i).checked) {S="1"};
+					break;
+				case "2": L='Д'; break;
+				case "3": L='Т';
+					S=document.getElementById("sep"+i).value;
+					break;
+				case "4": L='Ч'; break;
+				case "5": L='П'; break;
+				case "6": L='R';
+					S=document.getElementById("sep"+i).value;
+					S=RegExp.quote(S);
+			}
+			C='';
+			if (document.getElementById("Types"+i).value != 5) {
+				C=document.getElementById("count"+i).value;
+			}
+			Tmpl=Tmpl+L+';'+C;
+			if (S != '') {Tmpl=Tmpl+';'+S;}
+			Tmpl=Tmpl+'#';
 		}
-		C='';
-		if (document.getElementById("Types"+i).value != 5) {
-			C=document.getElementById("count"+i).value;
+		Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
+			LTempl+"-О;"+document.getElementById("SubCats").value+"##"
+			+document.getElementById("Files").selectedIndex;
+		document.getElementById("res").value=Tmpl;
+		let CVal = document.getElementById("Templates").selectedIndex;
+		if (CVal>0) document.getElementById("TmplName").value=Templates[2*(CVal-1)];
+		//document.getElementById("TmplName").value=document.getElementById("Templates").options[CVal].innerHTML;
+		let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1);
+		if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 		}
-		Tmpl=Tmpl+L+';'+C;
-		if (S != '') {Tmpl=Tmpl+';'+S;}
-		Tmpl=Tmpl+'#';
-	}
-	Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
-		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
-		+document.getElementById("Files").selectedIndex;
-	document.getElementById("res").value=Tmpl;
-	let CVal = document.getElementById("Templates").selectedIndex;
-	if (CVal>0) document.getElementById("TmplName").value=Templates[2*(CVal-1)];
-	//document.getElementById("TmplName").value=document.getElementById("Templates").options[CVal].innerHTML;
-	//document.getElementById("res").select();
-	//var CopyRes = document.execCommand('copy');
 }
 
-function UseTempl() {
-	var Templ=document.getElementById("res").value;
-	if (Templ=="") {return}
-	if (Templ[0] == '"') { // delete "s and ,
-		result=Templ.split('"');
-		Templ=result[1];
-	}	
-	SelTempl(Templ, true); //console.log(Templ);
-	Extract();
+function ClearTemplFld() {
+	ClearFld('res'); 
+	ClearFld('TmplName'); 
+	ClearFld('TmplAuto'); 
+	ClearFld('Replace'); 
+	ClearFld('ReplWith');
+	ShowAnim("TemplFld");
+	//ClearTemplate();
+}
+
+function GetRepl() {
+	let CVal=document.getElementById("res"+document.getElementById("ReplFld").value).value;
+	document.getElementById("ReplWith").value=CVal; // show replace with
+	let Found=FindInCol(Replaces, CVal, 1); // show replace
+	if (Found>=0) document.getElementById("Replace").value=Replaces[Found-1];
+}
+
+function EditTempl(str, clear) {
+	if (clear) ClearTemplFld();
+	document.getElementById("res").value=str;
+	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
+	if (CVal>0) document.getElementById("TmplName").value=Templates[2*(CVal-1)];
+	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show triger
+	if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
+	Found=str.match(/#\d#/g); //get replace fld number
+	if (Found!=null) document.getElementById("ReplFld").value=Found[0][1];
 }
 
 function SelTempl(str, clear) {
-	if (clear) {document.getElementById("Info").innerHTML="» Редактиране на шаблон"}
+	if (clear) document.getElementById("Info").innerHTML="» Редактиране на шаблон";
+	EditTempl(str, true);
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
@@ -397,6 +416,17 @@ function SelTempl(str, clear) {
 	}
 }
 
+function UseTempl() {
+	var Templ=document.getElementById("res").value;
+	if (Templ=="") {return}
+	if (Templ[0] == '"') { // delete "s and ,
+		result=Templ.split('"');
+		Templ=result[1];
+	}	
+	SelTempl(Templ, true); //console.log(Templ);
+	Extract();
+}
+
 function getTempls() {
 	var i;
 	var htmlString = '<select id="Templates" style="width: 133px;" class="inputMessage" '+
@@ -430,7 +460,7 @@ function Replace(F) {
 
 function Extract() {
 	var text=document.getElementById("MsgText").value;
-	text=text + ' ';	// to process dd.dd at end
+	text=text + ' ';	// to process dd.dd at the end
 	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTempl, WordTmpF;
 
 	function Process(part, pattern, c) {
