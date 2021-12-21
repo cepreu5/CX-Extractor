@@ -355,8 +355,7 @@ function ClearTemplFld() {
 	ClearFld('TmplAuto'); 
 	ClearFld('Replace'); 
 	ClearFld('ReplWith');
-	ShowAnim("TemplFld");
-	//ClearTemplate();
+	//ShowAnim("TemplFld");
 }
 
 function GetRepl() {
@@ -374,12 +373,12 @@ function EditTempl(str, clear) {
 	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show triger
 	if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 	Found=str.match(/#\d#/g); //get replace fld number
+	document.getElementById("ReplFld").value="";
 	if (Found!=null) document.getElementById("ReplFld").value=Found[0][1];
 }
 
 function SelTempl(str, clear) {
 	if (clear) document.getElementById("Info").innerHTML="» Редактиране на шаблон";
-	EditTempl(str, true);
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
@@ -548,7 +547,12 @@ function Extract() {
 	}
 	Replace(ReplaceF);
 	document.getElementById("Note").value="";
-	if (document.getElementById("res1").value == "") InsDate(); 
+	if (document.getElementById("res1").value == "") InsDate();
+	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
+	if (CVal>1) {
+		document.getElementById("Info").innerHTML+=": "+Templates[2*(CVal-1)];
+		EditTempl (document.getElementById("Templates").value, true);
+	}
 }
 
 function Combo(part) {
@@ -575,7 +579,7 @@ function AutoTempl() {
 			if (text.match(re)) {
 				for (j=0; j<Templates.length; j++) {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
-						document.getElementById("Info").innerHTML="» Шаблон: "+Templates[j];
+						document.getElementById("Info").innerHTML="» Редактиране на шаблон: "+Templates[j];
 						ClearDef();
 						SelTempl(Templates[j+1], false);
 						Extract();
@@ -1201,7 +1205,7 @@ function GetMemTemplates() {
 
 var myBlob, url, anchor;
 
-function editTemplates(mode) {
+function FileTemplates(mode) {
 	if (mode=="get") {
 		ShowLog();
 		// (A) CREATE BLOB OBJECT
