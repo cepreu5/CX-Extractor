@@ -50,7 +50,7 @@
 		</div>
 	
 		<fieldset ID="Main" class="centered-content" style="display:none;">
-		<SELECT ID="Files" style="width: 158px;" onChange="SelFile()" class="inputMessage">
+		<SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
 		</SELECT>
 		&nbsp;
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
@@ -100,7 +100,7 @@
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Параметри"></a><br>
 
-		<button class="solo typewriter-yellow" onclick="ShowAnim('Sels'); EditTempl(str, true);"><span ID="Info"></span></button>	<!--ShowAnim('Info'); -->
+		<button class="solo typewriter-yellow" onclick="ShowAnim('Sels'); ShowAnim('TemplFld');"><span ID="Info"></span></button>	<!--ShowAnim('Info'); -->
 		<span ID="Sels" hidden><br></span><br>
 
 		<!--span class="container">
@@ -342,25 +342,25 @@
 		
 		<span ID="TemplFld">
 			<hr>
-			Замени: <input style="text-align:left; width: 5.4em" ID="Replace" class="inputMessage" value="">
-			<!--с <input style="text-align:left; width: 5.4em" ID="ReplWith" class="inputMessage" value="">&nbsp;&nbsp;-->
-
-			с <input style="text-align:center; width: 6em" class="inputMessage" ID="ReplWith" value=""
-				list="acc-options">
-				<datalist id="acc-options">
-				</datalist>
-
-			в поле <input style="text-align:left; width: 2em" ID="ReplFld" class="inputMessage" value=""> 
-			<a><img src="Space.png" width="20px" style="vertical-align: sub;" 
-				onclick="GetRepl()"
-			<br>
-			Име: <input style="text-align:left; margin-top: 5px; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
+			Име: <input style="text-align:left; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value=""> 
 			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
 				onclick="ClearTemplFld()"
 			<br>
+			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
+			<!--с <input style="text-align:left; width: 5.4em" ID="ReplWith" class="inputMessage" value="">&nbsp;&nbsp;-->
+
+			с <input style="text-align:center; width: 6.8em" class="inputMessage" ID="ReplWith" value=""
+				list="acc-options">
+				<datalist id="acc-options">
+				</datalist>
+
+			в поле <input style="text-align:left; width: 1.2em" ID="ReplFld" class="inputMessage" value=""> 
+			<a><img src="Space.png" width="20px" style="vertical-align: sub;" ID="ReplBtn"
+				onclick="GetRepl()"
+			<br>
 			Шаблон: <input style="text-align:left; margin-top: 5px; width: 18em" ID="res" class="inputMessage" value="">
-			<a><img src="Save.png" width="20px" onclick="MemTemplate()"
+			<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
 				align="center" title="MemTemplate"></a>
 			<hr>
 		</span>
