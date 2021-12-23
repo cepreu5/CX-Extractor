@@ -342,7 +342,7 @@ function MakeTmpl() {
 			LTempl+"-О;"+document.getElementById("SubCats").value+"##"
 			+document.getElementById("Files").selectedIndex;
 		if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
-		if (WorkTmpl!="") {
+		if (WorkTmpl!="") { 
 			let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
 			if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 		}
