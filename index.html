@@ -60,7 +60,7 @@
 		&nbsp;
 		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a>
 		&nbsp;
-		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="FileTemplates('get'); FileTemplates('save')"></a> <!-- ShowLog()	 -->
+		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a> <!-- ShowLog()	 -->
 		&nbsp;
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
 		<br>
@@ -89,6 +89,24 @@
 			<!--hr>
 			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!-->
 			<hr>
+			<button class="solo typewriter-yellow">Шаблони</button>
+			<input type="button" id="click-input" value="От файл" 
+				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+				onclick="document.getElementById('fileToLoad').click();" />
+			<input type="button" value="Зареждане"
+				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+				onclick="loadFileAsText();" />
+			<!--input type="button" value="Зареждане" hidden
+				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+				onclick="LoadToLocal()" /-->
+			<input type="button" value="Изтриване" 
+				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+				onclick="ClearMem()" />
+			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
+				onclick="FileTemplates('get'); FileTemplates('save')" value="Запис">
+			<!--label for="click-input" id="file-name">...</label-->
+			<input type="file" style="display:none;" id="fileToLoad" accept=".txt" onclick="ShowName()">
+			<hr>
 		</div>
 
 		Шаблони 
@@ -100,8 +118,23 @@
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Параметри"></a><br>
 
-		<button class="solo typewriter-yellow" onclick="ShowAnim('Sels'); ShowAnim('TemplFld');"><span ID="Info"></span></button>	<!--ShowAnim('Info'); -->
-		<span ID="Sels" hidden><br></span><br>
+		<button class="solo typewriter-yellow" onclick="ShowAnim('Sels');"><span ID="Info"></span></button>
+		<span ID="Sels" hidden>
+			Име: <input style="text-align:left; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
+			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value="">
+			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
+				onclick="ClearTemplFld()"></a>
+			<br>
+			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
+			с <input style="text-align:center; width: 6.8em" class="inputMessage" ID="ReplWith" value=""
+				list="acc-options">
+				<datalist id="acc-options">
+				</datalist>
+			в поле <input style="text-align:left; width: 1.2em" ID="ReplFld" class="inputMessage" value=""> 
+			<a><img src="Space.png" width="20px" style="vertical-align: sub;" ID="ReplBtn"
+				onclick="GetRepl()"></a>
+			<hr>
+		</span>
 
 		<!--span class="container">
 			<div class="accordion">
@@ -206,7 +239,7 @@
 					ID=res2Split value="">&nbsp
 				<img src="Remove.png" width="30px" title="Изтриване" align="center"
 					onclick="ClearFld('res2Split')">
-			   </span>
+			</span>
 
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field3" ID=res3 value=""
 				list="acc-options">
@@ -341,14 +374,13 @@
 		</script>
 		
 		<span ID="TemplFld">
-			<hr>
-			Име: <input style="text-align:left; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
+			<!--hr>
+			<Име: <input style="text-align:left; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value=""> 
 			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
-				onclick="ClearTemplFld()"
+				onclick="ClearTemplFld()"></a>
 			<br>
 			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
-			<!--с <input style="text-align:left; width: 5.4em" ID="ReplWith" class="inputMessage" value="">&nbsp;&nbsp;-->
 
 			с <input style="text-align:center; width: 6.8em" class="inputMessage" ID="ReplWith" value=""
 				list="acc-options">
@@ -357,31 +389,15 @@
 
 			в поле <input style="text-align:left; width: 1.2em" ID="ReplFld" class="inputMessage" value=""> 
 			<a><img src="Space.png" width="20px" style="vertical-align: sub;" ID="ReplBtn"
-				onclick="GetRepl()"
-			<br>
-			Шаблон: <input style="text-align:left; margin-top: 5px; width: 18em" ID="res" class="inputMessage" value="">
+				onclick="GetRepl()"></a>
+			<br-->
+			Шаблон: <input style="text-align:left; margin-top: 5px; width: 16em" ID="res" class="inputMessage" value="">
+			<a><img src="Remove.png" width="20px" align="center"
+				onclick="ClearFld('res'); ShowAnim('TemplFld')"></a>
 			<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
 				align="center" title="MemTemplate"></a>
-			<hr>
 		</span>
-
 		<hr>
-		<input type="button" id="click-input" value="Изберете файл" 
-			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-			onclick="document.getElementById('fileToLoad').click();" />
-		<input type="button" value="ToLocal" 
-			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-			onclick="LoadToLocal()" />
-		<input type="button" value="ClearMem" 
-			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-			onclick="ClearMem()" />
-		<!--label for="click-input" id="file-name">...</label-->
-		<input type="file" style="display:none;" id="fileToLoad" accept=".txt" onclick="ShowName()">
-		<button 
-			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-			onclick="loadFileAsText()">Зареждане</button>
-		<hr>
-
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;
 			<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
@@ -398,7 +414,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor M18.12 / 
+			© 2021 CX Extractor M23.12 / 
 		</span>
 	</fieldset>
 	</div>

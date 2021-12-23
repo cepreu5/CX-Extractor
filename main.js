@@ -20,11 +20,11 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	ReplPtr=0, // Next free place in AutoT array
 	TmplPtr=2; // Next free place in Templates array
 
-	const Templates = [],
+	var Templates = [],
 	AutoT = [],
 	Replaces = [];
 
-	Templates[0]="Изтриване",
+	Templates[0]="Изтриване", // see also ClearMem for initialization
 	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
 
 function processUser() {
@@ -59,7 +59,7 @@ function NoAuto() {
 		document.getElementById('No').style.display = "none";
 		AutoTempl(); 
 	} 
-	if (AllTemplFlag) document.getElementById("Info").innerHTML=""; //<br>
+	//if (AllTemplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
 	getTempls(); 
 }
 
@@ -295,9 +295,9 @@ function createSels() { // Extract selection field
 		createLbl(i, "3", "&nbsp Разход");
 		createChk(i);
 
-		var brElem = document.createElement("BR");
-		document.getElementById("Sels").appendChild(brElem);
+		document.getElementById("Sels").appendChild(document.createElement("br"));
 	}
+	document.getElementById("Sels").appendChild(document.createElement("hr"));
 	document.getElementById("TemplFld").hidden=true;
 	document.getElementById("NoteFld").hidden=true;
 	document.getElementById("CalcSp").hidden=true; //
@@ -350,12 +350,16 @@ function MakeTempl() {
 }
 
 function ClearTemplFld() {
-	ClearFld('res'); 
+	//ClearFld('res'); 
 	ClearFld('TmplName'); 
 	ClearFld('TmplAuto'); 
 	ClearFld('Replace'); 
 	ClearFld('ReplWith');
-	ShowAnim("TemplFld");
+	ClearFld('ReplFld');
+	document.getElementById("Templates").selectedIndex=1;
+	SelTempl(Templates[1], true);
+	Extract();
+	//ShowAnim("TemplFld");
 	WorkTmpl="";
 }
 
@@ -735,14 +739,6 @@ function SelFile() {
 		x.remove(x.selectedIndex); // remove last option
 		x.selectedIndex = 0; scriptURL=x.value; // set to first option
 	};
-}
-
-function ShowSels() {
-	if (document.getElementById("Sels").hidden) {
-		document.getElementById("Sels").hidden = false;
-	}
-	else {document.getElementById("Sels").hidden = true;
-	}
 }
 
 function ShowSplit() {
@@ -1213,16 +1209,24 @@ function GetMemTemplates() {
 }
 
 function ClearMem() {
-	let item, start;
-	//for (let i=0; i<localStorage.length; i++) { //localStorage.length
-	for (let i=localStorage.length-1; i>-1; i--) { //localStorage.length
-		item=localStorage.getItem(localStorage.key(i));
-		start=localStorage.key(i).substring(0, 1);
-		if ((start=="*") || (start=="#") || (start=="@")) localStorage.removeItem(localStorage.key(i));
-	}
+	var CXpass, ZoomL1, ZoomL2, cfgTheme;
+	CXpass=localStorage.getItem("CXpass");console.log(CXpass)
+	ZoomL1=localStorage.getItem("ZoomL1");
+	ZoomL2=localStorage.getItem("ZoomL2");
+	cfgTheme=localStorage.getItem("cfgTheme");
+	localStorage.clear();
+	if (CXpass!=null) localStorage.setItem("CXpass", CXpass);
+	if (ZoomL1!=null) localStorage.setItem("ZoomL1", ZoomL1);
+	if (ZoomL2!=null) localStorage.setItem("ZoomL2", ZoomL2);
+	if (cfgTheme!=null) localStorage.setItem("cfgTheme", cfgTheme);
 	localStorage.setItem('TmplPtr', 2);
 	localStorage.setItem('AutoPtr', 0);
 	localStorage.setItem('ReplPtr', 0);
+	AutoT=[];
+	Replaces=[];
+	Templates=[];
+	Templates[0]="Изтриване",
+	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
 	location.reload();
 }
 
@@ -1267,13 +1271,12 @@ function FileTemplates(mode) {
 
 function loadFileAsText() {
     var fileToLoad = document.getElementById("fileToLoad").files[0]; //
-    //document.getElementById("Selected").innerText=fileToLoad.name;
     var fileReader = new FileReader();
-    fileReader.onload = function(fileLoadedEvent) 
-    {
+    fileReader.onload = function(fileLoadedEvent) {
         var textFromFileLoaded = fileLoadedEvent.target.result;
         document.getElementById("Log").value=textFromFileLoaded;
 		ShowLog();
+		LoadToLocal();
     };
     fileReader.readAsText(fileToLoad, "UTF-8");
 }
@@ -1326,13 +1329,13 @@ function LoadToLocal() {
 	let rows=T.split('\n');
 	if (rows[0] != "var Templates = [") return;
 	let i=1, parts;
-	TmplPtr=2;
+	//TmplPtr=2;
 	while (rows[i]!="],") {console.log(i+rows[i]);
 		parts=rows[i].split('"');
 		MemTemplateOnly(parts[1], parts[3]);
 		i++
 	}
-	i+=2; AutoPtr=0;
+	i+=2; //AutoPtr=0;
 	if (rows[i] != "AutoT = [") return;
 	i++;
 	while (rows[i]!="],") {
@@ -1340,7 +1343,7 @@ function LoadToLocal() {
 		MemAutoOnly(parts[1], parts[3]);
 		i++
 	}
-	i+=2; ReplPtr=0;
+	i+=2; //ReplPtr=0;
 	if (rows[i] != "Replaces = [") return;
 	i++;
 	while (rows[i]!="]") {
