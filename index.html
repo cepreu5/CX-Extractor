@@ -65,7 +65,7 @@
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
 		<br>
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
-			onFocus="AutoTempl()" onInput="AutoTempl()">
+			onFocus="AutoTmpl()" onInput="AutoTmpl()">
 		</textarea>
 		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" wrap="off" hidden>
 		</textarea>
@@ -123,7 +123,7 @@
 			Име: <input style="text-align:left; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value="">
 			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
-				onclick="ClearTemplFld()"></a>
+				onclick="ClearTmplFld()"></a>
 			<br>
 			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
 			с <input style="text-align:center; width: 6.8em" class="inputMessage" ID="ReplWith" value=""
@@ -196,7 +196,7 @@
 				<tr ID="TRow">
 				<td ID="Cell3"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTempl()" 
+				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTmpl()" 
 					title="Шаблон">
 				</td>
 				<td ID="Cell2"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
@@ -256,6 +256,13 @@
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
+			<span ID="TmplFld">
+				Шаблон: <input style="text-align:left; margin-top: 5px; width: 16em" ID="res" class="inputMessage" value="">
+				<a><img src="Remove.png" width="20px" align="center"
+					onclick="ClearFld('res'); ShowAnim('TmplFld')"></a>
+				<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
+					align="center" title="MemTemplate"></a>
+			</span>
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
@@ -273,7 +280,7 @@
 				</td>
 				<td ID="Cell3"><img src="Skin/Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTempl()" 
+				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTmpl()" 
 					title="Шаблон">
 				</td>
 				<td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
@@ -372,31 +379,6 @@
 				}
 			})
 		</script>
-		
-		<span ID="TemplFld">
-			<!--hr>
-			<Име: <input style="text-align:left; width: 7.4em" ID="TmplName" class="inputMessage" value="">&nbsp;&nbsp;&nbsp;
-			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value=""> 
-			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
-				onclick="ClearTemplFld()"></a>
-			<br>
-			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
-
-			с <input style="text-align:center; width: 6.8em" class="inputMessage" ID="ReplWith" value=""
-				list="acc-options">
-				<datalist id="acc-options">
-				</datalist>
-
-			в поле <input style="text-align:left; width: 1.2em" ID="ReplFld" class="inputMessage" value=""> 
-			<a><img src="Space.png" width="20px" style="vertical-align: sub;" ID="ReplBtn"
-				onclick="GetRepl()"></a>
-			<br-->
-			Шаблон: <input style="text-align:left; margin-top: 5px; width: 16em" ID="res" class="inputMessage" value="">
-			<a><img src="Remove.png" width="20px" align="center"
-				onclick="ClearFld('res'); ShowAnim('TemplFld')"></a>
-			<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
-				align="center" title="MemTemplate"></a>
-		</span>
 		<hr>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;

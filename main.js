@@ -1,6 +1,6 @@
 var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
 
-var ReplaceF, // Replace Field calculated in getTempls and used in Extract
+var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	Z100=true, // zoom level
 	CalcFl=false,
 	val="", // initial calculator display value
@@ -57,10 +57,10 @@ function NoAuto() {
 	else { 
 		document.getElementById('Yes').style.display = "inline"; 
 		document.getElementById('No').style.display = "none";
-		AutoTempl(); 
+		AutoTmpl(); 
 	} 
 	//if (AllTemplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
-	getTempls(); 
+	getTmpls(); 
 }
 
 function trueFalse(part, p1, p2, p3, p4, p5, p6) {
@@ -229,7 +229,7 @@ function createSels() { // Extract selection field
 		document.getElementById("Sels").appendChild(x);
 		if (i=="count") {
 			var I1='<input type="number" class="inputMessage" ID="'+i+s+
-				'" oninput="Extract();ChangeTip(\'Tip'+s+i+
+				'" oninput="Extract6();ChangeTip(\'Tip'+s+i+
 				'\', '+s+');" value="1" style="width: '+sz+
 				'em" hidden></input>';
 			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
@@ -238,7 +238,7 @@ function createSels() { // Extract selection field
 		}
 		else {
 			var I1='<input ID="'+i+s+
-				'" class="inputMessage" oninput="Extract();ChangeTip(\'Tip'+s+i+'\', '+s+
+				'" class="inputMessage" oninput="Extract6();ChangeTip(\'Tip'+s+i+'\', '+s+
 				');" value="" size="'+sz+'" hidden></input>';
 			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
 			  '">.</span>';  //alert(I1+I2)
@@ -253,7 +253,7 @@ function createSels() { // Extract selection field
 		x.type = "checkbox";
 		x.setAttribute("id", "Exp"+i);
 		x.setAttribute("style", "vertical-align: sub;");
-		x.setAttribute("onchange", "Extract()");
+		x.setAttribute("onchange", "Extract6()");
 		x.setAttribute("hidden", true);
 		where = document.getElementById('Sels');
 		where.appendChild(x);
@@ -298,20 +298,20 @@ function createSels() { // Extract selection field
 		document.getElementById("Sels").appendChild(document.createElement("br"));
 	}
 	document.getElementById("Sels").appendChild(document.createElement("hr"));
-	document.getElementById("TemplFld").hidden=true;
+	document.getElementById("TmplFld").hidden=true;
 	document.getElementById("NoteFld").hidden=true;
 	document.getElementById("CalcSp").hidden=true; //
 }
 
 function ShowAnim(BoxEl) {
 	document.getElementById(BoxEl).classList.toggle('active');
-	//if ((BoxEl=="res") && (document.getElementById("TemplFld").classList.length=0)) {ClearFld('res');}
+	//if ((BoxEl=="res") && (document.getElementById("TmplFld").classList.length=0)) {ClearFld('res');}
 }
 
-function MakeTempl() {
+function MakeTmpl() {
 	var Tmpl='';
 	var i, L, C, S; 
-	ShowAnim("TemplFld")
+	ShowAnim("TmplFld")
 	if (document.getElementById("res").value=="") {
 		for (i=1; i<=(LTempl-2); i++) {
 			S='';
@@ -342,25 +342,20 @@ function MakeTempl() {
 			LTempl+"-О;"+document.getElementById("SubCats").value+"##"
 			+document.getElementById("Files").selectedIndex;
 		if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
-		//document.getElementById("TmplName").value=WorkTmpl;
-		//document.getElementById("TmplName").value=document.getElementById("Templates").options[CVal].innerHTML;
-		let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
-		if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
+		if (WorkTmpl!="") {
+			let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
+			if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 		}
+	}
 }
 
-function ClearTemplFld() {
-	//ClearFld('res'); 
+function ClearTmplFld() {
 	ClearFld('TmplName'); 
 	ClearFld('TmplAuto'); 
 	ClearFld('Replace'); 
 	ClearFld('ReplWith');
 	ClearFld('ReplFld');
-	document.getElementById("Templates").selectedIndex=1;
-	SelTempl(Templates[1], true);
-	Extract();
-	//ShowAnim("TemplFld");
-	WorkTmpl="";
+	ClearTemplate();
 }
 
 function GetRepl() {
@@ -372,7 +367,7 @@ function GetRepl() {
 }
 
 function FillTmplFdl(str, clear) {
-	if (clear) ClearTemplFld();
+	if (clear) ClearTmplFld();
 	document.getElementById("res").value=str;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if (CVal>1) {
@@ -386,7 +381,7 @@ function FillTmplFdl(str, clear) {
 	if (Found!=null) document.getElementById("ReplFld").value=Found[0][1];
 }
 
-function SelTempl(str, clear) {
+function SelTmpl(str, clear) {
 	if (clear) document.getElementById("Info").innerHTML="» Редактиране на екстракт";
 	if (str!=Templates[1]) document.getElementById("res").value=str;
 	var result, fsplit, first, second, sep, I;
@@ -424,23 +419,23 @@ function SelTempl(str, clear) {
 	}
 }
 
-function UseTempl() {
+function UseTmpl() {
 	var Templ=document.getElementById("res").value;
 	if (Templ=="") {return}
 	if (Templ[0] == '"') { // delete "s and ,
 		result=Templ.split('"');
 		Templ=result[1];
 	}	
-	SelTempl(Templ, true); //console.log(Templ);
-	Extract();
+	SelTmpl(Templ, true); //console.log(Templ);
+	Extract6();
 }
 
-function getTempls() {
+function getTmpls() {
 	var i;
 	var htmlString = '<select id="Templates" style="width: 133px;" class="inputMessage" '+
-		'onChange="SelTempl(' + 
+		'onChange="SelTmpl(' + 
 		"document.getElementById('Templates').value" +
-		', true); Extract()"><option value="'+Templates[1]+'">Изберете шаблон</option>';
+		', true); Extract6()"><option value="'+Templates[1]+'">Изберете шаблон</option>';
 	ReplaceF=3;
 	for (i=0; i<Templates.length; i++) {
 		if (CheckAuto(Templates[i])) { //exclude Auto templates
@@ -464,7 +459,7 @@ function Replace(F) {
 	}	
 }
 
-function Extract() {
+function Extract6() {
 	var text=document.getElementById("MsgText").value;
 	text=text + ' ';	// to process dd.dd at the end
 	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTempl, WordTmpF;
@@ -572,15 +567,14 @@ function Combo(part) {
 		case "6": trueFalse(part, false, false, true, false, false, true);
 		  document.getElementById("res"+part).value="";
 	}
-	Extract();
+	Extract6();
 }
 
-function AutoTempl() {
+function AutoTmpl() {
 	document.getElementById("NormBtn").title="Нормализация";
 	var i, j, stop=false;
 	var text=document.getElementById("MsgText").value;
 	if (!AllTemplFlag && (text!="")) {
-		//console.log('AutoTempl');
 		for (i=1; i<=AutoT.length; i++) {
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
 			if (text.match(re)) {
@@ -590,8 +584,8 @@ function AutoTempl() {
 						document.getElementById("TmplName").value=Templates[j];
 						document.getElementById("Info").innerHTML="» Редактиране на шаблон: "+WorkTmpl;
 						ClearDef();
-						SelTempl(Templates[j+1], false);
-						Extract();
+						SelTmpl(Templates[j+1], false);
+						Extract6();
 						FillTmplFdl(Templates[j+1], false);
 						stop=true;
 						break;
@@ -643,7 +637,7 @@ function SaveConfig() {
 		document.getElementById("Cell3").innerHTML=
 			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
 		document.getElementById("Cell4").innerHTML=
-			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTmpl()">&nbsp&nbsp';
 	} else {
 		document.getElementById("TRow").innerHTML=BArea;
 	}
@@ -694,7 +688,7 @@ function Normal() {
 		text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
 		//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
 		document.getElementById("MsgText").value=text;
-		Extract();
+		Extract6();
 	}
 }
 
@@ -717,7 +711,7 @@ function showDiv() {
 	if (document.getElementById('Suc').style.display == "block") {
 		document.getElementById('Suc').style.display = "none";
 	}
-	document.getElementById("TemplFld").hidden = true;
+	document.getElementById("TmplFld").hidden = true;
 	document.getElementById('loadingGif').style.display = "block";
 }
 
@@ -763,8 +757,8 @@ function ShowLog() {
 
 function ExtClick() {
 	spinImage('ExtBtn');
-	if (document.getElementById("TemplFld").classList.length=0) Extract()
-	else UseTempl();
+	if (document.getElementById("TmplFld").classList.length=0) Extract6()
+	else UseTmpl();
 }
 
 function SelectAndCopy(What) {
@@ -775,9 +769,9 @@ function SelectAndCopy(What) {
 
 function ClearTemplate() {
 	document.getElementById("Templates").options[0].selected=true;
-	SelTempl(document.getElementById('Templates').value, true);
+	SelTmpl(document.getElementById('Templates').value, true);
 	WorkTmpl="";
-	Extract();
+	Extract6();
 }
 
 function ClearTextArea() {
@@ -800,8 +794,8 @@ function ClearFld(FldID) {
 function ClearDef() {
 	if (!(document.getElementById("Templates").options[0]==undefined)) {
 		document.getElementById("Templates").options[0].selected=true;
-		SelTempl(document.getElementById("Templates").options[0].value, false);
-		Extract();
+		SelTmpl(document.getElementById("Templates").options[0].value, false);
+		Extract6();
 	}
 }
 
@@ -888,7 +882,7 @@ function switchSheet() {
     document.getElementById("Cell3").innerHTML=
 		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
     document.getElementById("Cell4").innerHTML=
-		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTempl()">&nbsp&nbsp';
+		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTmpl()">&nbsp&nbsp';
   } else {
     theme.href = "First.css";
     document.getElementById("TRow").innerHTML=BArea;
@@ -1051,7 +1045,7 @@ function init() {
 	if (localStorage.getItem("ReplPtr")!=null) ReplPtr=+localStorage.getItem("ReplPtr")
 	else localStorage.setItem('ReplPtr','0')
 	GetMemTemplates();
-	getTempls();
+	getTmpls();
 	ClearTextArea();
 }	
 
@@ -1078,7 +1072,7 @@ function init2() {
 function paste() {
 	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
 	setTimeout(function() {
-		AutoTempl();	
+		AutoTmpl();	
 	},2500);
 	//document.getElementById("MsgText").focus();
 	//document.getElementById("Cats").focus();
@@ -1162,6 +1156,7 @@ function MemReplace() {
 function MemTemplate() {
 	let T=document.getElementById("TmplName").value;
 	if (T=="") return;
+	if (WorkTmpl=="") {document.getElementById("TmplName").value="Дублирано име!"; return}
 	MemReplace();
 	let R=document.getElementById("res").value;
 	spinImage("Floppy");
@@ -1177,7 +1172,7 @@ function MemTemplate() {
 		localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
 	}
 	MemAuto();
-	getTempls(); //recreate template Selection
+	getTmpls(); //recreate template Selection
 }
 
 function GetMemTemplates() {
