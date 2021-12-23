@@ -375,7 +375,7 @@ function FillTmplFdl(str, clear) {
 		WorkTmpl=Templates[2*(CVal-1)]
 		document.getElementById("TmplName").value=WorkTmpl;
 	}
-	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show triger
+	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show Auto
 	if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 	Found=str.match(/#\d#/g); //get replace fld number
 	document.getElementById("ReplFld").value="";
@@ -1124,7 +1124,7 @@ function FindInCol(Array, ToFind, Col) {
 	return Found;
 }
 
-function MemTriger() {
+function MemAuto() {
 	let V=document.getElementById("TmplAuto").value;
 	let T=document.getElementById("TmplName").value;
 	if (V=="") return;
@@ -1164,22 +1164,23 @@ function MemReplace() {
 }
 
 function MemTemplate() {
-	if (document.getElementById("TmplName").value=="") return;
-	spinImage("Floppy");
+	let T=document.getElementById("TmplName").value;
+	if (T=="") return;
 	MemReplace();
-	let Found=FindInCol(Templates, document.getElementById("TmplName").value, 0);
+	let R=document.getElementById("res").value;
+	spinImage("Floppy");
+	let Found=FindInCol(Templates, T, 0);
 	if (Found>=0) {
-		Templates[Found+1]=document.getElementById("res").value; // edit existing
+		Templates[Found+1]=R; // edit existing
 		localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
 	} else {
-		Templates[TmplPtr]=document.getElementById("TmplName").value;
-		TmplPtr++;
-		Templates[TmplPtr]=document.getElementById("res").value;
-		TmplPtr++;
+		Templates.push(T);
+		Templates.push(R);
+		TmplPtr+=2;
 		localStorage.setItem('TmplPtr', TmplPtr);
 		localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
 	}
-	MemTriger();
+	MemAuto();
 	getTempls(); //recreate template Selection
 }
 
@@ -1211,14 +1212,27 @@ function GetMemTemplates() {
 	return tc;
 }
 
-var myBlob, url, anchor;
+function ClearMem() {
+	let item, start;
+	//for (let i=0; i<localStorage.length; i++) { //localStorage.length
+	for (let i=localStorage.length-1; i>-1; i--) { //localStorage.length
+		item=localStorage.getItem(localStorage.key(i));
+		start=localStorage.key(i).substring(0, 1);
+		if ((start=="*") || (start=="#") || (start=="@")) localStorage.removeItem(localStorage.key(i));
+	}
+	localStorage.setItem('TmplPtr', 2);
+	localStorage.setItem('AutoPtr', 0);
+	localStorage.setItem('ReplPtr', 0);
+	location.reload();
+}
 
+var myBlob, url, anchor;
 function FileTemplates(mode) {
 	if (mode=="get") {
 		ShowLog();
 		// (A) CREATE BLOB OBJECT
 		document.getElementById("Log").value = "var Templates = [\n";
-		for (let i=0; i<Templates.length; i++) {
+		for (let i=2; i<Templates.length; i++) {
 			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1]+'",\n';
 			i=i+1;  
 		}
@@ -1234,7 +1248,7 @@ function FileTemplates(mode) {
 			document.getElementById("Log").value+='"'+Replaces[i]+'", "'+Replaces[i+1]+'",\n';
 			i=i+1;  
 		}
-		document.getElementById("Log").value+=']'
+		document.getElementById("Log").value+=']\n'
 		// (B) CREATE DOWNLOAD LINK
 		myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
 		url = window.URL.createObjectURL(myBlob);
@@ -1249,4 +1263,91 @@ function FileTemplates(mode) {
 		ShowLog();
 		document.getElementById("Log").value = "";
 	}
+}
+
+function loadFileAsText() {
+    var fileToLoad = document.getElementById("fileToLoad").files[0]; //
+    //document.getElementById("Selected").innerText=fileToLoad.name;
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) 
+    {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("Log").value=textFromFileLoaded;
+		ShowLog();
+    };
+    fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+function ShowName() {
+    inputElement = document.getElementById('fileToLoad')
+    labelElement = document.getElementById('file-name')
+    inputElement.onchange = function(event) {
+        var path = inputElement.value;
+        if (path) {
+            //labelElement.innerHTML = path.split(/(\\|\/)/g).pop()
+            document.getElementById('click-input').value=path.split(/(\\|\/)/g).pop()
+        } else {
+			//labelElement.innerHTML = '...'
+            document.getElementById('click-input').value = 'Изберете файл'
+        } 
+    }
+}
+
+function MemTemplateOnly(T, R) {
+	if ((T=="") || (R=="")) return;
+	Templates.push(T);
+	Templates.push(R);
+	TmplPtr+=2;
+	localStorage.setItem('TmplPtr', TmplPtr);
+	localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
+}
+
+function MemAutoOnly(V, T) {
+	if ((V=="") || (T=="")) return;
+	AutoT.push(V);
+	AutoT.push(T);
+	AutoPtr += 2;
+	localStorage.setItem('AutoPtr', AutoPtr);
+	localStorage.setItem('@00000'.substring(0, 5-((AutoPtr-2)/2).toString().length)+(AutoPtr-2)/2+AutoT[(AutoPtr-2)], AutoT[AutoPtr-1]);
+}
+
+function MemReplaceOnly(V, T) {
+	if ((V=="") || (T=="")) return;
+	Replaces.push(V);
+	Replaces.push(T);
+	ReplPtr += 2;
+	localStorage.setItem('ReplPtr', ReplPtr);
+	localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
+}
+
+function LoadToLocal() {
+	let T=document.getElementById('Log').value;
+	if (T == "") return;
+	let rows=T.split('\n');
+	if (rows[0] != "var Templates = [") return;
+	let i=1, parts;
+	TmplPtr=2;
+	while (rows[i]!="],") {console.log(i+rows[i]);
+		parts=rows[i].split('"');
+		MemTemplateOnly(parts[1], parts[3]);
+		i++
+	}
+	i+=2; AutoPtr=0;
+	if (rows[i] != "AutoT = [") return;
+	i++;
+	while (rows[i]!="],") {
+		parts=rows[i].split('"');
+		MemAutoOnly(parts[1], parts[3]);
+		i++
+	}
+	i+=2; ReplPtr=0;
+	if (rows[i] != "Replaces = [") return;
+	i++;
+	while (rows[i]!="]") {
+		parts=rows[i].split('"');
+		MemReplaceOnly(parts[1], parts[3]);
+		i++
+	}
+	location.reload();
+	//console.log(rows[i]);
 }

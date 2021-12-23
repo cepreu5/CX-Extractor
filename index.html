@@ -364,6 +364,24 @@
 				align="center" title="MemTemplate"></a>
 			<hr>
 		</span>
+
+		<hr>
+		<input type="button" id="click-input" value="Изберете файл" 
+			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+			onclick="document.getElementById('fileToLoad').click();" />
+		<input type="button" value="ToLocal" 
+			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+			onclick="LoadToLocal()" />
+		<input type="button" value="ClearMem" 
+			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+			onclick="ClearMem()" />
+		<!--label for="click-input" id="file-name">...</label-->
+		<input type="file" style="display:none;" id="fileToLoad" accept=".txt" onclick="ShowName()">
+		<button 
+			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
+			onclick="loadFileAsText()">Зареждане</button>
+		<hr>
+
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;
 			<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
