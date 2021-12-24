@@ -318,7 +318,7 @@ function MakeTmpl() {
 			Tmpl=Tmpl+i+'-';
 			switch (document.getElementById("Types"+i).value) {
 				case "1":	L='С'; S="0"
-					if (document.getElementById("Exp"+i).checked) {S="1"};
+					if (document.getElementById("Exp"+i).checked) S="1";
 					break;
 				case "2": L='Д'; break;
 				case "3": L='Т';
@@ -328,7 +328,7 @@ function MakeTmpl() {
 				case "5": L='П'; break;
 				case "6": L='R';
 					S=document.getElementById("sep"+i).value;
-					S=RegExp.quote(S);
+					//S=RegExp.quote(S);
 			}
 			C='';
 			if (document.getElementById("Types"+i).value != 5) {
@@ -550,11 +550,6 @@ function Extract6() {
 	Replace(ReplaceF);
 	document.getElementById("Note").value="";
 	if (document.getElementById("res1").value == "") InsDate();
-	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
-	if (CVal>1) {
-		document.getElementById("Info").innerHTML+=": "+Templates[2*(CVal-1)];
-		FillTmplFdl (document.getElementById("Templates").value, false);
-	}
 }
 
 function Combo(part) {
@@ -1348,4 +1343,13 @@ function LoadToLocal() {
 	}
 	location.reload();
 	//console.log(rows[i]);
+}
+
+function EditExtr() {
+	ShowAnim('Sels');
+	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
+	if (CVal>1) {
+		document.getElementById("Info").innerHTML+=": "+Templates[2*(CVal-1)];
+		FillTmplFdl (document.getElementById("Templates").value, false);
+	}
 }
