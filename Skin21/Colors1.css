@@ -1,0 +1,11 @@
+:root {
+  --InpText: black;
+	--LblColor: black;
+  --TipColor: rgb(212, 183, 148);
+  --TipText: black;
+  --FormBgrd: #211308;
+
+  --InpBgrd: snow;
+  --FormColor: FireBrick;
+  --Spinner: Blue; /*#f03355*/
+}
