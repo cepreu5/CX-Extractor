@@ -20,12 +20,11 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	ReplPtr=0, // Next free place in AutoT array
 	TmplPtr=2; // Next free place in Templates array
 
-	var Templates = [],
+	var Templates = {},
 	AutoT = [],
-	Replaces = [];
+	Replaces = []; // JSON not needed
 
-	Templates[0]="Изтриване", // see also ClearMem for initialization
-	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
+	Templates["Изтриване"]={1: 'П;', 2: 'П;', 3: 'П;', 4: 'П;', 5: 'П;', 6: 'П;', 7: 'К;', 8: 'О;', F: '0', T: ''}; // see also ClearMem for initialization
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
@@ -309,15 +308,15 @@ function ShowAnim(BoxEl) {
 }
 
 function MakeTmpl() {
-	var Tmpl='';
+	var Tmpl='{';
 	var i, L, C, S; 
 	ShowAnim("TmplFld")
 	if (document.getElementById("res").value=="") {
 		for (i=1; i<=(LTempl-2); i++) {
 			S='';
-			Tmpl=Tmpl+i+'-';
+			Tmpl=Tmpl+'"'+i+'":"';
 			switch (document.getElementById("Types"+i).value) {
-				case "1":	L='С'; S="0"
+				case "1": L='С'; S='0'
 					if (document.getElementById("Exp"+i).checked) S="1";
 					break;
 				case "2": L='Д'; break;
@@ -335,14 +334,17 @@ function MakeTmpl() {
 				C=document.getElementById("count"+i).value;
 			}
 			Tmpl=Tmpl+L+';'+C;
-			if (S != '') {Tmpl=Tmpl+';'+S;}
-			Tmpl=Tmpl+'#';
+			if (S != '') Tmpl=Tmpl+';'+S;
+			Tmpl=Tmpl+'", ';
 		}
-		Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
-			LTempl+"-О;"+document.getElementById("SubCats").value+"##"
-			+document.getElementById("Files").selectedIndex;
+		Tmpl+='"'+(LTempl-1)+'":"К;'+document.getElementById("Cats").value+'", '+ // cat, subcat
+		'"'+LTempl+'":"О;'+document.getElementById("SubCats").value+'", '+
+			'"F":"'+document.getElementById("Files").selectedIndex+'", ';
+		Tmpl+='"T":"'+document.getElementById("TmplAuto").value+'"}'
+		console.log(Tmpl);
+		//JSON
 		if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
-		if (WorkTmpl!="") { 
+		if (WorkTmpl!="") { //JSON
 			let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
 			if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 		}
@@ -368,10 +370,10 @@ function GetRepl() {
 
 function FillTmplFdl(str, clear) {
 	if (clear) ClearTmplFld();
-	document.getElementById("res").value=str;
+	document.getElementById("res").value="";
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if (CVal>1) {
-		WorkTmpl=Templates[2*(CVal-1)]
+		WorkTmpl=document.getElementById("Templates").options[CVal].text;
 		document.getElementById("TmplName").value=WorkTmpl;
 	}
 	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show Auto
@@ -382,7 +384,10 @@ function FillTmplFdl(str, clear) {
 }
 
 function SelTmpl(str, clear) {
-	if (clear) document.getElementById("Info").innerHTML="» Редактиране на екстракт";
+	if (clear) {
+	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
+	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
+	}
 	if (str!=Templates[1]) document.getElementById("res").value=str;
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
@@ -518,7 +523,7 @@ function Extract6() {
 					pattern = sep.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + 
 							"\\s+(\\S+(?:\\s+\\S+){0," + (count-1) + "})";
 					re = new RegExp(pattern,"gi"); //alert(text+sep)
-					while (m=re.exec(text)) {T=T+m[1];}
+					while (m=re.exec(text)) T=T+m[1]; console.log(sep); 
 					re = new RegExp(sep,"gi");
 					if (Incl && (text.match(re)!==null)) T=sep + " " + T;
 					if (T.substr(-1)==".") {T=T.substr(0,T.length-1);}
@@ -1113,20 +1118,13 @@ function MemAuto() {
 	let V=document.getElementById("TmplAuto").value;
 	let T=document.getElementById("TmplName").value;
 	if (V=="") return;
-	let Found=FindInCol(AutoT, V, 0);
-	if (Found>=0) {
-		AutoT[Found+1]=T; // edit existing
-		localStorage.setItem('@00000'.substring(0, 5-(Found/2).toString().length)+Found/2+AutoT[Found], AutoT[Found+1]);
-	} else {
-		AutoT.push(V);
-		AutoT.push(T);
-		AutoPtr += 2;
-		localStorage.setItem('AutoPtr', AutoPtr);
-		localStorage.setItem('@00000'.substring(0, 5-((AutoPtr-2)/2).toString().length)+(AutoPtr-2)/2+AutoT[(AutoPtr-2)], AutoT[AutoPtr-1]);
-	}
+	let Found=Object.keys(AutoT).includes(V); //let Found=FindInCol(AutoT, V, 0);
+	if ((WorkTmpl="") && Found) {document.getElementById("TmplAuto").value="Използва се!"; return}
+	//if (!Found) AutoT.push(V);
+	AutoT[V]=T;
 }
 
-function MemReplace() {
+function MemReplace() { // JSON-
 	let V=document.getElementById("Replace").value;
 	let T=document.getElementById("ReplWith").value;
 	if (V=="") return;
@@ -1151,51 +1149,32 @@ function MemReplace() {
 function MemTemplate() {
 	let T=document.getElementById("TmplName").value;
 	if (T=="") return;
-	if (WorkTmpl=="") {document.getElementById("TmplName").value="Дублирано име!"; return}
-	MemReplace();
-	let R=document.getElementById("res").value;
+	// if (WorkTmpl=="") {document.getElementById("TmplName").value="Дублирано име!"; return} JSON
+	// MemReplace(); JSON - new repl method
+	let R=JSON.parse(document.getElementById("res").value);
 	spinImage("Floppy");
-	let Found=FindInCol(Templates, T, 0);
-	if (Found>=0) {
-		Templates[Found+1]=R; // edit existing
-		localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
-	} else {
-		Templates.push(T);
-		Templates.push(R);
-		TmplPtr+=2;
-		localStorage.setItem('TmplPtr', TmplPtr);
-		localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
-	}
+	let Found=Object.keys(Templates).includes(T); // FindInCol(Templates, T, 0); JSON - not needed
+	//if (!Found) Templates.push(T);
+	Templates[T]=R;
+	localStorage.setItem(T, JSON.stringify(Templates[T]));
 	MemAuto();
-	getTmpls(); //recreate template Selection
+	//getTmpls(); //recreate template Selection JSON
 }
 
 function GetMemTemplates() {
 	//Object.keys(localStorage).forEach(function(key){console.log(localStorage.getItem(key));});
-	let j, tc=0, item;
+	let item, KI;
 	for (let i=0; i<localStorage.length; i++) { //localStorage.length
-		item=localStorage.getItem(localStorage.key(i)); 
+		KI=localStorage.key(i);
+		item=localStorage.getItem(KI); 
 		//console.log('mem: key: '+localStorage.key(i)+' '+item);
-		switch(localStorage.key(i).substring(0, 1)) {
-			case "*":
-				j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
-				Templates[j]=localStorage.key(i).substring(5);
-				Templates[j+1]=item;
-				tc++; 
-				break;
-			case "@":
-				j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
-				AutoT[j]=localStorage.key(i).substring(5);
-				AutoT[j+1]=item;
-				break;
-			case "#":
-				j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
-				Replaces[j]=localStorage.key(i).substring(5);
-				Replaces[j+1]=item;
-				break;
+		if (item.substring(0, 1)=="{") {
+			//Templates.push(KI); console.log(KI)
+			Templates[KI]=JSON.parse(item);
+			//AutoT.push(Templates[KI].T);
+			AutoT[Templates[KI].T]=KI; console.log(AutoT[Templates[KI].T]);
 		}
 	}
-	return tc;
 }
 
 function ClearMem() {
@@ -1209,40 +1188,24 @@ function ClearMem() {
 	if (ZoomL1!=null) localStorage.setItem("ZoomL1", ZoomL1);
 	if (ZoomL2!=null) localStorage.setItem("ZoomL2", ZoomL2);
 	if (cfgTheme!=null) localStorage.setItem("cfgTheme", cfgTheme);
-	localStorage.setItem('TmplPtr', 2);
+	localStorage.setItem('TmplPtr', 2); //JSON-
 	localStorage.setItem('AutoPtr', 0);
 	localStorage.setItem('ReplPtr', 0);
 	AutoT=[];
-	Replaces=[];
-	Templates=[];
-	Templates[0]="Изтриване",
-	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
+	//Replaces=[];
+	Templates={};
+	Templates["Изтриване"]={1: 'П;', 2: 'П;', 3: 'П;', 4: 'П;', 5: 'П;', 6: 'П;', 7: 'К;', 8: 'О;', F: '0', T: ''};
 	location.reload();
 }
 
 var myBlob, url, anchor;
 function FileTemplates(mode) {
+	var ToWrite={};
 	if (mode=="get") {
 		ShowLog();
 		// (A) CREATE BLOB OBJECT
-		document.getElementById("Log").value = "var Templates = [\n";
-		for (let i=2; i<Templates.length; i++) {
-			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1]+'",\n';
-			i=i+1;  
-		}
-		document.getElementById("Log").value+='],'
-		document.getElementById("Log").value += "\n\nAutoT = [\n";
-		for (let i=0; i<AutoT.length; i++) {
-			document.getElementById("Log").value+='"'+AutoT[i]+'", "'+AutoT[i+1]+'",\n';
-			i=i+1;  
-		}
-		document.getElementById("Log").value+='],'
-		document.getElementById("Log").value += "\n\nReplaces = [\n";
-		for (let i=0; i<Replaces.length; i++) {
-			document.getElementById("Log").value+='"'+Replaces[i]+'", "'+Replaces[i+1]+'",\n';
-			i=i+1;  
-		}
-		document.getElementById("Log").value+=']\n'
+		ToWrite=(Templates);
+		document.getElementById("Log").value = JSON.stringify(ToWrite);
 		// (B) CREATE DOWNLOAD LINK
 		myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
 		url = window.URL.createObjectURL(myBlob);
@@ -1316,40 +1279,19 @@ function MemReplaceOnly(V, T) {
 function LoadToLocal() {
 	let T=document.getElementById('Log').value;
 	if (T == "") return;
-	let rows=T.split('\n');
-	if (rows[0] != "var Templates = [") return;
-	let i=1, parts;
-	//TmplPtr=2;
-	while (rows[i]!="],") {console.log(i+rows[i]);
-		parts=rows[i].split('"');
-		MemTemplateOnly(parts[1], parts[3]);
-		i++
-	}
-	i+=2; //AutoPtr=0;
-	if (rows[i] != "AutoT = [") return;
-	i++;
-	while (rows[i]!="],") {
-		parts=rows[i].split('"');
-		MemAutoOnly(parts[1], parts[3]);
-		i++
-	}
-	i+=2; //ReplPtr=0;
-	if (rows[i] != "Replaces = [") return;
-	i++;
-	while (rows[i]!="]") {
-		parts=rows[i].split('"');
-		MemReplaceOnly(parts[1], parts[3]);
-		i++
-	}
+	Templates=JSON.parse(T);
+	//console.log(Templates);
+	for (let index in Templates) localStorage.setItem(index, JSON.stringify(Templates[index]));
 	location.reload();
 	//console.log(rows[i]);
 }
 
 function EditExtr() {
 	ShowAnim('Sels');
+	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
-	if (CVal>1) {
-		document.getElementById("Info").innerHTML+=": "+Templates[2*(CVal-1)];
+	if ((CVal>1) && !(T.includes(":"))) {
+		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text; //Templates[2*(CVal-1)]
 		FillTmplFdl (document.getElementById("Templates").value, false);
 	}
 }
