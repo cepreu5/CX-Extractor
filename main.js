@@ -371,7 +371,7 @@ function FillTmplFdl(str, clear) {
 	document.getElementById("res").value=str;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if (CVal>1) {
-		WorkTmpl=Templates[2*(CVal-1)]
+		WorkTmpl=document.getElementById("Templates").options[CVal].text;
 		document.getElementById("TmplName").value=WorkTmpl;
 	}
 	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show Auto
@@ -382,7 +382,10 @@ function FillTmplFdl(str, clear) {
 }
 
 function SelTmpl(str, clear) {
-	if (clear) document.getElementById("Info").innerHTML="» Редактиране на екстракт";
+	if (clear) {
+	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
+	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
+	}
 	if (str!=Templates[1]) document.getElementById("res").value=str;
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
@@ -1151,11 +1154,11 @@ function MemReplace() {
 function MemTemplate() {
 	let T=document.getElementById("TmplName").value;
 	if (T=="") return;
-	if (WorkTmpl=="") {document.getElementById("TmplName").value="Дублирано име!"; return}
 	MemReplace();
 	let R=document.getElementById("res").value;
 	spinImage("Floppy");
 	let Found=FindInCol(Templates, T, 0);
+	if ((WorkTmpl=="") && (Found>=0)) {document.getElementById("TmplName").value="Дублирано име!"; return}
 	if (Found>=0) {
 		Templates[Found+1]=R; // edit existing
 		localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
@@ -1320,7 +1323,7 @@ function LoadToLocal() {
 	if (rows[0] != "var Templates = [") return;
 	let i=1, parts;
 	//TmplPtr=2;
-	while (rows[i]!="],") {console.log(i+rows[i]);
+	while (rows[i]!="],") {//console.log(i+rows[i]);
 		parts=rows[i].split('"');
 		MemTemplateOnly(parts[1], parts[3]);
 		i++
@@ -1347,9 +1350,10 @@ function LoadToLocal() {
 
 function EditExtr() {
 	ShowAnim('Sels');
+	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
-	if (CVal>1) {
-		document.getElementById("Info").innerHTML+=": "+Templates[2*(CVal-1)];
+	if ((CVal>1) && !(T.includes(":"))) {
+		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text; //Templates[2*(CVal-1)]
 		FillTmplFdl (document.getElementById("Templates").value, false);
 	}
 }
