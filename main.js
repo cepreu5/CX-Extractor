@@ -1,13 +1,13 @@
 var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
 
-var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
+var ReplaceF, // Replace Field calculated in GetTmpls and used in Extract
 	Z100=true, // zoom level
 	CalcFl=false,
 	val="", // initial calculator display value
 	Total=0, Cnt=0, // log counter and total
 	SelectSheet=0, // selected sheet
-	LTempl=8, // elements in template (without optional replace field and selected sheet)
-	AllTemplFlag=false, // don't get Auto templates	
+	LTmpl=8, // elements in template (without selected sheet, triger, replace field)
+	AllTmplFlag=false, // don't get Auto templates	
 	WorkTmpl, //current template in use
 	Author = "© 2021 CX Extractor",
 	BArea, // buttons save area
@@ -16,15 +16,12 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
 	OpenFrom = 'res2', // calculator OpenFrom which field
-	AutoPtr=0, // Next free place in AutoT array
-	ReplPtr=0, // Next free place in AutoT array
-	TmplPtr=2; // Next free place in Templates array
 
-	var Templates = {},
-	AutoT = [],
-	Replaces = []; // JSON not needed
+	Templates = {},
+	AutoT = {},
+	Replaces = {};
 
-	Templates["Изтриване"]={1: 'П;', 2: 'П;', 3: 'П;', 4: 'П;', 5: 'П;', 6: 'П;', 7: 'К;', 8: 'О;', F: '0', T: ''}; // see also ClearMem for initialization
+	Templates["Изтриване"]={1: 'П;', 2: 'П;', 3: 'П;', 4: 'П;', 5: 'П;', 6: 'П;', 7: 'К;', 8: 'О;', F: '0', T: '', R: ''}; // see also ClearMem for initialization
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
@@ -37,19 +34,9 @@ RegExp.quote = function(str) {
      return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 };
 
-function CheckAuto(F) {//alert(AllTemplFlag)
-	if (AllTemplFlag) {return true}
-	var i;
-	for (i=0; i<AutoT.length; i++) { 
-		if (F == AutoT[i+1]) {return false}
-		i=i+1;  
-	}
-	return true;
-}
-
 function NoAuto() { 
-	AllTemplFlag=!AllTemplFlag; //!AllTemplFlag; 
-	if (AllTemplFlag) { 
+	AllTmplFlag=!AllTmplFlag; //!AllTmplFlag; 
+	if (AllTmplFlag) { 
 		document.getElementById('No').style.display = "inline"; 
 		document.getElementById('Yes').style.display = "none"; 
 	} 
@@ -58,8 +45,8 @@ function NoAuto() {
 		document.getElementById('No').style.display = "none";
 		AutoTmpl(); 
 	} 
-	//if (AllTemplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
-	getTmpls(); 
+	//if (AllTmplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
+	GetTmpls(); 
 }
 
 function trueFalse(part, p1, p2, p3, p4, p5, p6) {
@@ -307,12 +294,12 @@ function ShowAnim(BoxEl) {
 	//if ((BoxEl=="res") && (document.getElementById("TmplFld").classList.length=0)) {ClearFld('res');}
 }
 
-function MakeTmpl() {
+function MakeTmpl() { // създава шаблон в JSON формат
 	var Tmpl='{';
 	var i, L, C, S; 
 	ShowAnim("TmplFld")
 	if (document.getElementById("res").value=="") {
-		for (i=1; i<=(LTempl-2); i++) {
+		for (i=1; i<=(LTmpl-2); i++) {
 			S='';
 			Tmpl=Tmpl+'"'+i+'":"';
 			switch (document.getElementById("Types"+i).value) {
@@ -337,17 +324,19 @@ function MakeTmpl() {
 			if (S != '') Tmpl=Tmpl+';'+S;
 			Tmpl=Tmpl+'", ';
 		}
-		Tmpl+='"'+(LTempl-1)+'":"К;'+document.getElementById("Cats").value+'", '+ // cat, subcat
-		'"'+LTempl+'":"О;'+document.getElementById("SubCats").value+'", '+
-			'"F":"'+document.getElementById("Files").selectedIndex+'", ';
-		Tmpl+='"T":"'+document.getElementById("TmplAuto").value+'"}'
-		console.log(Tmpl);
+		Tmpl+='"'+(LTmpl-1)+'":"К;'+document.getElementById("Cats").value+'", '+ // cat, subcat
+			'"'+LTmpl+'":"О;'+document.getElementById("SubCats").value+'", '+
+			'"F":"'+document.getElementById("Files").selectedIndex+'", '+
+			'"T":"'+document.getElementById("TmplAuto").value+'", ';
+		Tmpl+='"R":"'+document.getElementById("ReplFld").value+'"}'
+		//console.log(Tmpl);
 		//JSON
-		if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
-		if (WorkTmpl!="") { //JSON
-			let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
-			if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
-		}
+		document.getElementById("res").value=Tmpl;
+		// if (Tmpl!=JSON.stringify(Templates["Изтриване"])) document.getElementById("res").value=Tmpl; //не изтрива шаблони, различни от празен
+		//if (WorkTmpl!="") { //JSON
+		//	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
+		//	if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
+		//}
 	}
 }
 
@@ -360,62 +349,58 @@ function ClearTmplFld() {
 	ClearTemplate();
 }
 
-function GetRepl() {
-	spinImage("ReplBtn");
-	let CVal=document.getElementById("res"+document.getElementById("ReplFld").value).value;
-	document.getElementById("ReplWith").value=CVal; // show replace with
-	let Found=FindInCol(Replaces, CVal, 1); // show replace
-	if (Found>=0) document.getElementById("Replace").value=Replaces[Found-1];
-}
+function getByValue(arr, value) {
+	var result = [];
+	arr.forEach(function(o){if (o.b == value) result.push(o);} );
+	return result? result[0] : null; // or undefined
+  }
 
 function FillTmplFdl(str, clear) {
 	if (clear) ClearTmplFld();
 	document.getElementById("res").value="";
-	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
-	if (CVal>1) {
+	let CVal = document.getElementById("Templates").selectedIndex; 
+	if (CVal>1) { // избрали сме ръчно шаблон
 		WorkTmpl=document.getElementById("Templates").options[CVal].text;
 		document.getElementById("TmplName").value=WorkTmpl;
 	}
-	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show Auto
-	if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
-	Found=str.match(/#\d#/g); //get replace fld number
-	document.getElementById("ReplFld").value="";
-	if (Found!=null) document.getElementById("ReplFld").value=Found[0][1];
+	document.getElementById("TmplAuto").value=Templates[WorkTmpl].T;
+	//let Found=Object.keys(AutoT).includes(document.getElementById("TmplName").value); //let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show Auto
+	//if (Found) getByValue(AutoT, document.getElementById("TmplAuto").value);
+	//Found=str.match(/#\d#/g); //get replace fld number JSON repl method
+	//document.getElementById("ReplFld").value="";
+	//if (Found!=null) document.getElementById("ReplFld").value=Found[0][1];
 }
 
-function SelTmpl(str, clear) {
+function SelTmpl(Tmpl, clear) { //Tmpl е JSON версия на шаблона
 	if (clear) {
 	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
 	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
 	}
-	if (str!=Templates[1]) document.getElementById("res").value=str;
+	//let JTmpl=JSON.stringify(Tmpl);
+	if (Tmpl!=JSON.stringify(Templates["Изтриване"])) document.getElementById("res").value=Tmpl;
 	var result, fsplit, first, second, sep, I;
-	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
-	if (str[0] == '"') { // delete "s
-		result=str.split('"');
-		str=result[1];
-	}	
-	result=str.split("#");
-	ReplaceF=result[LTempl];
-	if (typeof ReplaceF === "undefined") { ReplaceF=0; }
-	SelectSheet=result[LTempl+1];
-	if (typeof SelectSheet === "undefined") { SelectSheet=0; }
+	//if (JTmpl[0] != '{') return;
+	//ReplaceF=result[LTmpl]; //JSON
+	//if (typeof ReplaceF === "undefined") { ReplaceF=0; }
+	Tmpl=JSON.parse(Tmpl);
+	SelectSheet=+Tmpl.F;
+	if (SelectSheet == "") SelectSheet=0;
 	document.getElementById("Files").options.selectedIndex=SelectSheet;
 	SelFile();
-	for (I=0; I<LTempl; I++) {
-		first=result[I];
-			if (first.match(/;/g)==null) {return}
+	for (let I=1; I<LTmpl+1; I++) {
+		first=Tmpl[I];
+			if (!first.includes(";")) return;
 			fsplit=first.split(";");
-		if (fsplit.length>2) {sep=fsplit[2]}
-			second=fsplit[1];
-		if (typeof sep === "undefined") {sep="";}
-		switch(first.slice(2,3)) {
-			case "С": Combo2(I+1, "1", second, sep); break;
-			case "Д": Combo2(I+1, "2", second, sep); break;
-			case "Т": Combo2(I+1, "3", second, sep); break;
-			case "Ч": Combo2(I+1, "4", second, sep); break;
-			case "П": Combo2(I+1, "5", second, sep); break;
-			case "R": Combo2(I+1, "6", second, sep); break;
+		if (fsplit.length>2) sep=fsplit[2];
+		second=fsplit[1];
+		if (typeof sep === "undefined") sep="";
+		switch(first[0]) {
+			case "С": Combo2(I, "1", second, sep); break;
+			case "Д": Combo2(I, "2", second, sep); break;
+			case "Т": Combo2(I, "3", second, sep); break;
+			case "Ч": Combo2(I, "4", second, sep); break;
+			case "П": Combo2(I, "5", second, sep); break;
+			case "R": Combo2(I, "6", second, sep); break;
 			case "К": document.getElementById("Cats").value=second;	break;
 			case "О":
 				createSubCat("SubCat"+document.getElementById("Cats").options.selectedIndex);
@@ -425,41 +410,42 @@ function SelTmpl(str, clear) {
 }
 
 function UseTmpl() {
-	var Templ=document.getElementById("res").value;
-	if (Templ=="") {return}
-	if (Templ[0] == '"') { // delete "s and ,
-		result=Templ.split('"');
-		Templ=result[1];
-	}	
-	SelTmpl(Templ, true); //console.log(Templ);
+	var Tmpl=document.getElementById("res").value;
+	//Tmpl=JSON.parse
+	if (Tmpl=="") {return}
+	//if (Tmpl[0] == '"') { // delete "s and ,
+	//	result=Tmpl.split('"');
+	//	Tmpl=result[1];
+	//}	
+	SelTmpl(Tmpl, true); //console.log(Tmpl);
 	Extract6();
 }
 
-function getTmpls() {
-	var i;
+function GetTmpls() {
 	var htmlString = '<select id="Templates" style="width: 133px;" class="inputMessage" '+
-		'onChange="SelTmpl(' + 
-		"document.getElementById('Templates').value" +
-		', true); Extract6()"><option value="'+Templates[1]+'">Изберете шаблон</option>';
-	ReplaceF=3;
-	for (i=0; i<Templates.length; i++) {
-		if (CheckAuto(Templates[i])) { //exclude Auto templates
-			htmlString = htmlString + 
-				'<option value="'+Templates[i+1]+'">'+Templates[i]+'</option>';
-		}	
-		i=i+1;  
-	}
-	htmlString = htmlString + '</select>';
+		'onChange="SelTmpl(' + "document.getElementById('Templates').value" +
+		', true); Extract6()">'+
+		"<option value='"+
+		JSON.stringify(Templates["Изтриване"])+
+		"'>Изберете шаблон</option>";
+	ReplaceF=3; //JSON
+	const keys = Object.keys(Templates);
+	keys.forEach((key, index) => {
+		if ((Templates[key].T=="") || AllTmplFlag) htmlString += "<option value='"+JSON.stringify(Templates[key])+"'>"+key+"</option>";
+	});
+	htmlString += "</select>";
 	document.getElementById('Sel').innerHTML = htmlString;
 }
 
 function Replace(F) { 
-	var i;
 	if (F > 0) {
-		var FTR=document.getElementById('res'+F).value;
-		for (i=0; i<Replaces.length; i++) { 
-			if (FTR == Replaces[i]) {document.getElementById('res'+F).value=Replaces[i+1];}
-			i=i+1;  
+		var ToReplace=document.getElementById('res'+F).value;
+		let KA=Object.keys(Replaces); // това премахва излишните итерации
+		for (let k=0; k<KA.length; k++) {
+			if (KA[k]==ToReplace) { // при наличие на текста в Replaces
+				document.getElementById('res'+F).value=Replaces[KA[k]];
+				break;
+			}
 		}
 	}	
 }
@@ -467,7 +453,7 @@ function Replace(F) {
 function Extract6() {
 	var text=document.getElementById("MsgText").value;
 	text=text + ' ';	// to process dd.dd at the end
-	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTempl, WordTmpF;
+	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTmpl, WordTmplF;
 
 	function Process(part, pattern, c) {
 		re = new RegExp(pattern,"g");
@@ -500,12 +486,12 @@ function Extract6() {
 			case "3": // text
 				if (sep=="") break;
 				document.getElementById("res"+part).value="";
-				T='', WordTempl=''; // remove templ chars
+				T='', WordTmpl=''; // remove templ chars
 				var ii, Yes="^";
-				WordTmpF = (sep.substr(-1)==Yes);
-				if (WordTmpF) { // remove - ^ chars and store them in WordTempl
+				WordTmplF = (sep.substr(-1)==Yes);
+				if (WordTmplF) { // remove - ^ chars and store them in WordTmpl
 					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
-						WordTempl=sep.substr(-1)+WordTempl;
+						WordTmpl=sep.substr(-1)+WordTmpl;
 						sep=sep.substr(0,sep.length-1);
 					}
 				}
@@ -523,17 +509,17 @@ function Extract6() {
 					pattern = sep.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + 
 							"\\s+(\\S+(?:\\s+\\S+){0," + (count-1) + "})";
 					re = new RegExp(pattern,"gi"); //alert(text+sep)
-					while (m=re.exec(text)) T=T+m[1]; console.log(sep); 
+					while (m=re.exec(text)) T=T+m[1]; // console.log(sep); 
 					re = new RegExp(sep,"gi");
 					if (Incl && (text.match(re)!==null)) T=sep + " " + T;
 					if (T.substr(-1)==".") {T=T.substr(0,T.length-1);}
 					TS=T.split(' '), TT=""; // strip extra spaces
 					for (ii=0; ii<TS.length; ii++) if (TS[ii]!="") TT=TT+" "+TS[ii];
 					TT=TT.trim();
-					if (WordTmpF) {
+					if (WordTmplF) {
 						TS=TT.split(' '), TT=""; // strip extra words
-						if (Incl) WordTempl=Yes+WordTempl;
-						for (ii=0; ii<TS.length; ii++) if (WordTempl[ii]==Yes) TT=TT+" "+TS[ii];
+						if (Incl) WordTmpl=Yes+WordTmpl;
+						for (ii=0; ii<TS.length; ii++) if (WordTmpl[ii]==Yes) TT=TT+" "+TS[ii];
 					}	
 					document.getElementById("res"+part).value=TT.trim();//.match(/[\w,\s,\.,\*:]+[^\.]/);
 				}
@@ -552,7 +538,7 @@ function Extract6() {
 				Process(part, pattern, c);
 		}
 	}
-	Replace(ReplaceF);
+	Replace(ReplaceF); JSON
 	document.getElementById("Note").value="";
 	if (document.getElementById("res1").value == "") InsDate();
 }
@@ -570,33 +556,38 @@ function Combo(part) {
 	Extract6();
 }
 
-function AutoTmpl() {
-	document.getElementById("NormBtn").title="Нормализация";
-	var i, j, stop=false;
-	var text=document.getElementById("MsgText").value;
-	if (!AllTemplFlag && (text!="")) {
-		for (i=1; i<=AutoT.length; i++) {
-			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
-			if (text.match(re)) {
-				for (j=0; j<Templates.length; j++) {
-					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
-						WorkTmpl=Templates[j];
-						document.getElementById("TmplName").value=Templates[j];
-						document.getElementById("Info").innerHTML="» Редактиране на шаблон: "+WorkTmpl;
-						ClearDef();
-						SelTmpl(Templates[j+1], false);
-						Extract6();
-						FillTmplFdl(Templates[j+1], false);
-						stop=true;
-						break;
-					}
-					j++;
-				}
-			}
-			if (stop) break;
-			i++;
+function AutoTmpl() { //
+
+	function ProcessTriger(K) {
+		var re = new RegExp(K.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
+		if (text.match(re)) { // при наличие на тригер в текста
+			WorkTmpl=AutoT[K];
+			document.getElementById("TmplName").value=WorkTmpl;
+			document.getElementById("Info").innerHTML="» Редактиране на шаблон: "+WorkTmpl;
+			ClearDef();
+			SelTmpl(JSON.stringify(Templates[WorkTmpl]), false);
+			Extract6();
+			FillTmplFdl(Templates[WorkTmpl], false);
 		}
 	}
+
+	document.getElementById("NormBtn").title="Нормализация";
+	var text=document.getElementById("MsgText").value;
+	if (!AllTmplFlag && (text!="")) Object.keys(AutoT).forEach(ProcessTriger) // за всички, продължава дори след намиране на тригера
+	/*let KA=Object.keys(AutoT), re; // !! това премахва излишните итерации - не е доработено
+	for (let k=0; k<KA.length; k++) {
+		re = new RegExp(K.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
+		if (text.match(re)) { // при наличие на тригер в текста
+			WorkTmpl=AutoT[K];
+			document.getElementById("TmplName").value=WorkTmpl;
+			document.getElementById("Info").innerHTML="» Редактиране на шаблон: "+WorkTmpl;
+			ClearDef();
+			SelTmpl(JSON.stringify(Templates[WorkTmpl]), false);
+			Extract6();
+			FillTmplFdl(Templates[WorkTmpl], false);
+			break;
+		}	
+	}*/
 }
 
 function spinImage(ImgID) {
@@ -1038,14 +1029,14 @@ function init() {
 		CZoom();
 		document.getElementById("Zoom2").checked = true;
 	}
-	if (localStorage.getItem("TmplPtr")!=null) TmplPtr=+localStorage.getItem("TmplPtr")
+	/*if (localStorage.getItem("TmplPtr")!=null) TmplPtr=+localStorage.getItem("TmplPtr") JSON-
 	else localStorage.setItem('TmplPtr','2')
 	if (localStorage.getItem("AutoPtr")!=null) AutoPtr=+localStorage.getItem("AutoPtr")
 	else localStorage.setItem('AutoPtr','0')
 	if (localStorage.getItem("ReplPtr")!=null) ReplPtr=+localStorage.getItem("ReplPtr")
-	else localStorage.setItem('ReplPtr','0')
+	else localStorage.setItem('ReplPtr','0')*/
 	GetMemTemplates();
-	getTmpls();
+	GetTmpls();
 	ClearTextArea();
 }	
 
@@ -1105,81 +1096,68 @@ function clr() {
 	document.getElementById("result").value = "";
 }
 
-function FindInCol(Array, ToFind, Col) {
-	let Found=-1;
-	for (let i=+Col; i<Array.length; i++) {
-		if (Array[i]==ToFind) {Found=i; break}
-		i++;
-	}
-	return Found;
-}
-
-function MemAuto() {
-	let V=document.getElementById("TmplAuto").value;
+function MemTemplate() { // записване на нов/редактиран шаблон от формата на екрана
 	let T=document.getElementById("TmplName").value;
-	if (V=="") return;
-	let Found=Object.keys(AutoT).includes(V); //let Found=FindInCol(AutoT, V, 0);
-	if ((WorkTmpl="") && Found) {document.getElementById("TmplAuto").value="Използва се!"; return}
-	//if (!Found) AutoT.push(V);
-	AutoT[V]=T;
-}
-
-function MemReplace() { // JSON-
-	let V=document.getElementById("Replace").value;
-	let T=document.getElementById("ReplWith").value;
-	if (V=="") return;
-	let Found=FindInCol(Replaces, V, 0);
-	if (Found>=0) {
-		Replaces[Found+1]=T; // edit existing
-		localStorage.setItem('#00000'.substring(0, 5-(Found/2).toString().length)+Found/2+Replaces[Found], Replaces[Found+1]);
-	} else {
-		Replaces.push(V);
-		Replaces.push(T);
-		ReplPtr += 2;
-		localStorage.setItem('ReplPtr', ReplPtr);
-		localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
-	}
-	T=document.getElementById("res").value;
-	V=document.getElementById("ReplFld").value;
-	if (+V>6 || +V<1) return;
-	T=T.replace("##", "#"+V+"#");
-	document.getElementById("res").value=T; //console.log(T);
-}
-
-function MemTemplate() {
-	let T=document.getElementById("TmplName").value;
-	if (T=="") return;
-	// if (WorkTmpl=="") {document.getElementById("TmplName").value="Дублирано име!"; return} JSON
-	// MemReplace(); JSON - new repl method
-	let R=JSON.parse(document.getElementById("res").value);
+	let R=document.getElementById("res").value;
+	if ((T=="") || (R=="")) return;
 	spinImage("Floppy");
-	let Found=Object.keys(Templates).includes(T); // FindInCol(Templates, T, 0); JSON - not needed
-	//if (!Found) Templates.push(T);
+	R=JSON.parse(R);
+	let Found=Object.keys(Templates).includes(T);
+	if (Found && (WorkTmpl=="")) {document.getElementById("TmplName").value="Дублирано име!"; return}
 	Templates[T]=R;
 	localStorage.setItem(T, JSON.stringify(Templates[T]));
-	MemAuto();
-	//getTmpls(); //recreate template Selection JSON
+	WorkTmpl=T;
+	// MemReplace();
+	let V=document.getElementById("ReplWith").value;
+	R=document.getElementById("Replace").value;
+	if ((V!="") && (R!="")) {
+		Replaces[R]=V;
+		localStorage.setItem(R, JSON.stringify(V));
+	}
+	// MemAuto();
+	V=document.getElementById("TmplAuto").value;
+	if (V=="") return;
+	Found=Object.keys(AutoT).includes(V);
+	if (Found && (WorkTmpl=="")) {document.getElementById("TmplAuto").value="Използва се!"; return}
+	AutoT[V]=T;
+	GetTmpls(); //recreate template Selection
 }
 
-function GetMemTemplates() {
-	//Object.keys(localStorage).forEach(function(key){console.log(localStorage.getItem(key));});
+function GetMemTemplates() { // формиране на работните Templates и AutoT на базата на записаното в локалната памет
 	let item, KI;
 	for (let i=0; i<localStorage.length; i++) { //localStorage.length
 		KI=localStorage.key(i);
 		item=localStorage.getItem(KI); 
-		//console.log('mem: key: '+localStorage.key(i)+' '+item);
 		if (item.substring(0, 1)=="{") {
-			//Templates.push(KI); console.log(KI)
-			Templates[KI]=JSON.parse(item);
-			//AutoT.push(Templates[KI].T);
-			AutoT[Templates[KI].T]=KI; console.log(AutoT[Templates[KI].T]);
-		}
+				Templates[KI]=JSON.parse(item);
+				AutoT[Templates[KI].T]=KI; // console.log(AutoT[Templates[KI].T]);
+		} 
+		if (item.substring(0, 1)=='"') Replaces[KI]=JSON.parse(item);
 	}
+	delete AutoT[""];
+}
+
+function PostLoad() {
+	spinImage("LoadBtn");
+	document.getElementById("TmplInfo").innerHTML="Шаблони: "+document.getElementById("FileName").innerHTML;
+	document.getElementById("click-input").hidden=false; //	
+	document.getElementById("FileName").hidden=true;
+	document.getElementById("FileName").valeu="";
+	document.getElementById("LoadBtn").hidden=true;
+}
+
+function RPostLoad() {
+	spinImage("RLoadBtn");
+	document.getElementById("TmplInfo").innerHTML="Replaces: "+document.getElementById("FileName").innerHTML;
+	document.getElementById("rclick-input").hidden=false; //	
+	document.getElementById("FileName").hidden=true;
+	document.getElementById("FileName").valeu="";
+	document.getElementById("RLoadBtn").hidden=true;
 }
 
 function ClearMem() {
 	var CXpass, ZoomL1, ZoomL2, cfgTheme;
-	CXpass=localStorage.getItem("CXpass");console.log(CXpass)
+	CXpass=localStorage.getItem("CXpass");//console.log(CXpass)
 	ZoomL1=localStorage.getItem("ZoomL1");
 	ZoomL2=localStorage.getItem("ZoomL2");
 	cfgTheme=localStorage.getItem("cfgTheme");
@@ -1188,14 +1166,32 @@ function ClearMem() {
 	if (ZoomL1!=null) localStorage.setItem("ZoomL1", ZoomL1);
 	if (ZoomL2!=null) localStorage.setItem("ZoomL2", ZoomL2);
 	if (cfgTheme!=null) localStorage.setItem("cfgTheme", cfgTheme);
-	localStorage.setItem('TmplPtr', 2); //JSON-
-	localStorage.setItem('AutoPtr', 0);
-	localStorage.setItem('ReplPtr', 0);
-	AutoT=[];
-	//Replaces=[];
+	AutoT={};
+	Replaces={};
 	Templates={};
-	Templates["Изтриване"]={1: 'П;', 2: 'П;', 3: 'П;', 4: 'П;', 5: 'П;', 6: 'П;', 7: 'К;', 8: 'О;', F: '0', T: ''};
-	location.reload();
+	Templates["Изтриване"]={1: 'П;', 2: 'П;', 3: 'П;', 4: 'П;', 5: 'П;', 6: 'П;', 7: 'К;', 8: 'О;', F: '0', T: '', R: ''};
+	//location.reload();
+}
+
+function LoadToLocal() {
+	let T=document.getElementById('Log').value;
+	if (T == "") return;
+	try	{Templates=JSON.parse(T);}
+	catch {document.getElementById("TmplInfo").innerHTML ="Шаблони: Грешен формат!";}
+	for (let index in Templates) {
+		localStorage.setItem(index, JSON.stringify(Templates[index]));
+		AutoT[Templates[index].T]=index;
+	}
+	//location.reload();
+	//console.log(rows[i]);
+}
+
+function RLoadToLocal() {
+	let T=document.getElementById('Log').value;
+	if (T == "") return;
+	try	{Replaces=JSON.parse(T);}
+	catch {document.getElementById("TmplInfo").innerHTML ="Replaces: Грешен формат!";}
+	for (let index in Replaces) localStorage.setItem(index, JSON.stringify(Replaces[index]));
 }
 
 var myBlob, url, anchor;
@@ -1223,75 +1219,96 @@ function FileTemplates(mode) {
 }
 
 function loadFileAsText() {
-    var fileToLoad = document.getElementById("fileToLoad").files[0]; //
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
     var fileReader = new FileReader();
     fileReader.onload = function(fileLoadedEvent) {
         var textFromFileLoaded = fileLoadedEvent.target.result;
         document.getElementById("Log").value=textFromFileLoaded;
-		ShowLog();
+		//ShowLog();
 		LoadToLocal();
-    };
-    fileReader.readAsText(fileToLoad, "UTF-8");
+	};
+	//console.log(fileToLoad);
+    if (fileToLoad!=undefined) fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+function FileReplaces(mode) {
+	var ToWrite={};
+	if (mode=="get") {
+		ShowLog();
+		// (A) CREATE BLOB OBJECT
+		ToWrite=(Replaces);
+		document.getElementById("Log").value = JSON.stringify(ToWrite);
+		// (B) CREATE DOWNLOAD LINK
+		myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
+		url = window.URL.createObjectURL(myBlob);
+		anchor = document.createElement("a");
+		anchor.href = url;
+		anchor.download = "Replaces.txt";
+	}
+	if (mode=="save") {
+		anchor.click();
+		window.URL.revokeObjectURL(url);
+		//document.removeChild(anchor);
+		ShowLog();
+		document.getElementById("Log").value = "";
+	}
+}
+
+function RloadFileAsText() {
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("Log").value=textFromFileLoaded;
+		//ShowLog();
+		RLoadToLocal();
+	};
+	//console.log(fileToLoad);
+    if (fileToLoad!=undefined) fileReader.readAsText(fileToLoad, "UTF-8");
 }
 
 function ShowName() {
     inputElement = document.getElementById('fileToLoad')
-    labelElement = document.getElementById('file-name')
+    //labelElement = document.getElementById('file-name')
     inputElement.onchange = function(event) {
         var path = inputElement.value;
         if (path) {
             //labelElement.innerHTML = path.split(/(\\|\/)/g).pop()
-            document.getElementById('click-input').value=path.split(/(\\|\/)/g).pop()
-        } else {
+			//document.getElementById('click-input').hidden=true;
+			document.getElementById('FileName').hidden=false;
+            document.getElementById('FileName').innerHTML=path.split(/(\\|\/)/g).pop();
+        } //else {
 			//labelElement.innerHTML = '...'
-            document.getElementById('click-input').value = 'Изберете файл'
-        } 
+            //document.getElementById('click-input').value = 'Изберете файл'
+        //} 
     }
-}
-
-function MemTemplateOnly(T, R) {
-	if ((T=="") || (R=="")) return;
-	Templates.push(T);
-	Templates.push(R);
-	TmplPtr+=2;
-	localStorage.setItem('TmplPtr', TmplPtr);
-	localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
-}
-
-function MemAutoOnly(V, T) {
-	if ((V=="") || (T=="")) return;
-	AutoT.push(V);
-	AutoT.push(T);
-	AutoPtr += 2;
-	localStorage.setItem('AutoPtr', AutoPtr);
-	localStorage.setItem('@00000'.substring(0, 5-((AutoPtr-2)/2).toString().length)+(AutoPtr-2)/2+AutoT[(AutoPtr-2)], AutoT[AutoPtr-1]);
-}
-
-function MemReplaceOnly(V, T) {
-	if ((V=="") || (T=="")) return;
-	Replaces.push(V);
-	Replaces.push(T);
-	ReplPtr += 2;
-	localStorage.setItem('ReplPtr', ReplPtr);
-	localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
-}
-
-function LoadToLocal() {
-	let T=document.getElementById('Log').value;
-	if (T == "") return;
-	Templates=JSON.parse(T);
-	//console.log(Templates);
-	for (let index in Templates) localStorage.setItem(index, JSON.stringify(Templates[index]));
-	location.reload();
-	//console.log(rows[i]);
+	document.getElementById("LoadBtn").hidden=false;
+	document.getElementById("RLoadBtn").hidden=false;
 }
 
 function EditExtr() {
 	ShowAnim('Sels');
 	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
-	if ((CVal>1) && !(T.includes(":"))) {
-		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text; //Templates[2*(CVal-1)]
+	if ((CVal>1) && !(T.includes(":"))) { //T.match(/:/g)==null
+		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text;
 		FillTmplFdl (document.getElementById("Templates").value, false);
+	}
+}
+
+function ReplGet() {
+	let R=document.getElementById("ReplFld").value;
+	if ((R>6) || (R<1)) {
+		document.getElementById("ReplFld").value="";
+		return;
+	}
+	let ToReplace=document.getElementById("res"+R).value;
+	document.getElementById("Replace").value=ToReplace;
+	let KA=Object.keys(Replaces); // това премахва излишните итерации
+	for (let k=0; k<KA.length; k++) {
+		if (KA[k]==ToReplace) { // при наличие на текста в Replaces
+			document.getElementById("ReplWith").value=Replaces[KA[k]];
+			break;
+		}	
 	}
 }
