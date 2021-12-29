@@ -1148,10 +1148,10 @@ function PostLoad() {
 
 function RPostLoad() {
 	spinImage("RLoadBtn");
-	document.getElementById("TmplInfo").innerHTML="Replaces: "+document.getElementById("FileName").innerHTML;
+	document.getElementById("TmplInfo").innerHTML="Replaces: "+document.getElementById("RFileName").innerHTML;
 	document.getElementById("rclick-input").hidden=false; //	
-	document.getElementById("FileName").hidden=true;
-	document.getElementById("FileName").valeu="";
+	document.getElementById("RFileName").hidden=true;
+	document.getElementById("RFileName").valeu="";
 	document.getElementById("RLoadBtn").hidden=true;
 }
 

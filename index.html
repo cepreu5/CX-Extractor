@@ -90,6 +90,7 @@
 			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!-->
 			<hr>
 			<button ID="TmplInfo" class="solo typewriter-yellow" onclick="PostLoad()">Шаблони</button>
+			<span ID="FileName" hidden></span>
 			<input type="button" id="click-input" value="Изберете файл" 
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="this.hidden=true; document.getElementById('fileToLoad').click();" />
@@ -103,12 +104,13 @@
 			<!--input type="button" value="Зареждане" hidden
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="LoadToLocal()" /-->
-			<input type="button" value="Изтриване" 
+			<input type = "button"  value="Запис" onclick="FileTemplates('get'); FileTemplates('save')"
+				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;">
+				<input type="button" value="Изтриване" 
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="ClearMem()" />
-			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
-				onclick="FileTemplates('get'); FileTemplates('save')" value="Запис">
 			<br>
+			<span ID="RFileName" hidden></span>
 			<input type="button" id="rclick-input" value="Изберете файл" 
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="this.hidden=true; document.getElementById('fileToLoad').click();" />
@@ -118,7 +120,6 @@
 				onclick="FileReplaces('get'); FileReplaces('save')" value="Запис">
 
 			<!--label for="click-input" id="file-name">...</label-->
-			<span ID="FileName" hidden></span>
 			<input type="file" style="display:none;" id="fileToLoad" accept=".txt" onclick="ShowName()">
 			<hr>
 		</div>
