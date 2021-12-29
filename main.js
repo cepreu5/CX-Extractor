@@ -1201,7 +1201,9 @@ function FileTemplates(mode) {
 		ShowLog();
 		// (A) CREATE BLOB OBJECT
 		ToWrite=(Templates);
-		document.getElementById("Log").value = JSON.stringify(ToWrite);
+		ToWrite=JSON.stringify(ToWrite);
+		ToWrite=ToWrite.replace(/},/g, "},\r\n");
+		document.getElementById("Log").value = ToWrite;
 		// (B) CREATE DOWNLOAD LINK
 		myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
 		url = window.URL.createObjectURL(myBlob);
@@ -1237,7 +1239,9 @@ function FileReplaces(mode) {
 		ShowLog();
 		// (A) CREATE BLOB OBJECT
 		ToWrite=(Replaces);
-		document.getElementById("Log").value = JSON.stringify(ToWrite);
+		ToWrite=JSON.stringify(ToWrite);
+		ToWrite=ToWrite.replace(/,/g, ',\r\n');
+		document.getElementById("Log").value = ToWrite;
 		// (B) CREATE DOWNLOAD LINK
 		myBlob = new Blob([document.getElementById("Log").value], {type: "text/plain"});
 		url = window.URL.createObjectURL(myBlob);
@@ -1283,6 +1287,17 @@ function ShowName() {
         //} 
     }
 	document.getElementById("LoadBtn").hidden=false;
+}
+
+function RShowName() {
+    inputElement = document.getElementById('RfileToLoad')
+    inputElement.onchange = function(event) {
+        var path = inputElement.value;
+        if (path) {
+			document.getElementById('RFileName').hidden=false;
+            document.getElementById('RFileName').innerHTML=path.split(/(\\|\/)/g).pop();
+        }
+	}
 	document.getElementById("RLoadBtn").hidden=false;
 }
 

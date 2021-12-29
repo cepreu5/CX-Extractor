@@ -94,33 +94,39 @@
 			<input type="button" id="click-input" value="Изберете файл" 
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="this.hidden=true; document.getElementById('fileToLoad').click();" />
+			<input type="file" id="fileToLoad" accept=".txt" hidden onclick="ShowName()">
+			<input type="image" src="Download.png" ID="LoadBtn" style="width: 23px;" border="0"  align="center" hidden
+				title="Зареждане" onclick="PostLoad(); loadFileAsText();">
+			<input type="image" src="Save.png" ID="LoadBtn" style="width: 20px;" border="0"  align="center"
+				title="Запис шаблони" onclick="FileTemplates('get'); FileTemplates('save')">
+			<input type="image" src="Save.png" ID="RLoadBtn" style="width: 20px;" border="0"  align="center"
+				title="Запис Replaces" onclick="FileReplaces('get'); FileReplaces('save')">
+			<input type="image" src="Remove.png" style="width: 20px;" border="0"  align="center"
+				title="Изтриване" onclick="ClearMem()">
 			<!--input type="button" value="Зареждане" ID="LoadBtn" hidden
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="ClearMem(); loadFileAsText();" /-->
 			<!--a><img src="Save.png" ID="LoadBtn" style="width: 20px;" align="center" hidden
 				onclick="ClearMem(); loadFileAsText();" title="Зареждане"></a-->
-			<input type="image" src="Save.png" ID="LoadBtn" style="width: 20px;" border="0"  align="center" hidden
-					title="Зареждане" onclick="PostLoad(); loadFileAsText();">
 			<!--input type="button" value="Зареждане" hidden
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
 				onclick="LoadToLocal()" /-->
-			<input type = "button"  value="Запис" onclick="FileTemplates('get'); FileTemplates('save')"
-				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;">
-				<input type="button" value="Изтриване" 
+			<!--input type = "button"  value="Запис" onclick="FileTemplates('get'); FileTemplates('save')"
+				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"-->
+			<!--input type="button" value="Изтриване" 
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-				onclick="ClearMem()" />
-			<br>
-			<span ID="RFileName" hidden></span>
-			<input type="button" id="rclick-input" value="Изберете файл" 
+				onclick="ClearMem()" /-->
+			<!--span ID="RFileName" hidden></span style="display:none;" -->
+			<!--input type="button" id="rclick-input" value="Изберете файл" 
 				style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-				onclick="this.hidden=true; document.getElementById('fileToLoad').click();" />
-			<input type="image" src="Save.png" ID="RLoadBtn" style="width: 20px;" border="0"  align="center" hidden
-					title="Зареждане" onclick="RPostLoad(); RloadFileAsText();">
-			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
-				onclick="FileReplaces('get'); FileReplaces('save')" value="Запис">
+				onclick="this.hidden=true; document.getElementById('RfileToLoad').click();" />
+			<input type="image" src="Download.png" ID="RLoadBtn" style="width: 20px;" border="0"  align="center" hidden
+					title="Зареждане" onclick="RPostLoad(); RloadFileAsText();"-->
+			<!--input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
+				onclick="FileReplaces('get'); FileReplaces('save')" value="Запис"-->
 
 			<!--label for="click-input" id="file-name">...</label-->
-			<input type="file" style="display:none;" id="fileToLoad" accept=".txt" onclick="ShowName()">
+			<!--input type="file" style="display:none;" id="RfileToLoad" accept=".txt" onclick="RShowName()"-->
 			<hr>
 		</div>
 
