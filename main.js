@@ -1316,18 +1316,21 @@ function loadFileAsText() {
 }
 
 function ShowName() {
-    inputElement = document.getElementById('fileToLoad')
+    inputElement = document.getElementById('fileToLoad');
     //labelElement = document.getElementById('file-name')
     inputElement.onchange = function(event) {
         var path = inputElement.value;
         if (path) {
             //labelElement.innerHTML = path.split(/(\\|\/)/g).pop()
-            document.getElementById('click-input').value=path.split(/(\\|\/)/g).pop()
-        } // else {
+			//document.getElementById('click-input').hidden=true;
+			document.getElementById('FileName').hidden=false;
+            document.getElementById('FileName').innerHTML=path.split(/(\\|\/)/g).pop();
+        } //else {
 			//labelElement.innerHTML = '...'
-            // document.getElementById('click-input').value = 'Изберете файл'
+            //document.getElementById('click-input').value = 'Изберете файл'
         //} 
     }
+	document.getElementById("LoadBtn").hidden=false;
 }
 
 function MemTemplateOnly(T, R) {
@@ -1399,3 +1402,13 @@ function EditExtr() {
 		FillTmplFdl (document.getElementById("Templates").value, false);
 	}
 }
+
+function PostLoad() {
+	spinImage("LoadBtn");
+	document.getElementById("TmplInfo").innerHTML="Шаблони: "+document.getElementById("FileName").innerHTML;
+	document.getElementById("click-input").hidden=false; //	
+	document.getElementById("FileName").hidden=true;
+	document.getElementById("FileName").valeu="";
+	document.getElementById("LoadBtn").hidden=true;
+}
+
