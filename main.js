@@ -314,6 +314,7 @@ function MakeTmpl() { // създава шаблон в JSON формат
 				case "5": L='П'; break;
 				case "6": L='R';
 					S=document.getElementById("sep"+i).value;
+					S=S.replace(/\\/gi, "\\\\");
 					//S=RegExp.quote(S);
 			}
 			C='';
