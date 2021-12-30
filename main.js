@@ -1220,19 +1220,6 @@ function FileTemplates(mode) {
 	}
 }
 
-function loadFileAsText() {
-    var fileToLoad = document.getElementById("fileToLoad").files[0];
-    var fileReader = new FileReader();
-    fileReader.onload = function(fileLoadedEvent) {
-        var textFromFileLoaded = fileLoadedEvent.target.result;
-        document.getElementById("Log").value=textFromFileLoaded;
-		//ShowLog();
-		LoadToLocal();
-	};
-	//console.log(fileToLoad);
-    if (fileToLoad!=undefined) fileReader.readAsText(fileToLoad, "UTF-8");
-}
-
 function FileReplaces(mode) {
 	var ToWrite={};
 	if (mode=="get") {
@@ -1257,7 +1244,7 @@ function FileReplaces(mode) {
 		document.getElementById("Log").value = "";
 	}
 }
-
+/*
 function RloadFileAsText() {
     var fileToLoad = document.getElementById("fileToLoad").files[0];
     var fileReader = new FileReader();
@@ -1270,9 +1257,25 @@ function RloadFileAsText() {
 	//console.log(fileToLoad);
     if (fileToLoad!=undefined) fileReader.readAsText(fileToLoad, "UTF-8");
 }
+*/
+
+function loadFileAsText() {
+    var fileToLoad = document.getElementById("fileToLoad").files[0];
+    var fileReader = new FileReader();
+    fileReader.onload = function(fileLoadedEvent) {
+        var textFromFileLoaded = fileLoadedEvent.target.result;
+        document.getElementById("Log").value=textFromFileLoaded;
+		//ShowLog();
+		LoadToLocal();
+	};
+	//console.log(fileToLoad);
+    if (fileToLoad!=undefined) fileReader.readAsText(fileToLoad, "UTF-8");
+	document.getElementById('fileToLoad').value = "";
+
+}
 
 function ShowName() {
-    inputElement = document.getElementById('fileToLoad')
+    inputElement = document.getElementById('fileToLoad');
     //labelElement = document.getElementById('file-name')
     inputElement.onchange = function(event) {
         var path = inputElement.value;
@@ -1288,7 +1291,7 @@ function ShowName() {
     }
 	document.getElementById("LoadBtn").hidden=false;
 }
-
+/*
 function RShowName() {
     inputElement = document.getElementById('RfileToLoad')
     inputElement.onchange = function(event) {
@@ -1300,7 +1303,7 @@ function RShowName() {
 	}
 	document.getElementById("RLoadBtn").hidden=false;
 }
-
+*/
 function EditExtr() {
 	ShowAnim('Sels');
 	let T=document.getElementById("Info").innerHTML;
