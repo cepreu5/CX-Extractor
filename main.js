@@ -349,6 +349,47 @@ function MakeTmpl() {
 	}
 }
 
+function JSONMakeTmpl() {
+	var Tmpl='{'; //{"'+document.getElementById("TmplName").value+'":
+	var i, L, C, S; 
+	ShowAnim("TmplFld")
+	if (document.getElementById("res").value=="") {
+		for (i=1; i<=(LTempl-2); i++) {
+			S='';
+			Tmpl=Tmpl+'"'+i+'":"';
+			switch (document.getElementById("Types"+i).value) {
+				case "1": L='С'; S='0'
+					if (document.getElementById("Exp"+i).checked) S="1";
+					break;
+				case "2": L='Д'; break;
+				case "3": L='Т';
+					S=document.getElementById("sep"+i).value;
+					break;
+				case "4": L='Ч'; break;
+				case "5": L='П'; break;
+				case "6": L='R';
+					S=document.getElementById("sep"+i).value;
+					S=S.replace(/\\/gi, "\\\\");
+					//S=RegExp.quote(S);
+			}
+			C='';
+			if (document.getElementById("Types"+i).value != 5) {
+				C=document.getElementById("count"+i).value;
+			}
+			Tmpl=Tmpl+L+';'+C;
+			if (S != '') Tmpl=Tmpl+';'+S;
+			Tmpl=Tmpl+'", ';
+		}
+		Tmpl+='"'+(LTempl-1)+'":"К;'+document.getElementById("Cats").value+'", '+ // cat, subcat
+		'"'+LTempl+'":"О;'+document.getElementById("SubCats").value+'", '+
+			'"F":"'+document.getElementById("Files").selectedIndex+'", ';
+		Tmpl+='"T":"'+document.getElementById("TmplAuto").value+'", ';
+		Tmpl+='"R":"'+document.getElementById("ReplFld").value+'"}'
+		document.getElementById("res").value=Tmpl;
+		localStorage.setItem(document.getElementById("TmplName").value, Tmpl);
+	}
+}
+
 function ClearTmplFld() {
 	ClearFld('TmplName'); 
 	ClearFld('TmplAuto'); 
@@ -1203,7 +1244,7 @@ function GetMemTemplates() {
 
 function ClearMem() {
 	var CXpass, ZoomL1, ZoomL2, cfgTheme;
-	CXpass=localStorage.getItem("CXpass");console.log(CXpass)
+	CXpass=localStorage.getItem("CXpass");//console.log(CXpass)
 	ZoomL1=localStorage.getItem("ZoomL1");
 	ZoomL2=localStorage.getItem("ZoomL2");
 	cfgTheme=localStorage.getItem("cfgTheme");
@@ -1271,21 +1312,21 @@ function loadFileAsText() {
 		ShowLog();
 		LoadToLocal();
     };
-    fileReader.readAsText(fileToLoad, "UTF-8");
+    if (fileToLoad!=undefined) fileReader.readAsText(fileToLoad, "UTF-8");
 }
 
 function ShowName() {
     inputElement = document.getElementById('fileToLoad')
-    labelElement = document.getElementById('file-name')
+    //labelElement = document.getElementById('file-name')
     inputElement.onchange = function(event) {
         var path = inputElement.value;
         if (path) {
             //labelElement.innerHTML = path.split(/(\\|\/)/g).pop()
             document.getElementById('click-input').value=path.split(/(\\|\/)/g).pop()
-        } else {
+        } // else {
 			//labelElement.innerHTML = '...'
-            document.getElementById('click-input').value = 'Изберете файл'
-        } 
+            // document.getElementById('click-input').value = 'Изберете файл'
+        //} 
     }
 }
 
@@ -1314,6 +1355,7 @@ function MemReplaceOnly(V, T) {
 	ReplPtr += 2;
 	localStorage.setItem('ReplPtr', ReplPtr);
 	localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
+	localStorage.setItem(Replaces[(ReplPtr-2)], '"'+Replaces[ReplPtr-1]+'"'); //JSON replace
 }
 
 function LoadToLocal() {

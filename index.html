@@ -189,6 +189,16 @@
 		</div>
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
+			<span ID="TmplFld">
+				Шаблон: <input style="text-align:left; margin-top: 5px; width: 14.4em" ID="res" class="inputMessage" value="">
+				<a><img src="Space.png" width="20px" onclick="ClearFld('res'); JSONMakeTmpl(); ShowAnim('TmplFld')"
+					align="center" title="Генериране"></a>
+				<a><img src="Remove.png" width="20px" align="center"
+					onclick="ClearFld('res'); ShowAnim('TmplFld')"></a>
+				<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
+					align="center" title="MemTemplate"></a>
+				<hr>
+			</span>
 			<table ID="Top" hidden>
 				<tr style="text-align: center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
 					<td>Бележка</td><td>Шаблон</td><td>Екстракт</td><td>Изпрати</td>
@@ -196,8 +206,8 @@
 				<tr ID="TRow">
 				<td ID="Cell3"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTmpl()" 
-					title="Шаблон">
+				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="JSONMakeTmpl()" 
+					title="ШаблонJSON">
 				</td>
 				<td ID="Cell2"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()">
@@ -256,13 +266,6 @@
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field6" ID=res6 value="">
 				<img src="Remove.png" width="30px" onclick="ClearFld('res6')"
 					align="center" title="Изтриване">
-			<span ID="TmplFld">
-				Шаблон: <input style="text-align:left; margin-top: 5px; width: 16em" ID="res" class="inputMessage" value="">
-				<a><img src="Remove.png" width="20px" align="center"
-					onclick="ClearFld('res'); ShowAnim('TmplFld')"></a>
-				<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
-					align="center" title="MemTemplate"></a>
-			</span>
 			<span ID="NoteFld">
 				Бележка: 
 				<input style="text-align:left; width: 17em" ID="Note" class="inputMessage" name="Field9" 
