@@ -1,9 +1,9 @@
 :root {
   --InpText: black;
-  --FormBgrd: black;
-  --LblColor: #black;
+	--LblColor: white;
   --TipColor: DarkOrange;
   --TipText: black;
+  --FormBgrd: #211308;
 
   --InpBgrd: snow;
   --FormColor: FireBrick;

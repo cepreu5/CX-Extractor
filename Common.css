@@ -167,7 +167,7 @@ img {
   width: 100%;
   border: none;
   cursor: pointer;
-  text-align: left;
+  text-align: center;
 }
 
 select {
@@ -200,6 +200,17 @@ select option {
 }
 
 /*
+.splash {
+  background-image: url("Wallet.jpg");
+  //background-color: #cccccc;
+  height: 500px;
+  background-position: center;
+  background-repeat: no-repeat;
+  //background-size: cover;
+  position: relative;
+  color: white;
+}
+
 select option:first-child {
 	color: #C70000;
 }
