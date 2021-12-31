@@ -1,15 +1,15 @@
-@import "0-Colors1.css";
+@import url("Skin/Colors1.css");
 
 fieldset {
   background-color: var(--FormColor, #242424);
-  background-image: url("0-Bgrd.jpg");
+  background-image: url("Skin/Bgrd.jpg");
   background-repeat: repeat;
 }
 
 .inputMessage {
   background-color: var(--InpBgrd, white);
   color: var(--InpText, black);
-  background: url(0-FBgrd.jpg) repeat;
+  background: url("Skin/FBgrd.jpg") repeat;
 }
 
 input[type="text"] {
@@ -20,9 +20,43 @@ input[type="text"] {
   height: 60px;
   font-size: 30px;
   padding: 15px;
-  background: url(0-FBgrd.jpg) repeat;
+  background: url("Skin/FBgrd.jpg") repeat;
 }
 
-.block {
-  background-image: url("0-FBgrd.jpg");
+button {
+  border: none;
+  cursor: pointer;
+  transition: 0.1s ease;
+  outline-color: #ccc;
+  width: 100%
 }
+
+button > span {
+  display: block;
+}
+
+button.solo:hover {
+  transform: scale(0.99) translateY(1px);
+}
+button.solo:active {
+  outline: none;
+  transform: scale(0.97) translateY(3px);
+}
+.typewriter-yellow {
+  border-radius: 80px;
+  padding: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.65), 0 20px 25px rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  margin-bottom: 5px;
+  color: var(--LblColor, black);
+}
+.typewriter-yellow span {
+  padding: 2px 2px 2px;
+  border-radius: 80px;
+  border: 1px solid #e2d66a;
+}
+.typewriter-yellow:focus {
+  outline: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 0 1px #222, 0 10px 15px rgba(0, 0, 0, 0.12);
+}
+

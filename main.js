@@ -14,12 +14,8 @@ var ReplaceF, // Replace Field calculated in getTempls and used in Extract
 	ZoomL1="100%",
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
-	OpenFrom = 'res2', // calculator OpenFrom which field
-	TmplPtr=2; // Next free place in Templates array
 
-	const Templates = [];
-	Templates[0]="Изтриване",
-	Templates[1]="1-П;1#2-П;1#3-П;1#4-П;1#5-П;1#6-П;1#7-К;#8-О;";
+	OpenFrom = 'res2'; // calculator OpenFrom which field
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
@@ -299,7 +295,7 @@ function createSels() { // Extract selection field
 
 function ShowAnim(BoxEl) {
 	document.getElementById(BoxEl).classList.toggle('active');
-	//if ((BoxEl=="res") && (document.getElementById("TemplFld").classList.length=0)) {ClearFld('res');}
+	//if ((BoxEl=="res") && (document.getElementById("TemplFld").classList.length=0)) {ClearFld('res'); ClearFld('CSV');}
 }
 
 function MakeTempl() {
@@ -335,10 +331,18 @@ function MakeTempl() {
 	Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
 		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
 		+document.getElementById("Files").selectedIndex;
-	document.getElementById("res").value=Tmpl;
-	document.getElementById("res").value=Tmpl;
-	//document.getElementById("res").select();
-	//var CopyRes = document.execCommand('copy');
+	document.getElementById("CSV").value=
+	document.getElementById("res1").value + ", " + // \t
+	document.getElementById("res2").value + ", " +
+	document.getElementById("res3").value + ", " +
+	document.getElementById("res4").value + ", " +
+	document.getElementById("res5").value + ", " +
+	document.getElementById("res6").value + ", " +
+	document.getElementById("Cats").value + ", " +
+	document.getElementById("SubCats").value;
+	document.getElementById("res").value='"'+Tmpl+'",';
+	document.getElementById("res").select();
+	var CopyRes = document.execCommand('copy');
 }
 
 function UseTempl() {
@@ -947,9 +951,11 @@ function Gestures(el, d) {
 
 function init() {
 	var MsgData;
+	getTempls();
 	createSels();
 	dataListOpt(Notes, "combo-options");
 	dataListOpt(Accs, "acc-options");
+	ClearTextArea();
 	// document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
 	// document.getElementById("MsgText").select()
 	AddCfg();
@@ -1000,11 +1006,6 @@ function init() {
 		CZoom();
 		document.getElementById("Zoom2").checked = true;
 	}
-	if (localStorage.getItem("TmplPtr")!=null) TmplPtr=+localStorage.getItem("TmplPtr")
-	else localStorage.setItem('TmplPtr','2')
-	console.log(GetMemTemplates());
-	getTempls();
-	ClearTextArea();
 }	
 
 function init2() {
@@ -1034,60 +1035,4 @@ function paste() {
 	},2500);
 	//document.getElementById("MsgText").focus();
 	//document.getElementById("Cats").focus();
-}
-
-// Calc
-//function that display value 
-function dis(val) {
-	document.getElementById("result").value+=val
-} 
-	
-//function that evaluates the digit and return result 
-function solve() {
-	let x = document.getElementById("result").value;
-	let y = eval(x).toFixed(2);
-	if (y!=undefined && y!=Infinity) {
-		document.getElementById("result").value = y;
-		document.getElementById(OpenFrom).value = y;
-		//ShowAnim("CalcSp");
-		//oned.onclick = function () {
-		//let tl = gsap.timeline();
-		//tl.to("#CalcSp", 3, { opacity: 0 });
-		//tl.to("#CalcSp", 0.75, { height: 0 });}
-	}
-	if (x == "") document.getElementById(OpenFrom).value = "";
-} 
-	
-//function that clear the display 
-function clr() {
-	document.getElementById("result").value = "";
-}
-
-function MemTemplate() {
-	if (document.getElementById("TmplName").value=="") return;
-	Templates[TmplPtr]=document.getElementById("TmplName").value;
-	TmplPtr++;
-	Templates[TmplPtr]=document.getElementById("res").value;
-	TmplPtr++;
-	localStorage.setItem('TmplPtr', TmplPtr);
-	localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);  
-	//console.log('key: '+'*0000'.substring(0, 5-(i/2).toString().length)+i/2+Templates[i]);
-	//console.log(i/2);
-}
-
-function GetMemTemplates() {
-	//Object.keys(localStorage).forEach(function(key){console.log(localStorage.getItem(key));});
-	let j, tc=0, item;
-	for (let i=0; i<localStorage.length; i++) { //localStorage.length
-		item=localStorage.getItem(localStorage.key(i)); 
-		//console.log('mem: key: '+localStorage.key(i)+' '+item);
-		if (localStorage.key(i).substring(0, 1)==='*') { //console.log(localStorage.key(i).substring(1, 5));
-			j=2*Number(localStorage.key(i).substring(1,5)); //console.log(j);
-			Templates[j]=localStorage.key(i).substring(5);
-			Templates[j+1]=item;
-			tc++; 
-			//console.log(j+ ' ', Templates[j], (j+1)+' ', Templates[j+1]);
-		}
-	}
-	return tc;
 }
