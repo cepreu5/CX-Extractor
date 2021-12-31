@@ -9,12 +9,13 @@
 <link rel="stylesheet" href="First.css" id="theme" />
 <!--link rel="stylesheet" href="Accordion.css" /-->
 	
+<script type="text/javascript" src="Templates.txt"></script>
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
 
 <!-- script src="../js/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
- integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
+ integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script-->
 
 <script src="main.js"></script>
 
@@ -88,7 +89,7 @@
 			  onclick="SaveConfig()" value="Запис">
 			<!--hr>
 			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!-->
-			<hr>
+			<!--
 			<button ID="TmplInfo" class="solo typewriter-yellow">Шаблони</button>
 
 			<span ID="FileName" hidden></span>
@@ -97,11 +98,10 @@
 			onclick="this.hidden=true; document.getElementById('fileToLoad').click();" />
 			<input type="file" hidden id="fileToLoad" accept=".txt" onclick="ShowName()">
 			<input type="image" src="Download.png" ID="LoadBtn" style="width: 23px;" border="0"  align="center" hidden
-				title="Зареждане" onclick="PostLoad(); loadFileAsText();">
+				title="Зареждане" onclick="PostLoad(); loadFileAsText();"-->
+			Запис на шаблони: 
 			<input type="image" src="Save.png" ID="LoadBtn" style="width: 20px;" border="0"  align="center"
 				title="Запис шаблони" onclick="FileTemplates('get'); FileTemplates('save')">
-			<input type="image" src="Remove.png" style="width: 20px;" border="0"  align="center"
-				title="Изтриване" onclick="ClearMem()">
 			<hr>
 		</div>
 
@@ -187,12 +187,21 @@
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<span ID="TmplFld">
 				Шаблон: <input style="text-align:left; margin-top: 5px; width: 14.4em" ID="res" class="inputMessage" value="">
-				<a><img src="Space.png" width="20px" onclick="ClearFld('res'); JSONMakeTmpl(); ShowAnim('TmplFld')"
+				<a><img src="Space.png" width="20px" onclick="ClearFld('res'); ShowAnim('TmplFld')"
 					align="center" title="Генериране"></a>
 				<a><img src="Remove.png" width="20px" align="center"
 					onclick="ClearFld('res'); ShowAnim('TmplFld')"></a>
 				<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
 					align="center" title="MemTemplate"></a>
+				<span id="blink" style="text-align: center; font-family:Arial; font-size:13px; color: var(--LblColor, white);" hidden>
+					 Данните са променени! Моля, запишете шаблоните! </span>
+    <script type="text/javascript">
+        var blink = document.getElementById('blink');
+        setInterval(function() {
+            blink.style.opacity = (blink.style.opacity == 0 ? 1 : 0);
+        }, 500);
+    </script>
+
 				<hr>
 			</span>
 			<table ID="Top" hidden>
@@ -203,7 +212,7 @@
 				<td ID="Cell3"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
 				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" 
-					onclick="if(event.ctrlKey) {JSONMakeTmpl(); return false} else {MakeTmpl();}"
+					onclick="MakeTmpl()"
 					title="Шаблон&#13ШаблонJSON">
 				</td>
 				<td ID="Cell2"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
@@ -396,7 +405,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor M23.12 / 
+			© 2021 CX Extractor E31.12 / 
 		</span>
 	</fieldset>
 	</div>
