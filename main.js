@@ -709,9 +709,6 @@ function showSuc() {
 	document.getElementById('loadingGif').style.display = "none";
 	document.getElementById('ZoomBtn2').style.display = "none";
 	document.getElementById('Suc').style.display = "block";
-	//setTimeout(function() {
-    //	document.getElementById('Suc').style.display = "none";
-  	//},7000);  
 }
 
 function SelFile() {

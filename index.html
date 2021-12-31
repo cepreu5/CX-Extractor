@@ -204,16 +204,16 @@
 
 				<hr>
 			</span>
-			<table ID="Top" style="table-layout:fixed; width:125%;" hidden>
+			<table ID="Top" hidden>
 				<tr style="text-align: center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
 					<td>Бележка</td><!--td>Шаблон</td--><td>Екстракт</td><td>Изпрати</td>
 				</tr>
 				<tr ID="TRow" align="center">
-				<td ID="Cell3"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
+				<td ID="Cell3" style="width: 90px"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell2"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
+				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
 					onclick="ExtClick()"></td>
-				<td ID="Cell1"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
+				<td ID="Cell1" style="width: 90px"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
 				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
 					<img id="Suc" style="display:none" title="OK" src="Suc.png"
@@ -276,22 +276,25 @@
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
 					align="center" title="Изтриване"></a>
 			</span>
-			<table ID="Bottom" style="table-layout:fixed; width:125%;" hidden>
+			<table ID="Bottom" hidden>
 				<tr ID="TRow" align="center">
-				<td ID="Cell1"><input type="image" style="width: 70px;" name="submit" src="Skin/Send.png" 
+				<td ID="Cell1" style="width: 90px"><input type="image" style="width: 70px;" name="submit" src="Skin/Send.png" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td ID="Cell2"><img src="Skin/Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
-					onclick="ExtClick()">
-				</td>
-				<td ID="Cell3"><img src="Skin/Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
+				<td ID="Cell2" style="width: 90px"><img src="Skin/Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
+					onclick="ExtClick()"></td>
+				<td ID="Cell3" style="width: 90px"><img src="Skin/Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				</td>
-				<td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
+				<!--td><div class="loader" id="loadingGif" style="display:none"></div>
 					<img id="Suc" style="display:none" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
-						style="display:none" title="Намали"></a>
-				</td></tr>
+						style="display:none" title="Намали"></a></td-->
+				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
+					<img id="Suc" style="display:none" title="OK" src="Suc.png"
+						onclick='style="display: none"'>
+					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
+						style="display:none" title="Намали"></a></td>
+				</tr>
 				<tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
 					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><!--td>Шаблон</td-->
 				</tr>
