@@ -1,4 +1,4 @@
-var Encrypted=false; // false uncomment crypto-js above and use the correct TableFiles.txt
+var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
 
 var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	Z100=true, // zoom level
@@ -15,7 +15,14 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	ZoomL1="100%",
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
-	OpenFrom = 'res2'; // calculator OpenFrom which field
+	OpenFrom = 'res2', // calculator OpenFrom which field
+	AutoPtr=0, // Next free place in AutoT array
+	ReplPtr=0, // Next free place in AutoT array
+	TmplPtr=2; // Next free place in Templates array
+
+	var Templates = [],
+	AutoT = [],
+	Replaces = [];
 
 	Templates[0]="Изтриване", // see also ClearMem for initialization
 	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
@@ -298,49 +305,50 @@ function createSels() { // Extract selection field
 
 function ShowAnim(BoxEl) {
 	document.getElementById(BoxEl).classList.toggle('active');
+	//if ((BoxEl=="res") && (document.getElementById("TmplFld").classList.length=0)) {ClearFld('res');}
 }
 
 function MakeTmpl() {
 	var Tmpl='';
 	var i, L, C, S; 
-	ShowAnim("TmplFld");
-	document.getElementById("res").value="";
-	for (i=1; i<=(LTempl-2); i++) {
-		S='';
-		Tmpl=Tmpl+i+'-';
-		switch (document.getElementById("Types"+i).value) {
-			case "1":	L='С'; S="0"
-				if (document.getElementById("Exp"+i).checked) S="1";
-				break;
-			case "2": L='Д'; break;
-			case "3": L='Т';
-				S=document.getElementById("sep"+i).value;
-				break;
-			case "4": L='Ч'; break;
-			case "5": L='П'; break;
-			case "6": L='R';
-				S=document.getElementById("sep"+i).value;
-				//S=RegExp.quote(S);
+	ShowAnim("TmplFld")
+	if (document.getElementById("res").value=="") {
+		for (i=1; i<=(LTempl-2); i++) {
+			S='';
+			Tmpl=Tmpl+i+'-';
+			switch (document.getElementById("Types"+i).value) {
+				case "1":	L='С'; S="0"
+					if (document.getElementById("Exp"+i).checked) S="1";
+					break;
+				case "2": L='Д'; break;
+				case "3": L='Т';
+					S=document.getElementById("sep"+i).value;
+					break;
+				case "4": L='Ч'; break;
+				case "5": L='П'; break;
+				case "6": L='R';
+					S=document.getElementById("sep"+i).value;
+					//S=RegExp.quote(S);
+			}
+			C='';
+			if (document.getElementById("Types"+i).value != 5) {
+				C=document.getElementById("count"+i).value;
+			}
+			Tmpl=Tmpl+L+';'+C;
+			if (S != '') {Tmpl=Tmpl+';'+S;}
+			Tmpl=Tmpl+'#';
 		}
-		C='';
-		if (document.getElementById("Types"+i).value != 5) {
-			C=document.getElementById("count"+i).value;
+		Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
+			LTempl+"-О;"+document.getElementById("SubCats").value+"##"
+			+document.getElementById("Files").selectedIndex;
+		if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
+		if (WorkTmpl!="") { 
+			let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
+			if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 		}
-		Tmpl=Tmpl+L+';'+C;
-		if (S != '') {Tmpl=Tmpl+';'+S;}
-		Tmpl=Tmpl+'#';
 	}
-	Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
-		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
-		+document.getElementById("Files").selectedIndex;
-	if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
-	if (WorkTmpl!="") { 
-		let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
-		if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
-	}
-	document.getElementById("blink").hidden=true;
 }
-/*
+
 function JSONMakeTmpl() {
 	var Tmpl='{'; //{"'+document.getElementById("TmplName").value+'":
 	var i, L, C, S; 
@@ -381,7 +389,6 @@ function JSONMakeTmpl() {
 		localStorage.setItem(document.getElementById("TmplName").value, Tmpl);
 	}
 }
-*/
 
 function ClearTmplFld() {
 	ClearFld('TmplName'); 
@@ -402,7 +409,7 @@ function GetRepl() {
 
 function FillTmplFdl(str, clear) {
 	if (clear) ClearTmplFld();
-	//document.getElementById("res").value=str;
+	document.getElementById("res").value=str;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if (CVal>1) {
 		WorkTmpl=document.getElementById("Templates").options[CVal].text;
@@ -419,9 +426,8 @@ function SelTmpl(str, clear) {
 	if (clear) {
 	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
 	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
-	  if (document.getElementById("TmplFld").classList.length>0) ShowAnim('TmplFld');
 	}
-	//if (str!=Templates[1]) document.getElementById("res").value=str;
+	if (str!=Templates[1]) document.getElementById("res").value=str;
 	var result, fsplit, first, second, sep, I;
 	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
 	if (str[0] == '"') { // delete "s
@@ -1071,7 +1077,13 @@ function init() {
 		CZoom();
 		document.getElementById("Zoom2").checked = true;
 	}
-	//GetMemTemplates();
+	if (localStorage.getItem("TmplPtr")!=null) TmplPtr=+localStorage.getItem("TmplPtr")
+	else localStorage.setItem('TmplPtr','2')
+	if (localStorage.getItem("AutoPtr")!=null) AutoPtr=+localStorage.getItem("AutoPtr")
+	else localStorage.setItem('AutoPtr','0')
+	if (localStorage.getItem("ReplPtr")!=null) ReplPtr=+localStorage.getItem("ReplPtr")
+	else localStorage.setItem('ReplPtr','0')
+	GetMemTemplates();
 	getTmpls();
 	ClearTextArea();
 }	
@@ -1099,7 +1111,7 @@ function init2() {
 function paste() {
 	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
 	setTimeout(function() {
-		if (document.getElementById("MsgText").value!="") AutoTmpl();	
+		AutoTmpl();	
 	},2500);
 	//document.getElementById("MsgText").focus();
 	//document.getElementById("Cats").focus();
@@ -1148,10 +1160,13 @@ function MemAuto() {
 	let Found=FindInCol(AutoT, V, 0);
 	if (Found>=0) {
 		AutoT[Found+1]=T; // edit existing
-		//localStorage.setItem('@00000'.substring(0, 5-(Found/2).toString().length)+Found/2+AutoT[Found], AutoT[Found+1]);
+		localStorage.setItem('@00000'.substring(0, 5-(Found/2).toString().length)+Found/2+AutoT[Found], AutoT[Found+1]);
 	} else {
 		AutoT.push(V);
 		AutoT.push(T);
+		AutoPtr += 2;
+		localStorage.setItem('AutoPtr', AutoPtr);
+		localStorage.setItem('@00000'.substring(0, 5-((AutoPtr-2)/2).toString().length)+(AutoPtr-2)/2+AutoT[(AutoPtr-2)], AutoT[AutoPtr-1]);
 	}
 }
 
@@ -1162,10 +1177,13 @@ function MemReplace() {
 	let Found=FindInCol(Replaces, V, 0);
 	if (Found>=0) {
 		Replaces[Found+1]=T; // edit existing
-		//localStorage.setItem('#00000'.substring(0, 5-(Found/2).toString().length)+Found/2+Replaces[Found], Replaces[Found+1]);
+		localStorage.setItem('#00000'.substring(0, 5-(Found/2).toString().length)+Found/2+Replaces[Found], Replaces[Found+1]);
 	} else {
 		Replaces.push(V);
 		Replaces.push(T);
+		ReplPtr += 2;
+		localStorage.setItem('ReplPtr', ReplPtr);
+		localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
 	}
 	T=document.getElementById("res").value;
 	V=document.getElementById("ReplFld").value;
@@ -1184,17 +1202,19 @@ function MemTemplate() {
 	if ((WorkTmpl=="") && (Found>=0)) {document.getElementById("TmplName").value="Дублирано име!"; return}
 	if (Found>=0) {
 		Templates[Found+1]=R; // edit existing
-		//localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
+		localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
 	} else {
 		Templates.push(T);
 		Templates.push(R);
+		TmplPtr+=2;
+		localStorage.setItem('TmplPtr', TmplPtr);
+		localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
 	}
 	MemAuto();
 	getTmpls(); //recreate template Selection
-	document.getElementById("blink").hidden=false;
 }
 
-/*function GetMemTemplates() {
+function GetMemTemplates() {
 	//Object.keys(localStorage).forEach(function(key){console.log(localStorage.getItem(key));});
 	let j, tc=0, item;
 	for (let i=0; i<localStorage.length; i++) { //localStorage.length
@@ -1243,7 +1263,7 @@ function ClearMem() {
 	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
 	location.reload();
 }
-*/
+
 var myBlob, url, anchor;
 function FileTemplates(mode) {
 	if (mode=="get") {
@@ -1282,7 +1302,7 @@ function FileTemplates(mode) {
 		document.getElementById("Log").value = "";
 	}
 }
-/*
+
 function loadFileAsText() {
     var fileToLoad = document.getElementById("fileToLoad").files[0]; //
     var fileReader = new FileReader();
@@ -1312,26 +1332,34 @@ function ShowName() {
     }
 	document.getElementById("LoadBtn").hidden=false;
 }
-*/
-/*
+
 function MemTemplateOnly(T, R) {
 	if ((T=="") || (R=="")) return;
 	Templates.push(T);
 	Templates.push(R);
+	TmplPtr+=2;
+	localStorage.setItem('TmplPtr', TmplPtr);
+	localStorage.setItem('*00000'.substring(0, 5-((TmplPtr-2)/2).toString().length)+(TmplPtr-2)/2+Templates[(TmplPtr-2)], Templates[TmplPtr-1]);
 }
 
 function MemAutoOnly(V, T) {
 	if ((V=="") || (T=="")) return;
 	AutoT.push(V);
 	AutoT.push(T);
+	AutoPtr += 2;
+	localStorage.setItem('AutoPtr', AutoPtr);
+	localStorage.setItem('@00000'.substring(0, 5-((AutoPtr-2)/2).toString().length)+(AutoPtr-2)/2+AutoT[(AutoPtr-2)], AutoT[AutoPtr-1]);
 }
 
 function MemReplaceOnly(V, T) {
 	if ((V=="") || (T=="")) return;
 	Replaces.push(V);
 	Replaces.push(T);
+	ReplPtr += 2;
+	localStorage.setItem('ReplPtr', ReplPtr);
+	localStorage.setItem('#00000'.substring(0, 5-((ReplPtr-2)/2).toString().length)+(ReplPtr-2)/2+Replaces[(ReplPtr-2)], Replaces[ReplPtr-1]);
+	localStorage.setItem(Replaces[(ReplPtr-2)], '"'+Replaces[ReplPtr-1]+'"'); //JSON replace
 }
-
 
 function LoadToLocal() {
 	let T=document.getElementById('Log').value;
@@ -1364,20 +1392,17 @@ function LoadToLocal() {
 	location.reload();
 	//console.log(rows[i]);
 }
-*/
 
 function EditExtr() {
-	if ((document.getElementById("Sels").classList.length>0) && 
-		(document.getElementById("TmplFld").classList.length>0)) ShowAnim('TmplFld');
 	ShowAnim('Sels');
 	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if ((CVal>1) && !(T.includes(":"))) {
-		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text;
+		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text; //Templates[2*(CVal-1)]
 		FillTmplFdl (document.getElementById("Templates").value, false);
 	}
 }
-/*
+
 function PostLoad() {
 	spinImage("LoadBtn");
 	document.getElementById("TmplInfo").innerHTML="Шаблони: "+document.getElementById("FileName").innerHTML;
@@ -1386,4 +1411,4 @@ function PostLoad() {
 	document.getElementById("FileName").valeu="";
 	document.getElementById("LoadBtn").hidden=true;
 }
-*/
+
