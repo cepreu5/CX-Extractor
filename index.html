@@ -14,8 +14,8 @@
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
 
 <!-- script src="../js/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script -->
-<!--script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
- integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
+ integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
 
 <script src="main.js"></script>
 
@@ -187,10 +187,10 @@
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<span ID="TmplFld">
 				Шаблон: <input style="text-align:left; margin-top: 5px; width: 14.4em" ID="res" class="inputMessage" value="">
-				<a><img src="Space.png" width="20px" onclick="ClearFld('res'); ShowAnim('TmplFld')"
-					align="center" title="Генериране"></a>
+				<a><img src="Space.png"  title="Генериране" width="20px" onclick="ClearFld('res'); MakeTmpl()"
+					align="center"></a>
 				<a><img src="Remove.png" width="20px" align="center"
-					onclick="ClearFld('res'); ShowAnim('TmplFld')"></a>
+					onclick="ClearFld('res')"></a>
 				<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
 					align="center" title="MemTemplate"></a>
 				<span id="blink" style="text-align: center; font-family:Arial; font-size:13px; color: var(--LblColor, white);" hidden>
@@ -204,28 +204,23 @@
 
 				<hr>
 			</span>
-			<table ID="Top" hidden>
+			<table ID="Top" style="table-layout:fixed; width:125%;" hidden>
 				<tr style="text-align: center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
-					<td>Бележка</td><td>Шаблон</td><td>Екстракт</td><td>Изпрати</td>
+					<td>Бележка</td><!--td>Шаблон</td--><td>Екстракт</td><td>Изпрати</td>
 				</tr>
-				<tr ID="TRow">
+				<tr ID="TRow" align="center">
 				<td ID="Cell3"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" 
-					onclick="MakeTmpl()"
-					title="Шаблон&#13ШаблонJSON">
-				</td>
 				<td ID="Cell2"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
-					onclick="ExtClick()">
-				</td>
+					onclick="ExtClick()"></td>
 				<td ID="Cell1"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
 				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
 					<img id="Suc" style="display:none" title="OK" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
-						style="display:none" title="Намали"></a>
-				</td></tr>
+						style="display:none" title="Намали"></a></td>
+				</tr>
 			</table>
 			<span ID="CatsTop">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
@@ -281,7 +276,8 @@
 				<a><img src="Remove.png" width="30px" onclick="ClearFld('Note')"
 					align="center" title="Изтриване"></a>
 			</span>
-			<table ID="Bottom"><tr ID="TRow">
+			<table ID="Bottom" style="table-layout:fixed; width:125%;" hidden>
+				<tr ID="TRow" align="center">
 				<td ID="Cell1"><input type="image" style="width: 70px;" name="submit" src="Skin/Send.png" 
 					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
 				<td ID="Cell2"><img src="Skin/Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
@@ -289,8 +285,6 @@
 				</td>
 				<td ID="Cell3"><img src="Skin/Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell4"><img src="Skin/Template.png" style="width: 70px;" onclick="MakeTmpl()" 
-					title="Шаблон">
 				</td>
 				<td><div class="loader" id="loadingGif" style="display:none"></div> <!--spinner-->
 					<img id="Suc" style="display:none" src="Suc.png"
@@ -299,7 +293,7 @@
 						style="display:none" title="Намали"></a>
 				</td></tr>
 				<tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
-					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><td>Шаблон</td>
+					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><!--td>Шаблон</td-->
 				</tr>
 			</table>
 

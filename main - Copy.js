@@ -1,5 +1,5 @@
 const WLimit=501; // определя дали бутоните да са отгоре
-var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
+var Encrypted=false; // false uncomment crypto-js above and use the correct TableFiles.txt
 
 var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	Z100=true, // zoom level
@@ -8,8 +8,8 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	val="", // initial calculator display value
 	Total=0, Cnt=0, // log counter and total
 	SelectSheet=0, // selected sheet
-	LTmpl=8, // elements in template (without optional replace field and selected sheet)
-	AllTmplFlag=false, // don't get Auto templates	
+	LTempl=8, // elements in template (without optional replace field and selected sheet)
+	AllTemplFlag=false, // don't get Auto templates	
 	WorkTmpl, //current template in use
 	Author = "© 2021 CX Extractor",
 	BArea, // buttons save area
@@ -33,9 +33,10 @@ RegExp.quote = function(str) {
      return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 };
 
-function CheckAuto(F) {//alert(AllTmplFlag)
-	if (AllTmplFlag) {return true}
-	for (let i=0; i<AutoT.length; i++) { 
+function CheckAuto(F) {//alert(AllTemplFlag)
+	if (AllTemplFlag) {return true}
+	var i;
+	for (i=0; i<AutoT.length; i++) { 
 		if (F == AutoT[i+1]) {return false}
 		i=i+1;  
 	}
@@ -43,8 +44,8 @@ function CheckAuto(F) {//alert(AllTmplFlag)
 }
 
 function NoAuto() { 
-	AllTmplFlag=!AllTmplFlag; //!AllTmplFlag; 
-	if (AllTmplFlag) { 
+	AllTemplFlag=!AllTemplFlag; //!AllTemplFlag; 
+	if (AllTemplFlag) { 
 		document.getElementById('No').style.display = "inline"; 
 		document.getElementById('Yes').style.display = "none"; 
 	} 
@@ -53,7 +54,7 @@ function NoAuto() {
 		document.getElementById('No').style.display = "none";
 		AutoTmpl(); 
 	} 
-	//if (AllTmplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
+	//if (AllTemplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
 	getTmpls(); 
 }
 
@@ -130,7 +131,8 @@ function createFilesDec(passphrase) {
 			return decrypted;
 	}
 
-	var i,
+	var i;
+	var
 		encryptedMsg,
 		encryptedHMAC,
 		encryptedHTML,
@@ -304,7 +306,7 @@ function MakeTmpl() {
 	var Tmpl='';
 	var i, L, C, S; 
 	document.getElementById("res").value="";
-	for (i=1; i<=(LTmpl-2); i++) {
+	for (i=1; i<=(LTempl-2); i++) {
 		S='';
 		Tmpl=Tmpl+i+'-';
 		switch (document.getElementById("Types"+i).value) {
@@ -329,8 +331,8 @@ function MakeTmpl() {
 		if (S != '') {Tmpl=Tmpl+';'+S;}
 		Tmpl=Tmpl+'#';
 	}
-	Tmpl=Tmpl+(LTmpl-1)+"-К;"+document.getElementById("Cats").value+"#"+
-		LTmpl+"-О;"+document.getElementById("SubCats").value+"##"
+	Tmpl=Tmpl+(LTempl-1)+"-К;"+document.getElementById("Cats").value+"#"+
+		LTempl+"-О;"+document.getElementById("SubCats").value+"##"
 		+document.getElementById("Files").selectedIndex;
 	if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
 	if (WorkTmpl!="") { 
@@ -357,9 +359,9 @@ function GetRepl() {
 	if (Found>=0) document.getElementById("Replace").value=Replaces[Found-1];
 }
 
-function FillTmplFdl(Tmpl, clear) {
+function FillTmplFdl(str, clear) {
 	if (clear) ClearTmplFld();
-	//document.getElementById("res").value=Tmpl;
+	//document.getElementById("res").value=str;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if (CVal>1) {
 		WorkTmpl=document.getElementById("Templates").options[CVal].text;
@@ -367,32 +369,32 @@ function FillTmplFdl(Tmpl, clear) {
 	}
 	let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); // show Auto
 	if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
-	Found=Tmpl.match(/#\d#/g); //get replace fld number
+	Found=str.match(/#\d#/g); //get replace fld number
 	document.getElementById("ReplFld").value="";
 	if (Found!=null) document.getElementById("ReplFld").value=Found[0][1];
 }
 
-function SelTmpl(Tmpl, clear) {
+function SelTmpl(str, clear) {
 	if (clear) {
 	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
 	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
 	  if (document.getElementById("TmplFld").classList.length>0) ShowAnim('TmplFld');
 	}
-	//if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
+	//if (str!=Templates[1]) document.getElementById("res").value=str;
 	var result, fsplit, first, second, sep, I;
-	if ((Tmpl.match(/#/g)==null) || (Tmpl.match(/;/g)==null)) {return}
-	if (Tmpl[0] == '"') { // delete "s
-		result=Tmpl.split('"');
-		Tmpl=result[1];
+	if ((str.match(/#/g)==null) || (str.match(/;/g)==null)) {return}
+	if (str[0] == '"') { // delete "s
+		result=str.split('"');
+		str=result[1];
 	}	
-	result=Tmpl.split("#");
-	ReplaceF=result[LTmpl];
-	if (typeof ReplaceF === "undefined") ReplaceF=0;
-	SelectSheet=result[LTmpl+1];
-	if (typeof SelectSheet === "undefined") SelectSheet=0;
+	result=str.split("#");
+	ReplaceF=result[LTempl];
+	if (typeof ReplaceF === "undefined") { ReplaceF=0; }
+	SelectSheet=result[LTempl+1];
+	if (typeof SelectSheet === "undefined") { SelectSheet=0; }
 	document.getElementById("Files").options.selectedIndex=SelectSheet;
 	SelFile();
-	for (I=0; I<LTmpl; I++) {
+	for (I=0; I<LTempl; I++) {
 		first=result[I];
 			if (first.match(/;/g)==null) {return}
 			fsplit=first.split(";");
@@ -415,13 +417,13 @@ function SelTmpl(Tmpl, clear) {
 }
 
 function UseTmpl() {
-	var Tmpl=document.getElementById("res").value;
-	if (Tmpl=="") {return}
-	if (Tmpl[0] == '"') { // delete "s and ,
-		result=Tmpl.split('"');
-		Tmpl=result[1];
+	var Templ=document.getElementById("res").value;
+	if (Templ=="") {return}
+	if (Templ[0] == '"') { // delete "s and ,
+		result=Templ.split('"');
+		Templ=result[1];
 	}	
-	SelTmpl(Tmpl, true); //console.log(Tmpl);
+	SelTmpl(Templ, true); //console.log(Templ);
 	Extract6();
 }
 
@@ -431,7 +433,7 @@ function getTmpls() {
 		'onChange="SelTmpl(' + 
 		"document.getElementById('Templates').value" +
 		', true); Extract6()"><option value="'+Templates[1]+'">Изберете шаблон</option>';
-	//ReplaceF=3;
+	ReplaceF=3;
 	for (i=0; i<Templates.length; i++) {
 		if (CheckAuto(Templates[i])) { //exclude Auto templates
 			htmlString = htmlString + 
@@ -457,7 +459,7 @@ function Replace(F) {
 function Extract6() {
 	var text=document.getElementById("MsgText").value;
 	text=text + ' ';	// to process dd.dd at the end
-	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTmpl, WordTmpF;
+	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTempl, WordTmpF;
 
 	function Process(part, pattern, c) {
 		re = new RegExp(pattern,"g");
@@ -490,12 +492,12 @@ function Extract6() {
 			case "3": // text
 				if (sep=="") break;
 				document.getElementById("res"+part).value="";
-				T='', WordTmpl=''; // remove Tmpl chars
+				T='', WordTempl=''; // remove templ chars
 				var ii, Yes="^";
 				WordTmpF = (sep.substr(-1)==Yes);
-				if (WordTmpF) { // remove - ^ chars and store them in WordTmpl
+				if (WordTmpF) { // remove - ^ chars and store them in WordTempl
 					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
-						WordTmpl=sep.substr(-1)+WordTmpl;
+						WordTempl=sep.substr(-1)+WordTempl;
 						sep=sep.substr(0,sep.length-1);
 					}
 				}
@@ -522,8 +524,8 @@ function Extract6() {
 					TT=TT.trim();
 					if (WordTmpF) {
 						TS=TT.split(' '), TT=""; // strip extra words
-						if (Incl) WordTmpl=Yes+WordTmpl;
-						for (ii=0; ii<TS.length; ii++) if (WordTmpl[ii]==Yes) TT=TT+" "+TS[ii];
+						if (Incl) WordTempl=Yes+WordTempl;
+						for (ii=0; ii<TS.length; ii++) if (WordTempl[ii]==Yes) TT=TT+" "+TS[ii];
 					}	
 					document.getElementById("res"+part).value=TT.trim();//.match(/[\w,\s,\.,\*:]+[^\.]/);
 				}
@@ -564,7 +566,7 @@ function AutoTmpl() {
 	document.getElementById("NormBtn").title="Нормализация";
 	var i, j, stop=false;
 	var text=document.getElementById("MsgText").value;
-	if (!AllTmplFlag && (text!="")) {
+	if (!AllTemplFlag && (text!="")) {
 		for (i=1; i<=AutoT.length; i++) {
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
 			if (text.match(re)) {
