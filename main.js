@@ -1064,7 +1064,7 @@ function init2() {
 function paste() {
 	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
 	setTimeout(function() {
-		AutoTmpl();	
+		if (document.getElementById("MsgText").value!="") AutoTmpl();	
 	},2500);
 	//document.getElementById("MsgText").focus();
 	//document.getElementById("Cats").focus();
@@ -1128,7 +1128,7 @@ function GetMemTemplates() { // формиране на работните Templ
 	let item, KI;
 	for (let i=0; i<localStorage.length; i++) { //localStorage.length
 		KI=localStorage.key(i);
-		item=localStorage.getItem(KI); 
+		item=localStorage.getItem(KI);
 		if (item.substring(0, 1)=="{") {
 				Templates[KI]=JSON.parse(item);
 				AutoT[Templates[KI].T]=KI; // console.log(AutoT[Templates[KI].T]);
@@ -1306,6 +1306,8 @@ function RShowName() {
 }
 */
 function EditExtr() {
+	if ((document.getElementById("Sels").classList.length>0) && 
+		(document.getElementById("TmplFld").classList.length>0)) ShowAnim('TmplFld');
 	ShowAnim('Sels');
 	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
