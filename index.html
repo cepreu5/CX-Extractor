@@ -87,18 +87,6 @@
 			Увел.&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
 			  onclick="SaveConfig()" value="Запис">
-			<!--hr>
-			&nbsp;&nbsp;&nbsp;&nbsp;Презаредете след промяна на параметрите!-->
-			<!--
-			<button ID="TmplInfo" class="solo typewriter-yellow">Шаблони</button>
-
-			<span ID="FileName" hidden></span>
-			<input type="button" id="click-input" value="Изберете файл" 
-			style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;"
-			onclick="this.hidden=true; document.getElementById('fileToLoad').click();" />
-			<input type="file" hidden id="fileToLoad" accept=".txt" onclick="ShowName()">
-			<input type="image" src="Download.png" ID="LoadBtn" style="width: 23px;" border="0"  align="center" hidden
-				title="Зареждане" onclick="PostLoad(); loadFileAsText();"-->
 			Запис на шаблони: 
 			<input type="image" src="Save.png" ID="LoadBtn" style="width: 20px;" border="0"  align="center"
 				title="Запис шаблони" onclick="FileTemplates('get'); FileTemplates('save')">
@@ -205,9 +193,6 @@
 				<hr>
 			</span>
 			<table ID="Top" hidden>
-				<tr style="text-align: center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
-					<td>Бележка</td><!--td>Шаблон</td--><td>Екстракт</td><td>Изпрати</td>
-				</tr>
 				<tr ID="TRow" align="center">
 				<td ID="Cell3" style="width: 90px"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
@@ -215,11 +200,14 @@
 					onclick="ExtClick()"></td>
 				<td ID="Cell1" style="width: 90px"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
-				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
+				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>
 					<img id="Suc" style="display:none" title="OK" src="Suc.png"
 						onclick='style="display: none"'>
 					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a></td>
+				</tr>
+				<tr style="text-align: center; font-family:Arial; font-size:14px; color: var(--LblColor, white);">
+					<td>Бележка</td><td>Екстракт</td><td>Изпрати</td>
 				</tr>
 			</table>
 			<span ID="CatsTop">
@@ -277,27 +265,6 @@
 					align="center" title="Изтриване"></a>
 			</span>
 			<table ID="Bottom" hidden>
-				<tr ID="TRow" align="center">
-				<td ID="Cell1" style="width: 90px"><input type="image" style="width: 70px;" name="submit" src="Skin/Send.png" 
-					title="Изпрати" onclick="showDiv()" alt="Изпрати"></td>
-				<td ID="Cell2" style="width: 90px"><img src="Skin/Extract.png" style="width: 70px;" title="Екстракт" ID="ExtBtn"
-					onclick="ExtClick()"></td>
-				<td ID="Cell3" style="width: 90px"><img src="Skin/Note.png" ID="NoteBtn" style="width: 70px;" onclick="ShowAnim('NoteFld')" 
-					title="Бележка"></td>
-				<!--td><div class="loader" id="loadingGif" style="display:none"></div>
-					<img id="Suc" style="display:none" src="Suc.png"
-						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
-						style="display:none" title="Намали"></a></td-->
-				<td><snap class="loader" id="loadingGif" style="display:none;"></snap>  <!-- spinner  vertical-align: 50%-->
-					<img id="Suc" style="display:none" title="OK" src="Suc.png"
-						onclick='style="display: none"'>
-					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
-						style="display:none" title="Намали"></a></td>
-				</tr>
-				<tr style="text-align:center; font-family:Arial; font-size:12px; color: var(--LblColor, white);">
-					<td>Изпрати</td><td>Екстракт</td><td>Бележка</td><!--td>Шаблон</td-->
-				</tr>
 			</table>
 
 		</form>
@@ -402,7 +369,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2021 CX Extractor E31.12 / 
+			© 2022 CX Extractor 1.01 / 
 		</span>
 	</fieldset>
 	</div>

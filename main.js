@@ -12,7 +12,7 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	AllTmplFlag=false, // don't get Auto templates	
 	WorkTmpl, //current template in use
 	Author = "© 2021 CX Extractor",
-	BArea, // buttons save area
+	BArea, BAreaSave, // table buttons save area
 	cfgTheme="1", // initial values
 	ZoomL1="100%",
 	ZoomL2="160%",
@@ -626,10 +626,10 @@ function SaveConfig() {
 			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
 		document.getElementById("Cell3").innerHTML=
 			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
-		document.getElementById("Cell4").innerHTML=
-			'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTmpl()">&nbsp&nbsp';
+		//document.getElementById("Cell4").innerHTML=
+		//	'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTmpl()">&nbsp&nbsp';
 	} else {
-		document.getElementById("TRow").innerHTML=BArea;
+		document.getElementById("Top").innerHTML=BArea;
 	}
 
 	if (document.getElementById("Zoom1").checked) cfgZoom=ZoomL1;
@@ -654,10 +654,7 @@ function SaveConfig() {
 function Normal() {
 	spinImage("NormBtn");
 	var text=document.getElementById("MsgText").value;
-	if (text === "") {
-		if (document.getElementById("ConfigFld").classList.length>0) SaveConfig()
-		else Config();
-	}
+	if (text === "") {Config();}
 	else {
 		text=text.replace(/([^\d])\.([^\d\s])/g,'$1. $2');		// aaa.aaa aaa. aaa
 		text=text.replace(/([\d]+)\.(\d\d)(0)/g,'$1.$2');				// dd.dd0 dd.dd
@@ -672,11 +669,8 @@ function Normal() {
 		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
 		text=text.replace(/([^\d]),([^\d\s])/g,'$1, $2');		// aaa,aaa aaa, aaa
 		text=text.replace(/([\d])\.([^\d\s])/g,'$1. $2');		// 111.aaa 111. aaa
-		//text=text.replace(/([^\d])\.([\d\s])/g,'$1. $2');		// aaa.111 aaa. 111
 		text=text.replace(/([\d])\,([^\d\s])/g,'$1, $2');		// 111,aaa 111, aaa
-		//text=text.replace(/([^\d])\,([\d\s])/g,'$1, $2');		// aaa,111 aaa, 111
 		text=text.replace(/\)([^\d\s])/g,') $1');				// )aaa ) aaa
-		//text=text.replace(/([\d])([\w])/g,'$1 $2');			// 111aaa 111 aaa
 		document.getElementById("MsgText").value=text;
 		Extract6();
 	}
@@ -858,21 +852,24 @@ function AddCfg() {
 }
 
 function switchSheet() {
-  let theme = document.getElementById("theme");
-  if (theme.getAttribute("href") == "First.css") {
-    theme.href = "Second.css";
-    document.getElementById("Cell1").innerHTML=
-		'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'Skin/SendFace.png\');">&nbsp';
-    document.getElementById("Cell2").innerHTML=
-		'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
-    document.getElementById("Cell3").innerHTML=
-		'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
-    document.getElementById("Cell4").innerHTML=
-		'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTmpl()">&nbsp&nbsp';
-  } else {
-    theme.href = "First.css";
-    document.getElementById("TRow").innerHTML=BArea;
-  }
+	let theme = document.getElementById("theme");
+	if (theme.getAttribute("href") == "First.css") {
+		BAreaSave=BArea;
+		theme.href = "Second.css";
+		document.getElementById("Cell1").innerHTML=
+			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'Skin/SendFace.png\');">&nbsp';
+		document.getElementById("Cell2").innerHTML=
+			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+		document.getElementById("Cell3").innerHTML=
+			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
+		if (document.getElementById("Top").innerHTML=="") {BArea=document.getElementById("Bottom").innerHTML;}
+		else {BArea=document.getElementById("Top").innerHTML;}
+	} else {
+		BArea=BAreaSave;
+		theme.href = "First.css";
+		if (document.getElementById("Top").innerHTML=="") document.getElementById("Bottom").innerHTML=BArea;
+		else document.getElementById("Top").innerHTML=BArea;
+	}
 }
 
   function setColor() {
@@ -979,14 +976,6 @@ function init() {
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
 	//document.getElementById("Info").innerHTML="» SW: "+ww+",      "+((100*ww/330)-6).toFixed(0)+"%";
-	if (ww<WLimit) {
-		document.getElementById("Top").hidden = false;
-		//document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
-	}
-	else {
-		//document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
-		document.getElementById("Bottom").hidden = false;
-	}
 	createCats();
 	document.getElementById("Log").value="";
 	document.getElementById("PwdFld").hidden = true;
@@ -1011,8 +1000,17 @@ function init() {
 	}
 	MsgData = processUser();
   	if (MsgData != "undefined") document.getElementById("MsgText").value = MsgData;
-	BArea = document.getElementById("TRow").innerHTML;
-
+	BArea = document.getElementById("Top").innerHTML;
+	if (ww<WLimit) {
+		document.getElementById("Top").hidden = false;
+		//document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
+	}
+	else {
+		//document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
+		document.getElementById("Top").innerHTML="";
+		document.getElementById("Bottom").innerHTML=BArea;
+		document.getElementById("Bottom").hidden = false;
+	}
 	if (localStorage.getItem("cfgTheme")!=null) cfgTheme=localStorage.getItem("cfgTheme");
 	if (cfgTheme=="2") {
 		switchSheet();
@@ -1185,11 +1183,15 @@ function EditExtr() {
 	if (ww<WLimit) {
 	if (document.getElementById("Sels").classList.length>0) {
 		document.getElementById("Top").hidden = true;
+		document.getElementById("Top").innerHTML="";
 		document.getElementById("Bottom").hidden = false;
+		document.getElementById("Bottom").innerHTML=BArea;
 	}
 	else {
 		document.getElementById("Top").hidden = false;
+		document.getElementById("Top").innerHTML=BArea;
 		document.getElementById("Bottom").hidden = true;
+		document.getElementById("Bottom").innerHTML="";
 	}}
 	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
