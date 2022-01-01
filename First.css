@@ -60,3 +60,13 @@ button.solo:active {
   /*box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35), 0 0 0 1px #222, 0 10px 15px rgba(0, 0, 0, 0.12);*/
 }
 
+/*:root {--TextBtns: visible}
+/*
+.condpart {
+  display: none;
+}
+
+.activator:checked + .condpart {
+  display: block;
+}
+*/

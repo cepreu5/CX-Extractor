@@ -10,7 +10,8 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	SelectSheet=0, // selected sheet
 	LTmpl=8, // elements in template (without optional replace field and selected sheet)
 	AllTmplFlag=false, // don't get Auto templates	
-	WorkTmpl, //current template in use
+	WorkTmpl, // current template in use
+	Start=1, // start position to search in AutoT for triger
 	Author = "© 2021 CX Extractor",
 	BArea, BAreaSave, // table buttons save area
 	cfgTheme="1", // initial values
@@ -51,6 +52,7 @@ function NoAuto() {
 	else { 
 		document.getElementById('Yes').style.display = "inline"; 
 		document.getElementById('No').style.display = "none";
+		Start=1;
 		AutoTmpl(); 
 	} 
 	//if (AllTmplFlag) document.getElementById("Info").innerHTML="» Редактиране на екстракт"; //<br>
@@ -565,10 +567,11 @@ function AutoTmpl() {
 	var i, j, stop=false;
 	var text=document.getElementById("MsgText").value;
 	if (!AllTmplFlag && (text!="")) {
-		for (i=1; i<=AutoT.length; i++) {
+		for (i=Start; i<AutoT.length; i++) {
+			if (i==(AutoT.length-1)) Start=1; // next search from begining again
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
-			if (text.match(re)) {
-				for (j=0; j<Templates.length; j++) {
+			if (text.match(re)) { // намерен е тригера в текста
+				for (j=0; j<Templates.length; j++) { // търсим шаблон със съответното име и го прилагаме
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
 						WorkTmpl=Templates[j];
 						document.getElementById("TmplName").value=Templates[j];
@@ -578,6 +581,7 @@ function AutoTmpl() {
 						Extract6();
 						FillTmplFdl(Templates[j+1], false);
 						stop=true;
+						Start=i+2; // ready for next search
 						break;
 					}
 					j++;
@@ -1024,6 +1028,7 @@ function init() {
 	//GetMemTemplates();
 	getTmpls();
 	ClearTextArea();
+	if (TextBtns) document.getElementById("TextRow").hidden=false;
 }	
 
 function init2() {
@@ -1047,6 +1052,7 @@ function init2() {
 }
 
 function paste() {
+	Start=1;
 	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
 	setTimeout(function() {
 		if (document.getElementById("MsgText").value!="") AutoTmpl();	

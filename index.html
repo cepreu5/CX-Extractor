@@ -66,7 +66,7 @@
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
 		<br>
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
-			onFocus="AutoTmpl()" onInput="AutoTmpl()">
+			onFocus="AutoTmpl()" onInput="Start=1; AutoTmpl()">
 		</textarea>
 		<textarea ID="Log" rows="5" style="width: 320px; font-size:14px;" wrap="off" hidden>
 		</textarea>
@@ -183,13 +183,12 @@
 					align="center" title="MemTemplate"></a>
 				<span id="blink" style="text-align: center; font-family:Arial; font-size:13px; color: var(--LblColor, white);" hidden>
 					 Данните са променени! Моля, запишете шаблоните! </span>
-    <script type="text/javascript">
-        var blink = document.getElementById('blink');
-        setInterval(function() {
-            blink.style.opacity = (blink.style.opacity == 0 ? 1 : 0);
-        }, 500);
-    </script>
-
+				<script type="text/javascript">
+					var blink = document.getElementById('blink');
+					setInterval(function() {
+						blink.style.opacity = (blink.style.opacity == 0 ? 1 : 0);
+					}, 500);
+				</script>
 				<hr>
 			</span>
 			<table ID="Top" hidden>
@@ -206,10 +205,14 @@
 					<a><img ID="ZoomBtn2" src="Zoom2.png" width="20px" onclick="CZoom()" 
 						style="display:none" title="Намали"></a></td>
 				</tr>
-				<tr style="text-align: center; font-family:Arial; font-size:14px; color: var(--LblColor, white);">
+				<tr ID="TextRow" hidden
+					style="text-align: center; font-family:Arial; font-size:14px; color: var(--LblColor, white);">
 					<td>Бележка</td><td>Екстракт</td><td>Изпрати</td>
 				</tr>
 			</table>
+			<!--  visibility: var(--TextBtns, hidden)
+			input class="activator" type="checkbox">
+			<div class="condpart">Hide me</div-->
 			<span ID="CatsTop">
 				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
 				onChange="createSubCat('SubCat'+this.selectedIndex)">
@@ -266,7 +269,6 @@
 			</span>
 			<table ID="Bottom" hidden>
 			</table>
-
 		</form>
 
 		<script>
