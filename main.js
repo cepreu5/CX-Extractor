@@ -334,7 +334,11 @@ function MakeTmpl() {
 	Tmpl=Tmpl+(LTmpl-1)+"-К;"+document.getElementById("Cats").value+"#"+
 		LTmpl+"-О;"+document.getElementById("SubCats").value+"##"
 		+document.getElementById("Files").selectedIndex;
-	if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
+	if (Tmpl!=Templates[1]) {
+		// Tmpl='"'+Tmpl+'",';
+		// document.getElementById("res").value='"'+document.getElementById("TmplName").value+'", '+Tmpl;
+		document.getElementById("res").value=Tmpl;
+	}
 	if (WorkTmpl!="") { 
 		let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
 		if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
@@ -1111,7 +1115,6 @@ function MemReplace() {
 	let Found=FindInCol(Replaces, V, 0);
 	if (Found>=0) {
 		Replaces[Found+1]=T; // edit existing
-		//localStorage.setItem('#00000'.substring(0, 5-(Found/2).toString().length)+Found/2+Replaces[Found], Replaces[Found+1]);
 	} else {
 		Replaces.push(V);
 		Replaces.push(T);
@@ -1133,7 +1136,6 @@ function MemTemplate() {
 	if ((WorkTmpl=="") && (Found>=0)) {document.getElementById("TmplName").value="Дублирано име!"; return}
 	if (Found>=0) {
 		Templates[Found+1]=R; // edit existing
-		//localStorage.setItem('*00000'.substring(0, 5-((Found)/2).toString().length)+(Found)/2+Templates[Found], Templates[Found+1]);
 	} else {
 		Templates.push(T);
 		Templates.push(R);
