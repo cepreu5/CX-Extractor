@@ -1201,6 +1201,7 @@ function EditExtr() {
 		document.getElementById("Bottom").hidden = true;
 		document.getElementById("Bottom").innerHTML="";
 	}}
+	if (TextBtns) document.getElementById("TextRow").hidden=false;
 	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
 	if ((CVal>1) && !(T.includes(":"))) {
