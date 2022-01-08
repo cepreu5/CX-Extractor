@@ -321,7 +321,7 @@ function MakeTmpl() {
 			case "5": L='П'; break;
 			case "6": L='R';
 				S=document.getElementById("sep"+i).value;
-				//S=RegExp.quote(S);
+				S=S.replace(/\\/gi, "\\\\");
 		}
 		C='';
 		if (document.getElementById("Types"+i).value != 5) {
