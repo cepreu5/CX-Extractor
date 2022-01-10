@@ -20,8 +20,8 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	cfgZoom=ZoomL1,
 	OpenFrom = 'res2'; // calculator OpenFrom which field
 
-	Templates[0]="Изтриване",
-	Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
+	// Templates[0]="Изтриване",
+	// Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
@@ -1151,7 +1151,7 @@ function FileTemplates(mode) {
 		ShowLog();
 		// (A) CREATE BLOB OBJECT
 		document.getElementById("Log").value = "var Templates = [\n";
-		for (let i=2; i<Templates.length; i++) {
+		for (let i=0; i<Templates.length; i++) {
 			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1]+'",\n';
 			i=i+1;  
 		}
