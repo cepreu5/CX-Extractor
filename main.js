@@ -722,6 +722,9 @@ function SelFile() {
 		x.remove(x.selectedIndex); // remove last option
 		x.selectedIndex = 0; scriptURL=x.value; // set to first option
 	};
+	if (x.selectedIndex == ((Files.length/2) - 2)) { // if it is the option before the last one
+		window.open(scriptURL);
+	}
 }
 
 function ShowSplit() {
