@@ -40,7 +40,7 @@ AutoT = [
 "*1097501613", "Icode",
 "*1097501681", "Тcode",
 "MC RaiCard", "EndRai",
-"kraya", "EndMaster",
+"dalzhima", "EndMaster",
 "SALARY", "SALARY",
 "Бобо парно", "БобоП",
 "Бобо вода", "БобоП",
