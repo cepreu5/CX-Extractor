@@ -881,6 +881,7 @@ function switchSheet() {
 		if (document.getElementById("Top").innerHTML=="") document.getElementById("Bottom").innerHTML=BArea;
 		else document.getElementById("Top").innerHTML=BArea;
 	}
+	if (TextBtns) document.getElementById("TextRow").hidden=false;
 }
 
   function setColor() {

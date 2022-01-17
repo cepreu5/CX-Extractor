@@ -1,11 +1,11 @@
 :root {
-  --InpBgrd: #c0c0c0;
-  --InpText: black;
+  --InpBgrd: #9790d0;
+  --InpText: #d9d7ef;
   --FormBgrd: #000000;
-  --LblColor: white;
+  --LblColor: #857ad6;
   --TipColor: DarkOrange;
   --TipText: black;
   --Spinner: #f03355;
-  --FormColor: #340909;
-  --BtnColor: #501111;
+  --FormColor: #0d0326;
+  --BtnColor: #200a57;
 }
