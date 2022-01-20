@@ -1156,7 +1156,7 @@ function FileTemplates(mode) {
 		// (A) CREATE BLOB OBJECT
 		document.getElementById("Log").value = "var Templates = [\n";
 		for (let i=0; i<Templates.length; i++) {
-			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1]+'",\n';
+			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1].replace(/\\/gi, "\\\\")+'",\n';
 			i=i+1;  
 		}
 		document.getElementById("Log").value+='],'
