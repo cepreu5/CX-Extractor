@@ -12,16 +12,13 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	AllTmplFlag=false, // don't get Auto templates	
 	WorkTmpl, // current template in use
 	Start=1, // start position to search in AutoT for triger
-	Author = "© 2021 CX Extractor",
+	Author = "© 2022 CX Extractor",
 	BArea, BAreaSave, // table buttons save area
 	cfgTheme="1", // initial values
 	ZoomL1="100%",
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
 	OpenFrom = 'res2'; // calculator OpenFrom which field
-
-	// Templates[0]="Изтриване",
-	// Templates[1]="1-П;#2-П;#3-П;#4-П;#5-П;#6-П;#7-К;#8-О;##0";
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
