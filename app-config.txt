@@ -1,6 +1,6 @@
 var 
 CfgDate="10.01",
-TextBtns=0;
+TextBtns=1;
 Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП'
 digi = '1234567890--.1234567890.1234567890';
 
