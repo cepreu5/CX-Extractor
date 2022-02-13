@@ -1,7 +1,8 @@
 @import "Skin/Colors2.css";
 
 fieldset {
-  background-color: var(--FormColor, #990000);
+  /*background-color: var(--FormColor, #2e3138);*/
+  background: linear-gradient(90deg, #2e3138, #5c6270);
 }
 
 .inputMessage {
@@ -21,11 +22,13 @@ input[type="text"] {
 .abutton {
   background-repeat: no-repeat;
   background-color: var(--BtnColor, DarkOrange);
+  /*background-image: linear-gradient(90deg, #f49725, #f7b96e);*/
   background-position: center;
   cursor: pointer;
   box-shadow: 3px 3px rgba(0, 0, 0, 0.3);
   border: solid black 2px;
-  color: white;
+  border-radius: 20%;
+  /*color: white;*/
   width: 65px;
   height: 65px;
 }

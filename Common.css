@@ -89,11 +89,6 @@ input[type="color"] {
   margin-left: -60px;
 }
 
-select option {
-  background: rgba(0, 0, 0, 0.3);
-  color: #000;
-}
-
 img {
   cursor: pointer;
   border: 0;
@@ -151,11 +146,6 @@ select {
 	outline: none;
 }
 
-#wrapper {
-	text-align: center;
-	margin: 40px auto;
-}
-
 select {
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -166,10 +156,20 @@ select {
 	cursor: pointer;
 }
 
-select:hover {
-	background-position: right -42px;
+select option {
+  background: rgba(0, 0, 0, 0.3);
+  color: #000;
 }
 
 select option {
 	padding: 6px 11px;
+}
+
+select:hover {
+	background-position: right -42px;
+}
+
+#wrapper {
+	text-align: center;
+	margin: 40px auto;
 }
