@@ -273,13 +273,6 @@
 
 		<script>
 			const form = document.forms['submit-to-google-sheet']
-			var formatter = new Intl.NumberFormat(undefined, {
-				style: 'currency',
-				currency: 'BGN',
-				//These options are needed to round to whole numbers if that's what you want.
-				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-			});
 			form.addEventListener('submit', e => {
 				e.preventDefault()
 
@@ -423,7 +416,18 @@ Any newly created file should be available on github after stage/commit/push.
 			}
 		})
 	}
-Object.assign(document.createElement('a'), {target: '_blank', href: scriptURL}).click();
+
+	Object.assign(document.createElement('a'), {target: '_blank', href: scriptURL}).click();
+
+			/*var formatter = new Intl.NumberFormat(undefined, {
+				style: 'currency',
+				currency: 'BGN',
+				//These options are needed to round to whole numbers if that's what you want.
+				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+			});*/
+
+
 <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFwBlS8X7CvTlJ3sNHvZ4mcoky34spCoThaN1BWeQJPgW-87ocHZRaBjdNvoWvtXFnt8vG0M9KdpeA/pubhtml?gid=1231932610&amp;single=true&amp;widget=true&amp;headers=false">Link</a>
 <iframe width=”500” and height=”500” src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFwBlS8X7CvTlJ3sNHvZ4mcoky34spCoThaN1BWeQJPgW-87ocHZRaBjdNvoWvtXFnt8vG0M9KdpeA/pubhtml?gid=1231932610&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
 -->
