@@ -67,9 +67,7 @@ AutoT = [
 "*1100727371", "codeL",
 "*1097501613", "Icode",
 "*1097501681", "Тcode",
-"pokupka", "SMS",
 "EUR", "VisaEUR",
-"Pogashenie", "Pogashenie",
 "country", "AliArrived",
 "ДЖЕНЕРАЛИ", "ДЖЕНЕРАЛИ",
 "MC RaiCard", "EndRai",
@@ -104,6 +102,8 @@ AutoT = [
 "СОД", "ePayС",
 "MOBILE", "Internet",
 "Постъпила", "Погашение",
+"Pogashenie", "Pogashenie",
+"pokupka", "SMS",
 ],
 
 Replaces = [
