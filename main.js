@@ -329,8 +329,9 @@ function MakeTmpl() {
 		Tmpl=Tmpl+'#';
 	}
 	Tmpl=Tmpl+(LTmpl-1)+"-К;"+document.getElementById("Cats").value+"#"+
-		LTmpl+"-О;"+document.getElementById("SubCats").value+"##"
-		+document.getElementById("Files").selectedIndex;
+		LTmpl+"-О;"+document.getElementById("SubCats").value+"#"+
+		document.getElementById("ReplFld").value+"#"+
+		document.getElementById("Files").selectedIndex;
 	if (Tmpl!=Templates[1]) {
 		// Tmpl='"'+Tmpl+'",';
 		// document.getElementById("res").value='"'+document.getElementById("TmplName").value+'", '+Tmpl;

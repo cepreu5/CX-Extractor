@@ -1,7 +1,7 @@
-var 
-CfgDate="10.01",
+var
+CfgDate="29.04",
 TextBtns=1;
-Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП'
+Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',
 digi = '1234567890--.1234567890.1234567890';
 
 Accs = [
