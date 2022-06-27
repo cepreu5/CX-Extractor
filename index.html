@@ -313,7 +313,8 @@
 					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)}
 				)
 					
-				if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
+				// if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
+				if (document.getElementById("res4").value.substr(3,1)=="/")	{
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
 						WM=document.getElementById("res5").value
@@ -327,14 +328,19 @@
 						S=N.toString()
 						S=parseFloat(S).toFixed(2)
 					}
-					if (S.substr(0,1)=="-") {S=S.substr(1,S.length-1)}
-					else {S="-"+S}
+					if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
+					  if (S.substr(0,1)=="-") S=S.substr(1,S.length-1)
+					  else S="-"+S
+					}
 					document.getElementById("res2").value=S
 					var AccSave=document.getElementById("res3").value
-					document.getElementById("res3").value=
-						document.getElementById("SubCats").value
-					document.getElementById("SubCats").value=AccSave
-					document.getElementById("SubCats").selected
+					if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
+						document.getElementById("res3").value=
+						  document.getElementById("SubCats").value
+						document.getElementById("SubCats").value=AccSave
+						document.getElementById("SubCats").selected
+					}
+					else document.getElementById("res3").value=""
 					fetch(scriptURL, {method: 'POST', body: new FormData(form)})
 						.then(res => { 
 							if(res.ok) {
@@ -364,7 +370,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2022 CX Extractor 29.04 / 
+			© 2022 CX Extractor 28.06 / 
 		</span>
 	</fieldset>
 	</div>
