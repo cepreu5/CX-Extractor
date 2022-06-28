@@ -1,5 +1,5 @@
 var
-CfgDate="27.06",
+CfgDate="28.06",
 TextBtns=1;
 Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',
 digi = '1234567890--.1234567890.1234567890';
@@ -18,14 +18,15 @@ Accs = [
   "Светлана",
   // "СветланаЛ",
   "-- Интернет --",
-  "W1TTY",
+  "EasyPay",
   "Paysera",
   "Revolut",
   "RevolutBGN",
   "RevolutUSD",
-  "iuvo",
-  "iuvo 2",
-  "iuvo m",
+  "W1TTY",
+  // "iuvo",
+  // "iuvo m",
+  "-- Инвест --",
   "Robocash",
   "doFinance",
   "Mintos",

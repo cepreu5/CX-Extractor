@@ -314,7 +314,8 @@
 				)
 					
 				// if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
-				if (document.getElementById("res4").value.substr(3,1)=="/")	{
+				if ((document.getElementById("res4").value.substr(3,1)=="/") ||	
+				  (document.getElementById("Cats").selectedIndex==1)){
 					var WM=1, N;
 					if (document.getElementById("res4").value.substr(3,1)=="/") {
 						WM=document.getElementById("res5").value
