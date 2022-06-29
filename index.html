@@ -87,9 +87,9 @@
 			Увел.&nbsp;&nbsp;&nbsp;&nbsp;
 			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
 			  onclick="SaveConfig()" value="Запис">
-			Запис на шаблони: 
+			<!-- Запис на шаблони: 
 			<input type="image" src="Save.png" ID="LoadBtn" style="width: 20px;" border="0"  align="center"
-				title="Запис шаблони" onclick="FileTemplates('get'); FileTemplates('save')">
+				title="Запис шаблони" onclick="FileTemplates('get'); FileTemplates('save')" -->
 			<hr>
 		</div>
 
@@ -179,10 +179,11 @@
 					align="center"></a>
 				<a><img src="Remove.png" width="20px" align="center"
 					onclick="ClearFld('res')"></a>
-				<a><img src="Save.png" width="20px" onclick="MemTemplate()" ID="Floppy"
-					align="center" title="MemTemplate"></a>
+				<a><img src="Save.png" width="20px" ID="Floppy"
+					onclick="if(event.ctrlKey) {FileTemplates('get'); FileTemplates('save'); return false;} else {MemTemplate()}"
+					align="center" title="Запомни&#13Запис шаблони"></a>
 				<span id="blink" style="text-align: center; font-family:Arial; font-size:13px; color: var(--LblColor, white);" hidden>
-					 Данните са променени! Моля, запишете шаблоните! </span>
+					 Моля, запишете шаблоните! (Ctrl+click)</span>
 				<script type="text/javascript">
 					var blink = document.getElementById('blink');
 					setInterval(function() {
@@ -371,7 +372,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2022 CX Extractor 28.06 / 
+			© 2022 CX Extractor 29.06 / 
 		</span>
 	</fieldset>
 	</div>

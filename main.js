@@ -1129,11 +1129,11 @@ function MemReplace() {
 }
 
 function MemTemplate() {
+	spinImage("Floppy");
 	let T=document.getElementById("TmplName").value;
 	if (T=="") return;
 	MemReplace();
 	let R=document.getElementById("res").value;
-	spinImage("Floppy");
 	let Found=FindInCol(Templates, T, 0);
 	if ((WorkTmpl=="") && (Found>=0)) {document.getElementById("TmplName").value="Дублирано име!"; return}
 	if (Found>=0) {
