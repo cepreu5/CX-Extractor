@@ -1,8 +1,7 @@
 var
-CfgDate="5.07",
 TextBtns=1;
-Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',
-digi = '1234567890--.1234567890.1234567890';
+//Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',
+//digi = '1234567890--.1234567890.1234567890';
 
 Accs = [
   "Планирани",
@@ -24,13 +23,15 @@ Accs = [
   "RevolutBGN",
   "RevolutUSD",
   "W1TTY",
-  // "iuvo",
   // "iuvo m",
   "-- Инвест --",
+  "iuvo",
   "Robocash",
   "doFinance",
   "Mintos",
 ],
+
+DefEUR = "W1TTY",
 
 Cats = [
   "Трансфер",  // don't move

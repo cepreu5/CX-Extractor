@@ -233,8 +233,8 @@
 			<input type="number" step="0.01" style="text-align:center; width: 6.9em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
 			<img src="Skin/NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
-			<img src="Calculator.png" width="30px" align="center" title="qwe -> 123&#13;Калкулатор&#13;Изтриване"
-        		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">
+			<img src="Calculator.png" width="30px" align="center" title="Калкулатор&#13;Изтриване"
+        		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc('res2');}">  <!-- qwe -> 123&#13; -->
 
 			<span ID="SplitArea" hidden>
 				<img src="Spacer.png" width="32px" height="20" align="center">Сума за разделяне:
@@ -342,7 +342,8 @@
 						document.getElementById("SubCats").value=AccSave
 						document.getElementById("SubCats").selected
 					}
-					else document.getElementById("res3").value=""
+					else if (AccSave=="") document.getElementById("res3").value=DefEUR
+						 else document.getElementById("res3").value=""
 					fetch(scriptURL, {method: 'POST', body: new FormData(form)})
 						.then(res => { 
 							if(res.ok) {
@@ -372,7 +373,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2022 CX Extractor 29.06 / 
+			© 2022 CX Extractor 1.08 / 
 		</span>
 	</fieldset>
 	</div>

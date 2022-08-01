@@ -891,6 +891,7 @@ function switchSheet() {
   document.getElementById("Colors").selectedIndex=0;
 }
 
+/*
 function LetToDig() {
     var Converted = false;
     var toConv=document.getElementById("res2").value;
@@ -905,9 +906,10 @@ function LetToDig() {
     document.getElementById("res2").value = res;
     return Converted;
 }
+*/
 
 function Calc (SF) {
-	if (LetToDig()) return;
+	//if (LetToDig()) return;
 	ShowAnim("CalcSp");
 	document.getElementById("CalcSp").scrollIntoView();
 	CalcFl=!CalcFl;
