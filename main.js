@@ -908,7 +908,7 @@ function LetToDig() {
 }
 */
 
-function Calc (SF) {
+function Calc(SF) {
 	//if (LetToDig()) return;
 	ShowAnim("CalcSp");
 	document.getElementById("CalcSp").scrollIntoView();
@@ -916,7 +916,16 @@ function Calc (SF) {
 	if (CalcFl)	{
 		// alert(obj.value);
 		if (document.getElementById("result").value != "") dis (';');
-		dis (document.getElementById('res2').value); // SF
+		if (SF=="Calc") {
+			dis (
+				document.getElementById('res2').value +
+				document.getElementById('res3').value +
+				document.getElementById('res4').value +
+				document.getElementById('res5').value +
+				document.getElementById('res6').value
+			);
+		}
+		else dis (document.getElementById('res2').value);
 	}
 	//else {document.getElementById("Main").scrollIntoView(); } //solve()
 }
