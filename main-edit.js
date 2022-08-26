@@ -56,7 +56,7 @@ function NoAuto() {
 	getTmpls(); 
 }
 
-function trueFalse(part, p1, p2, p3, p4, p5, p6, p7) {
+function trueFalse(part, p1, p2, p3, p4, p5, p6) {
 	document.getElementById("sep"+part).hidden=p1;
 	if (p1) document.getElementById("sep"+part).value="";
 	document.getElementById("lab"+part).hidden=p2;
@@ -67,33 +67,28 @@ function trueFalse(part, p1, p2, p3, p4, p5, p6, p7) {
 	document.getElementById("lab"+part+"3").hidden=p6;
 	document.getElementById("Exp"+part).hidden=p6;
 	if (p6) document.getElementById("Exp"+part).checked=false;
-	document.getElementById("Add"+part).hidden=p7;
 }
 
-function Combo2(part, types, num, septxt, AA) {
+function Combo2(part, types, num, septxt) {
 	document.getElementById("Types"+part).options[types-1].selected=true;
 	document.getElementById("count"+part).value=num;
 	switch(types) {
 		case "1":
 			document.getElementById("Exp"+part).checked=(septxt=="1");
-			document.getElementById("Add"+part).value=AA;
-			trueFalse(part, true, true, false, true, false, false, false); 
+			trueFalse(part, true, true, false, true, false, false); 
 			break;
-		case "2": trueFalse(part, true, true, false, true, false, true, true); break;
+		case "2":	trueFalse(part, true, true, false, true, false, true); break;
 		case "3":
 			document.getElementById("sep"+part).value=septxt;
-			trueFalse(part, false, false, true, false, false, true, true);
+			trueFalse(part, false, false, true, false, false, true);
 			break;
-		case "4":
-			document.getElementById("Add"+part).value=septxt;
-			trueFalse(part, true, true, false, true, false, true, false); 
-			break;
+		case "4":	trueFalse(part, true, true, false, true, false, true); break;
 		case "5": 
-			trueFalse(part, true, true, true, true, true, true, true);
+			trueFalse(part, true, true, true, true, true, true);
 		  document.getElementById("res"+part).value="";
 		break;
 		case "6":	document.getElementById("sep"+part).value=septxt;
-			trueFalse(part, false, false, true, false, false, true, true);
+			trueFalse(part, false, false, true, false, false, true);
 	}
 }
 	
@@ -291,7 +286,6 @@ function createSels() { // Extract selection field
 		createInp(i, "sep", 10);
 		createLbl(i, "3", "&nbsp Разход");
 		createChk(i);
-		createInp(i, "Add", 1);
 
 		document.getElementById("Sels").appendChild(document.createElement("br"));
 	}
@@ -307,20 +301,20 @@ function ShowAnim(BoxEl) {
 
 function MakeTmpl() {
 	var Tmpl='';
-	var i, L, C, S, AA; 
+	var i, L, C, S; 
 	document.getElementById("res").value="";
 	for (i=1; i<=(LTmpl-2); i++) {
-		S=''; AA='';
+		S='';
 		Tmpl=Tmpl+i+'-';
 		switch (document.getElementById("Types"+i).value) {
-			case "1":	L='С'; S="0"; AA=document.getElementById("Add"+i).value;
+			case "1":	L='С'; S="0"
 				if (document.getElementById("Exp"+i).checked) S="1";
 				break;
 			case "2": L='Д'; break;
 			case "3": L='Т';
 				S=document.getElementById("sep"+i).value;
 				break;
-			case "4": L='Ч'; AA=document.getElementById("Add"+i).value; break;
+			case "4": L='Ч'; break;
 			case "5": L='П'; break;
 			case "6": L='R';
 				S=document.getElementById("sep"+i).value;
@@ -332,7 +326,6 @@ function MakeTmpl() {
 		}
 		Tmpl=Tmpl+L+';'+C;
 		if (S != '') {Tmpl=Tmpl+';'+S;}
-		if (AA != '') {Tmpl=Tmpl+';'+AA;}
 		Tmpl=Tmpl+'#';
 	}
 	Tmpl=Tmpl+(LTmpl-1)+"-К;"+document.getElementById("Cats").value+"#"+
@@ -390,7 +383,7 @@ function SelTmpl(Tmpl, clear) {
 	  if (document.getElementById("TmplFld").classList.length>0) ShowAnim('TmplFld');
 	}
 	//if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
-	var result, fsplit, first, second, third, sep, I;
+	var result, fsplit, first, second, sep, I;
 	if ((Tmpl.match(/#/g)==null) || (Tmpl.match(/;/g)==null)) {return}
 	if (Tmpl[0] == '"') { // delete "s
 		result=Tmpl.split('"');
@@ -405,15 +398,13 @@ function SelTmpl(Tmpl, clear) {
 	SelFile();
 	for (I=0; I<LTmpl; I++) {
 		first=result[I];
-		if (first.match(/;/g)==null) {return}
-		fsplit=first.split(";");
-		second=fsplit[1];
-		sep=fsplit[2]; //alert(sep);
-		third=fsplit[3]; //alert(third);
-		if (typeof sep === "undefined") sep="";
-		if (typeof third === "undefined") third="";
+			if (first.match(/;/g)==null) {return}
+			fsplit=first.split(";");
+		if (fsplit.length>2) {sep=fsplit[2]}
+			second=fsplit[1];
+		if (typeof sep === "undefined") {sep="";}
 		switch(first.slice(2,3)) {
-			case "С": Combo2(I+1, "1", second, sep, third); break;
+			case "С": Combo2(I+1, "1", second, sep); break;
 			case "Д": Combo2(I+1, "2", second, sep); break;
 			case "Т": Combo2(I+1, "3", second, sep); break;
 			case "Ч": Combo2(I+1, "4", second, sep); break;
@@ -562,12 +553,12 @@ function Extract6() {
 
 function Combo(part) {
 	switch(document.getElementById("Types"+part).value) {
-		case "1": trueFalse(part, true, true, false, true, false, false, false); break;
-		case "2": trueFalse(part, true, true, false, true, false, true, true); break;
-		case "3": trueFalse(part, false, false, true, false, false, true, true); break;
-		case "4": trueFalse(part, true, true, false, true, false, true, false); break;
-		case "5": trueFalse(part, true, true, true, true, true, true, true); break;
-		case "6": trueFalse(part, false, false, true, false, false, true, true);
+		case "1": trueFalse(part, true, true, false, true, false, false); break;
+		case "2": trueFalse(part, true, true, false, true, false, true); break;
+		case "3": trueFalse(part, false, false, true, false, false, true); break;
+		case "4": trueFalse(part, true, true, false, true, false, true); break;
+		case "5": trueFalse(part, true, true, true, true, true, true); break;
+		case "6": trueFalse(part, false, false, true, false, false, true);
 		  document.getElementById("res"+part).value="";
 	}
 	Extract6();
