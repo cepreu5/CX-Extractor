@@ -209,13 +209,117 @@ function NoCat() {
 	document.getElementById("SubCats").options[0].selected=true;
 }
 
+function Extract6() {
+	var C1, C2;
+	var text=document.getElementById("MsgText").value;
+	text=text + ' ';	// to process dd.dd at the end
+	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTmpl, WordTmpF;
+
+	function Process(part, pattern, c) {
+		re = new RegExp(pattern,"g");
+		work=text.match(re);
+		if ((work!=null) && (work[c]!=undefined) && (c<=work.length)) {
+			document.getElementById("res"+part).value=work[c];
+		}
+	}
+
+	for (part=1; part<=6; part++) {
+		sep=document.getElementById("sep"+part).value;
+		count=document.getElementById("count"+part).value;
+		switch (document.getElementById("Types"+part).value) {
+			case "1":
+				pattern = "(\-|[0-9])+(\\.|\\,)([0-9]{1,2})( |\n|\t)"; 
+				re = new RegExp(pattern,"g");
+				var Sum=text.match(re);
+				if (Sum!=null) {Sum=text.match(re)[count-1]}
+				Exp=document.getElementById("Exp"+part).checked; //alert(Exp);
+				if (Sum!=undefined) {
+					if (Exp) Sum="-"+Sum; // alert(Sum);
+					// Sum=Sum.replace(",", ".");
+					C1=C2="";
+					Sum=Sum.trim();
+					if (document.getElementById("Add"+part).value.length > 0) C1=document.getElementById("Add"+part).value.substring(0, 1);
+					if (document.getElementById("Add"+part).value.length > 1) {
+					   C2=document.getElementById("Add"+part).value.substring(1, 2); //alert(C2);
+					   if (C2=="(") Sum=C2+Sum; //alert(Sum);
+					}
+					if (C2==")") Sum=Sum+C2;
+					document.getElementById("res"+part).value=Sum+C1;
+				}	
+				break;
+			case "2":
+				pattern = "[0-9]+(\\.|\\-|:|/\)[0-9]+(\\.|\\-|:|/\)[0-9]+";
+				Process(part, pattern, count-1);
+				break;
+			case "3": // text
+				if (sep=="") break;
+				document.getElementById("res"+part).value="";
+				T='', WordTmpl=''; // remove Tmpl chars
+				var ii, Yes="^";
+				WordTmpF = (sep.substr(-1)==Yes);
+				if (WordTmpF) { // remove - ^ chars and store them in WordTmpl
+					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
+						WordTmpl=sep.substr(-1)+WordTmpl;
+						sep=sep.substr(0,sep.length-1);
+					}
+				}
+				Incl = (sep.substr(-1)=="+");
+				if (sep.substr(-1)==">") {
+					pattern = "(?<=([A-z,0-9,А-я,\,\.\:]+\s){0})([A-z,0-9,А-я,\,\.\:]+)";
+					Process(part, pattern, count-1);
+					break;
+				}
+				if (Incl) sep=sep.substr(0,sep.length-1); // cut +    alert(sep)
+				PutTxt = (sep.substr(-1)=="!");
+				if (PutTxt) {document.getElementById("res"+part).value= // cut !
+					sep.substr(0,sep.length-1);
+				} else {	
+					pattern = sep.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + 
+							"\\s+(\\S+(?:\\s+\\S+){0," + (count-1) + "})";
+					re = new RegExp(pattern,"gi"); //alert(text+sep)
+					while (m=re.exec(text)) {T=T+m[1];}
+					re = new RegExp(sep,"gi");
+					if (Incl && (text.match(re)!==null)) T=sep + " " + T;
+					if (T.substr(-1)==".") {T=T.substr(0,T.length-1);}
+					TS=T.split(' '), TT=""; // strip extra spaces
+					for (ii=0; ii<TS.length; ii++) if (TS[ii]!="") TT=TT+" "+TS[ii];
+					TT=TT.trim();
+					if (WordTmpF) {
+						TS=TT.split(' '), TT=""; // strip extra words
+						if (Incl) WordTmpl=Yes+WordTmpl;
+						for (ii=0; ii<TS.length; ii++) if (WordTmpl[ii]==Yes) TT=TT+" "+TS[ii];
+					}	
+					document.getElementById("res"+part).value=TT.trim(); //.match(/[\w,\s,\.,\*:]+[^\.]/);
+				}
+				break;
+			case "4":
+				pattern = "[0-9]+";
+				Process(part, pattern, count-1);
+				break;
+			case "5":
+				document.getElementById("res"+part).value="";
+				break;
+			case "6":
+				if (sep=="") {break}
+				pattern = document.getElementById("sep"+part).value;
+				var c=document.getElementById("count"+part).value-1;
+				Process(part, pattern, c);
+		}
+	}
+	Replace(ReplaceF);
+	document.getElementById("Note").value="";
+	if (document.getElementById("res1").value == "") InsDate();
+	if (document.getElementById("Add3").value.length > 0) Calc();
+}
+
 function createSels() { // Extract selection field
 
 	function createOpt(v, n, s) {
 		var z, t;
 		z = document.createElement("option");
 		z.setAttribute("value", v);
-		if (v=="5") {z.setAttribute("selected", true);}
+		if (v=="5") z.setAttribute("selected", true);
+		if ((s==2) && ((v==2) || (v==3) || (v==6))) z.setAttribute("disabled", true); // Field 2 е цифрово поле
 		t = document.createTextNode(n);
 		z.appendChild(t);
 		document.getElementById("Types"+s).appendChild(z);
@@ -469,109 +573,6 @@ function Replace(F) {
 			i=i+1;  
 		}
 	}	
-}
-
-function Extract6() {
-	var C1, C2;
-	var text=document.getElementById("MsgText").value;
-	text=text + ' ';	// to process dd.dd at the end
-	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTmpl, WordTmpF;
-
-	function Process(part, pattern, c) {
-		re = new RegExp(pattern,"g");
-		work=text.match(re);
-		if ((work!=null) && (work[c]!=undefined) && (c<=work.length)) {
-			document.getElementById("res"+part).value=work[c];
-		}
-	}
-
-	for (part=1; part<=6; part++) {
-		sep=document.getElementById("sep"+part).value;
-		count=document.getElementById("count"+part).value;
-		switch (document.getElementById("Types"+part).value) {
-			case "1":
-				pattern = "(\-|[0-9])+(\\.|\\,)([0-9]{1,2})( |\n|\t)"; 
-				re = new RegExp(pattern,"g");
-				var Sum=text.match(re);
-				if (Sum!=null) {Sum=text.match(re)[count-1]}
-				Exp=document.getElementById("Exp"+part).checked; //alert(Exp);
-				if (Sum!=undefined) {
-					if (Exp) Sum="-"+Sum; // alert(Sum);
-					// Sum=Sum.replace(",", ".");
-					C1=C2="";
-					Sum=Sum.trim();
-					if (document.getElementById("Add"+part).value.length > 0) C1=document.getElementById("Add"+part).value.substring(0, 1);
-					if (document.getElementById("Add"+part).value.length > 1) {
-					   C2=document.getElementById("Add"+part).value.substring(1, 2); //alert(C2);
-					   if (C2=="(") Sum=C2+Sum; //alert(Sum);
-					}
-					if (C2==")") Sum=Sum+C2;
-					document.getElementById("res"+part).value=Sum+C1;
-				}	
-				break;
-			case "2":
-				pattern = "[0-9]+(\\.|\\-|:|/\)[0-9]+(\\.|\\-|:|/\)[0-9]+";
-				Process(part, pattern, count-1);
-				break;
-			case "3": // text
-				if (sep=="") break;
-				document.getElementById("res"+part).value="";
-				T='', WordTmpl=''; // remove Tmpl chars
-				var ii, Yes="^";
-				WordTmpF = (sep.substr(-1)==Yes);
-				if (WordTmpF) { // remove - ^ chars and store them in WordTmpl
-					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
-						WordTmpl=sep.substr(-1)+WordTmpl;
-						sep=sep.substr(0,sep.length-1);
-					}
-				}
-				Incl = (sep.substr(-1)=="+");
-				if (sep.substr(-1)==">") {
-					pattern = "(?<=([A-z,0-9,А-я,\,\.\:]+\s){0})([A-z,0-9,А-я,\,\.\:]+)";
-					Process(part, pattern, count-1);
-					break;
-				}
-				if (Incl) sep=sep.substr(0,sep.length-1); // cut +    alert(sep)
-				PutTxt = (sep.substr(-1)=="!");
-				if (PutTxt) {document.getElementById("res"+part).value= // cut !
-					sep.substr(0,sep.length-1);
-				} else {	
-					pattern = sep.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&') + 
-							"\\s+(\\S+(?:\\s+\\S+){0," + (count-1) + "})";
-					re = new RegExp(pattern,"gi"); //alert(text+sep)
-					while (m=re.exec(text)) {T=T+m[1];}
-					re = new RegExp(sep,"gi");
-					if (Incl && (text.match(re)!==null)) T=sep + " " + T;
-					if (T.substr(-1)==".") {T=T.substr(0,T.length-1);}
-					TS=T.split(' '), TT=""; // strip extra spaces
-					for (ii=0; ii<TS.length; ii++) if (TS[ii]!="") TT=TT+" "+TS[ii];
-					TT=TT.trim();
-					if (WordTmpF) {
-						TS=TT.split(' '), TT=""; // strip extra words
-						if (Incl) WordTmpl=Yes+WordTmpl;
-						for (ii=0; ii<TS.length; ii++) if (WordTmpl[ii]==Yes) TT=TT+" "+TS[ii];
-					}	
-					document.getElementById("res"+part).value=TT.trim();//.match(/[\w,\s,\.,\*:]+[^\.]/);
-				}
-				break;
-			case "4":
-				pattern = "[0-9]+";
-				Process(part, pattern, count-1);
-				break;
-			case "5":
-				document.getElementById("res"+part).value="";
-				break;
-			case "6":
-				if (sep=="") {break}
-				pattern = document.getElementById("sep"+part).value;
-				var c=document.getElementById("count"+part).value-1;
-				Process(part, pattern, c);
-		}
-	}
-	Replace(ReplaceF);
-	document.getElementById("Note").value="";
-	if (document.getElementById("res1").value == "") InsDate();
-	if (document.getElementById("Add3").value.length > 0) Calc();
 }
 
 function Combo(part) {
