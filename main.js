@@ -1117,8 +1117,9 @@ function dis(val) {
 	
 //function that evaluates the digit and return result 
 function solve() {
+	let y;
 	let x = document.getElementById("result").value;
-	let y = eval(x).toFixed(2);
+	if (x != "") y = eval(x).toFixed(2);
 	if (y!=undefined && y!=Infinity) {
 		document.getElementById("result").value = y;
 		document.getElementById(OpenFrom).value = y;
