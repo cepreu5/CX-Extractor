@@ -76,6 +76,7 @@ function Combo2(part, types, num, septxt, AA) {
 	switch(types) {
 		case "1":
 			document.getElementById("Exp"+part).checked=(septxt=="1");
+			// alert(AA)
 			if (part>2) {
 			  document.getElementById("Add"+part).value=AA;
 			  trueFalse(part, true, true, false, true, false, false, false);
@@ -390,6 +391,7 @@ function SelTmpl(Tmpl, clear) {
 	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
 	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
 	  if (document.getElementById("TmplFld").classList.length>0) ShowAnim('TmplFld');
+	  for (var i=3; i<7; i++) document.getElementById('Add'+i).value=""; // clear Add fields
 	}
 	//if (Tmpl!=Templates[1]) document.getElementById("res").value=Tmpl;
 	var result, fsplit, first, second, third, sep, I;
@@ -786,6 +788,7 @@ function ClearTemplate() {
 	document.getElementById("Templates").options[0].selected=true;
 	SelTmpl(document.getElementById('Templates').value, true);
 	WorkTmpl="";
+	for (var i=3; i<7; i++) document.getElementById('Add'+i).value=""; // clear Add fields
 	Extract6();
 }
 
@@ -948,7 +951,8 @@ function Calc() {
 				document.getElementById('res5').value +
 				document.getElementById('res6').value
 			);
-			solve();
+			document.getElementById("Note").value = document.getElementById("result").value;
+			solve(); 
 			ShowAnim("CalcSp");
 			CalcFl=!CalcFl;
 		}
