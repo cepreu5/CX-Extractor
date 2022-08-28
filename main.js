@@ -569,6 +569,7 @@ function Extract6() {
 	Replace(ReplaceF);
 	document.getElementById("Note").value="";
 	if (document.getElementById("res1").value == "") InsDate();
+	if (document.getElementById("Add3").value.length > 0) Calc();
 }
 
 function Combo(part) {
@@ -947,6 +948,9 @@ function Calc() {
 				document.getElementById('res5').value +
 				document.getElementById('res6').value
 			);
+			solve();
+			ShowAnim("CalcSp");
+			CalcFl=!CalcFl;
 		}
 		else dis (document.getElementById('res2').value);
 	}
