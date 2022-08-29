@@ -80,7 +80,7 @@ function Combo2(part, types, num, septxt, AA) {
 			if (part>2) {
 			  document.getElementById("Add"+part).value=AA;
 			  trueFalse(part, true, true, false, true, false, false, false);
-			} else trueFalse(part, true, true, false, true, false, true);
+			} else trueFalse(part, true, true, false, true, false, false, true);
 			break;
 		case "2": trueFalse(part, true, true, false, true, false, true, true); break;
 		case "3":
