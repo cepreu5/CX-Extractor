@@ -309,7 +309,7 @@ function Extract6() {
 	Replace(ReplaceF);
 	document.getElementById("Note").value="";
 	if (document.getElementById("res1").value == "") InsDate();
-	if (document.getElementById("Add3").value.length > 0) Calc();
+	//if (document.getElementById("Add3").value.length > 0) Calc();
 }
 
 function createSels() { // Extract selection field
