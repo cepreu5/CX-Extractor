@@ -302,15 +302,11 @@
 						  Cnt+". "+document.getElementById("res3").value+" "+
 						  Number(document.getElementById("res2").value).toFixed(2)+" "+document.getElementById("Cats").value+" "+
 						  Total.toFixed(2)+"\n";
-
 						if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
 							(document.getElementById("res2Split").value === "0.00")) {
 							document.getElementById("res2").value = "";	
 						}
-						if (document.getElementById("res2Split").value === "0.00") {
-							ShowSplit();	
-						}
-
+						if (document.getElementById("res2Split").value === "0.00") ShowSplit();
 					})
 					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)}
 				)
@@ -337,26 +333,31 @@
 					}
 					document.getElementById("res2").value=S
 					var AccSave=document.getElementById("res3").value
-					if (document.getElementById("Cats").selectedIndex==1) { // in case of transfer
-						document.getElementById("res3").value=
-						  document.getElementById("SubCats").value
-						document.getElementById("SubCats").value=AccSave
+					if (document.getElementById("Cats").selectedIndex == 1) { // in case of transfer
+						document.getElementById("res3").value = document.getElementById("SubCats").value
+						document.getElementById("SubCats").value = AccSave
 						document.getElementById("SubCats").selected
 					}
-					else if (AccSave=="") document.getElementById("res3").value=DefEUR
-						 else document.getElementById("res3").value=""
+					else {
+						if (AccSave == "") document.getElementById("res3").value = DefEUR
+						else document.getElementById("res3").value = ""
+						document.getElementById("Cats").value = 0
+						document.getElementById("Cats").selectedIndex = 0
+						document.getElementById("SubCats").value = 0
+						document.getElementById("SubCats").selectedIndex = 0
+					}
 					fetch(scriptURL, {method: 'POST', body: new FormData(form)})
 						.then(res => { 
-							if(res.ok) {
-								return res;
-							} else {
-							throw Error(`Request rejected with status ${res.status}`);
-							}
+							if(res.ok) return res
+							else throw Error(`Request rejected with status ${res.status}`);
 						})
-						.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)})
+						.catch(error => {document.getElementById('loadingGif').style.display = "none"; 
+						  alert('Грешка! ' + error.message)
+						})
 				}
 			})
-		</script> 
+		</script>
+
 		<hr>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;
