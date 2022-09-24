@@ -823,6 +823,9 @@ function ChangeTip(s, i) {//alert(s)
 	if (T=="") {document.getElementById(s).innerHTML="&nbsp";}
 	else	{document.getElementById(s).innerHTML=T;}
 	document.getElementById(s).style="visibility: visible";
+	setTimeout(function() {
+		if (T!="") document.getElementById(s).style="visibility: hidden";	
+	},2000);
 }
 
 function NowHide(obj) {
@@ -1080,6 +1083,17 @@ function init() {
 	if (TextBtns) document.getElementById("TextRow").hidden=false;
 }	
 
+function paste() {
+	Start=1;
+	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
+	//if (document.getElementById("Note").value=="") 
+	//document.getElementById("Note").value = document.getElementById("MsgText").value;
+	setTimeout(function() {
+		if (document.getElementById("MsgText").value!="") AutoTmpl();	
+	},2500);
+	document.getElementById("Note").value = document.getElementById("MsgText").value;
+}
+
 function init2() {
 	if (document.getElementById("RCookie").checked) {
 		// Encrypt
@@ -1100,21 +1114,12 @@ function init2() {
 	paste();
 }
 
-function paste() {
-	Start=1;
-	navigator.clipboard.readText().then(clipText => document.getElementById("MsgText").value = clipText);
-	setTimeout(function() {
-		if (document.getElementById("MsgText").value!="") AutoTmpl();	
-	},2500);
-	//document.getElementById("Cats").focus();
-}
-
 // Calc
 //function that display value 
 function dis(val) {
 	document.getElementById("result").value+=val
 } 
-	
+
 //function that evaluates the digit and return result 
 function solve() {
 	let y;
