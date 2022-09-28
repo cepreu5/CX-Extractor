@@ -942,13 +942,14 @@ function LetToDig() {
 
 function Calc() {
 	//if (LetToDig()) return;
+	if (document.getElementById("res2").value == "") CalcFl = false
 	ShowAnim("CalcSp");
 	document.getElementById("CalcSp").scrollIntoView();
 	CalcFl=!CalcFl;
 	if (CalcFl)	{
 		// alert(obj.value);
 		if (document.getElementById("result").value != "") dis (';');
-		if (document.getElementById('Add3').value.length>0) {
+		if (document.getElementById('Add3').value.length > 0) {
 			dis (
 				document.getElementById('res3').value +
 				document.getElementById('res4').value +
