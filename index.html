@@ -225,8 +225,8 @@
 			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
 				<option value="" selected>Подкатегория</option>
 			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване ↓" align="center"
-				 onclick="ClearFld('res2')">
+			<img src="Remove.png" width="30px" title="Изтриване" align="center"
+				 onclick="NoCat('Sub')">
 			</span>
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
@@ -234,8 +234,8 @@
 			<input type="number" step="0.01" style="text-align:center; width: 6.9em" class="inputMessage" name="Field2" 
 				ID=res2 value="">
 			<img src="Skin/NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
-			<img src="Calculator.png" width="30px" align="center" title="Калкулатор&#13;Изчисление"
-        		onclick="if(event.ctrlKey) {Calc(); return false;} else {Calc();}">  <!-- qwe -> 123&#13; -->
+			<img src="Calculator.png" width="30px" align="center" title="Калкулатор&#13;Изтриване"
+        		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc();}">  <!-- qwe -> 123&#13; -->
 
 			<span ID="SplitArea" hidden>
 				<img src="Spacer.png" width="32px" height="20" align="center">Сума за разделяне:
@@ -390,8 +390,9 @@ Any newly created file should be available on github after stage/commit/push.
 				//if (document.getElementById("res4").value.substr(0,4)=="EUR/") { // да не категоризира разхода в EUR
 				//	CSave = document.getElementById("Cats").selectedIndex
 				//	SSave = document.getElementById("SubCats").selectedIndex
-				//	document.getElementById("Cats").value = 0
-				//	document.getElementById("Cats").selectedIndex = 0
+				//  document.getElementById("Cats").options[0].selected=true - yes
+				//		document.getElementById("Cats").value = 0            - no
+				//		document.getElementById("Cats").selectedIndex = 0    - no
 				//	document.getElementById("SubCats").value = 0
 				//	document.getElementById("SubCats").selectedIndex = 0
 				//}

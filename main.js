@@ -204,8 +204,8 @@ function createSubCat(SC) {
 	}
 }
 
-function NoCat() {
-	document.getElementById("Cats").options[0].selected=true;
+function NoCat(S) {
+	if (S != "Sub") document.getElementById("Cats").options[0].selected=true;
 	document.getElementById("SubCats").options[0].selected=true;
 }
 
