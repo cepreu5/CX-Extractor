@@ -774,9 +774,10 @@ function ShowLog() {
 }
 
 function ExtClick() {
-	spinImage('ExtBtn');
-	if (document.getElementById("TmplFld").classList.length=0) Extract6()
-	else UseTmpl();
+	spinImage('ExtBtn'); Extract6()
+	//if (document.getElementById("TmplFld").classList.length=0) Extract6() // if field is open?
+	//if (document.getElementById("res").value="") Extract6()
+	//else UseTmpl();
 }
 
 function SelectAndCopy(What) {
@@ -824,7 +825,7 @@ function ChangeTip(s, i) {//alert(s)
 	else	{document.getElementById(s).innerHTML=T;}
 	document.getElementById(s).style="visibility: visible";
 	setTimeout(function() {
-		if (T!="") document.getElementById(s).style="visibility: hidden";	
+		document.getElementById(s).style="visibility: hidden";	// if (T!="") 
 	},2000);
 }
 
