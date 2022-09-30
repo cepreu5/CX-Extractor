@@ -273,12 +273,12 @@
 			</table>
 		</form>
 
-		<script>"-"
+		<script>
 			const form = document.forms['submit-to-google-sheet']
 			form.addEventListener('submit', e => {
 				e.preventDefault()
 
-				if (Number(document.getElementById("res2Split").value) !== 0) { //alert(1)
+				if (Number(document.getElementById("res2Split").value) !== 0) {
 					if (Number(document.getElementById("res2Split").value) < 0) { // няма сплит за отрицателни стойности
 						ShowSplit();
 					} else {
@@ -288,7 +288,6 @@
 						document.getElementById("res2Split").value = 
 						  (Number(document.getElementById("res2Split").value) - Number(document.getElementById("res2").value)).toFixed(2)
 						document.getElementById("res2").value = "-" + document.getElementById("res2").value
-						//alert(3)
 					}	
 				}
 
@@ -311,27 +310,22 @@
 					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)}
 					)
 					
-				if ((document.getElementById("res6").value.substr(0,1)=="/") ||	// document.getElementById("res4").value.substr(3,1)=="/"
+				if ((document.getElementById("res6").value.substr(3,1)=="/") ||	
 				   (document.getElementById("Cats").selectedIndex==1)) {
-						var WM = 1, N; //, CSave = SSave = 0;
-						if (document.getElementById("res6").value.substr(0,1)=="/") WM=document.getElementById("res6").value.substr(1) // document.getElementById("res5").value
-						var S = document.getElementById("res2").value
-						N = parseFloat(S)*parseFloat(WM)
-						if (document.getElementById("res3").value.substr(0,4) == "") N = parseFloat(S) / parseFloat(WM)
+						var WM = 1, N;
+						if (document.getElementById("res6").value.substr(3,1)=="/") WM=document.getElementById("res5").value
+						var S=document.getElementById("res2").value
+						N=parseFloat(S)*parseFloat(WM)
+						if (document.getElementById("res6").value.substr(0,4)=="BGN/") N=parseFloat(S)/parseFloat(WM)
 						if (!isNaN(N)) {
-							S = N.toString()
-							S = parseFloat(S).toFixed(2)
+							S=N.toString()
+							S=parseFloat(S).toFixed(2)
 						}
-						//if (document.getElementById("Cats").selectedIndex == 1) 			Google put "-"
-						// {  in case of transfer
-							if (S.substr(0,1) == "-") S = S.substr(1,S.length-1)
-							else S = "-" + S
-							//alert(2)
-						//}
-						document.getElementById("res2").value = S
-						if ((document.getElementById("res6").value.substr(0,1)=="/") && (S.substr(0,1) == "-")) // Google put "-"
-						  document.getElementById("res2").value = S.substr(1,S.length-1)
-						//alert(4)
+						if (document.getElementById("Cats").selectedIndex ==1 ) { // in case of transfer
+							if (S.substr(0,1)=="-") S=S.substr(1,S.length-1)
+							else S="-"+S
+						}
+						document.getElementById("res2").value=S
 						var AccSave=document.getElementById("res3").value
 						if (document.getElementById("Cats").selectedIndex == 1) { // in case of transfer
 							document.getElementById("res3").value = document.getElementById("SubCats").value
@@ -339,7 +333,7 @@
 							document.getElementById("SubCats").selected
 						}
 						else { // операция с конвертиране на валута
-							if (AccSave == "") document.getElementById("res3").value = "EUR"
+							if (AccSave == "") document.getElementById("res3").value = DefEUR
 							else document.getElementById("res3").value = ""
 						}
 						fetch(scriptURL, {method: 'POST', body: new FormData(form)})
@@ -371,7 +365,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2022 CX Extractor 29.09 / 
+			© 2022 CX Extractor 30.09 / 
 		</span>
 	</fieldset>
 	</div>

@@ -31,7 +31,7 @@ RegExp.quote = function(str) {
      return str.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1");
 };
 
-function CheckAuto(F) {//alert(AllTmplFlag)
+function CheckAuto(F) {
 	if (AllTmplFlag) {return true}
 	for (let i=0; i<AutoT.length; i++) { 
 		if (F == AutoT[i+1]) {return false}
@@ -41,7 +41,7 @@ function CheckAuto(F) {//alert(AllTmplFlag)
 }
 
 function NoAuto() { 
-	AllTmplFlag=!AllTmplFlag; //!AllTmplFlag; 
+	AllTmplFlag=!AllTmplFlag;
 	if (AllTmplFlag) { 
 		document.getElementById('No').style.display = "inline"; 
 		document.getElementById('Yes').style.display = "none"; 
@@ -76,7 +76,6 @@ function Combo2(part, types, num, septxt, AA) {
 	switch(types) {
 		case "1":
 			document.getElementById("Exp"+part).checked=(septxt=="1");
-			// alert(AA)
 			if (part>2) {
 			  document.getElementById("Add"+part).value=AA;
 			  trueFalse(part, true, true, false, true, false, false, false);
@@ -232,7 +231,7 @@ function Extract6() {
 				re = new RegExp(pattern,"g");
 				var Sum=text.match(re);
 				if (Sum!=null) {Sum=text.match(re)[count-1]}
-				Exp=document.getElementById("Exp"+part).checked; //alert(Exp);
+				Exp=document.getElementById("Exp"+part).checked;
 				if (Sum!=undefined) {
 					if (Exp) Sum="-"+Sum; // alert(Sum);
 					// Sum=Sum.replace(",", ".");
@@ -240,8 +239,8 @@ function Extract6() {
 					Sum=Sum.trim();
 					if (document.getElementById("Add"+part).value.length > 0) C1=document.getElementById("Add"+part).value.substring(0, 1);
 					if (document.getElementById("Add"+part).value.length > 1) {
-					   C2=document.getElementById("Add"+part).value.substring(1, 2); //alert(C2);
-					   if (C2=="(") Sum=C2+Sum; //alert(Sum);
+					   C2=document.getElementById("Add"+part).value.substring(1, 2);
+					   if (C2=="(") Sum=C2+Sum;
 					}
 					if (C2==")") Sum=Sum+C2;
 					document.getElementById("res"+part).value=Sum+C1;
@@ -337,7 +336,7 @@ function createSels() { // Extract selection field
 				'\', '+s+');" value="1" style="width: '+sz+
 				'em" hidden></input>';
 			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
-			  '">.</span>';  //alert(I1+I2)
+			  '">.</span>';
 			document.getElementById("TSpan"+s+i).innerHTML=I1+I2;
 		}
 		else {
@@ -345,7 +344,7 @@ function createSels() { // Extract selection field
 				'" class="inputMessage" oninput="Extract6();ChangeTip(\'Tip'+s+i+'\', '+s+
 				');" value="" size="'+sz+'" hidden></input>';
 			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
-			  '">.</span>';  //alert(I1+I2)
+			  '">.</span>';
 			document.getElementById("TSpan"+s+i).innerHTML=I1+I2;
 		}
 		document.getElementById("Sels").appendChild(x);
@@ -740,7 +739,6 @@ function showSuc() {
 }
 
 function SelFile() {
-	// alert(Files.length/2);
 	var x = document.getElementById("Files");
 	scriptURL=x.value;  // URL of selected file (table)
 	if (x.selectedIndex == ((Files.length/2) - 1)) { // if it is last option
@@ -819,13 +817,13 @@ function ClearDef() {
 	}
 }
 
-function ChangeTip(s, i) {//alert(s)
+function ChangeTip(s, i) {
 	var T=document.getElementById("res"+i).value;
 	if (T=="") {document.getElementById(s).innerHTML="&nbsp";}
 	else	{document.getElementById(s).innerHTML=T;}
 	document.getElementById(s).style="visibility: visible";
 	setTimeout(function() {
-		document.getElementById(s).style="visibility: hidden";	// if (T!="") 
+		document.getElementById(s).style="visibility: hidden"; 
 	},2000);
 }
 
@@ -848,9 +846,6 @@ function InsDate() {
 		var d = new Date();
 		dt = d;
 		FormDate(d);
-		//alert("1")
-		//dt.setDate(dt.getDate() - 1);
-		//FormDate(dt);
 	} else if (document.getElementById("res3").value == "Планирани") {
 		var dsplit=document.getElementById("res1").value.split(".");
 		if (dsplit[0].length<2) dsplit[0]='0' + dsplit[0];
