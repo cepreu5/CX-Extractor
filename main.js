@@ -1,5 +1,5 @@
 const WLimit=501; // определя дали бутоните да са отгоре
-var Encrypted=true; // false uncomment crypto-js above and use the correct TableFiles.txt
+var Encrypted=true; // false - uncomment crypto-js above and use the unencrypted TableFiles.txt
 
 var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	Z100=true, // zoom level
