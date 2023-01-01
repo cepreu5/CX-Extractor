@@ -1,5 +1,6 @@
 const WLimit=501; // определя дали бутоните да са отгоре
-var Encrypted=false; // false - uncomment crypto-js above and use the unencrypted TableFiles.txt
+var Encrypted=false; // true - use the encrypted links in TableFiles.txt
+	// остава без криптиране на връзките към Google, не иска да работи за новата година, със старите криптирани работи
 
 var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	Z100=true, // zoom level
@@ -146,6 +147,7 @@ function createFilesDec(passphrase) {
 		encryptedHMAC = encryptedMsg.substring(0, 64),
 		encryptedHTML = encryptedMsg.substring(64),
 		decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
+		/*createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));*/
 		if (decryptedHMAC !== encryptedHMAC) {
 				createOpt("", "Грешна парола");
 				document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";

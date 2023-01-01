@@ -3,10 +3,10 @@ Files = [
   "Персонални финанси",
   "https://script.google.com/macros/s/AKfycbwxYXFwmxR_vvGPo5bmM1ajxGpypHda3zQh2C18YtErBu59opece-6vBJJghdl7IZg5DA/exec",
   "Интернет покупки",
-  "https://script.google.com/macros/s/AKfycbwxYXFwmxR_vvGPo5bmM1ajxGpypHda3zQh2C18YtErBu59opece-6vBJJghdl7IZg5DA/exec",
+  "https://script.google.com/macros/s/AKfycbyYqMqsyCJWsGZnnDwrXnh0Da3x3Z2scFFxGQ8xJO0Yp-LCeGzF/exec",
   "Статистика",
   "https://script.google.com/macros/s/AKfycbwxYXFwmxR_vvGPo5bmM1ajxGpypHda3zQh2C18YtErBu59opece-6vBJJghdl7IZg5DA/exec",
   "Бележки",
-  "https://script.google.com/macros/s/AKfycbwxYXFwmxR_vvGPo5bmM1ajxGpypHda3zQh2C18YtErBu59opece-6vBJJghdl7IZg5DA/exec",
+  "https://script.google.com/macros/s/AKfycbwbT2YrsiSkJ6wwDdS1ofFklKFwgqunWeDRUHBf31YIZVJ4s4Yi_hHRjUUEO6JuVxyFTw/exec",
   "Салда"
 ];
