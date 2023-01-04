@@ -225,8 +225,8 @@
 			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
 				<option value="" selected>Подкатегория</option>
 			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване" align="center"
-				 onclick="NoCat('Sub')">
+			<img src="Remove.png" width="30px" title="Изтриване сума&#13;Изтриване подкат." align="center"
+				onclick="if(event.ctrlKey) {NoCat('Sub'); return false;} else {ClearFld('res2')}"
 			</span>
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
@@ -365,7 +365,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2022 CX Extractor 01.01 / 
+			© 2022 CX Extractor 04.01 / 
 		</span>
 	</fieldset>
 	</div>
