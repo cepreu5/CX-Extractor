@@ -1,5 +1,5 @@
 const WLimit=501; // определя дали бутоните да са отгоре
-var Encrypted=false; // true - use the encrypted links in TableFiles.txt
+var Encrypted=true; // true - use the encrypted links in TableFiles.txt
 	// остава без криптиране на връзките към Google, не иска да работи за новата година, със старите криптирани работи
 
 var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
@@ -142,21 +142,49 @@ function createFilesDec(passphrase) {
 		encryptedHMAC,
 		encryptedHTML,
 		decryptedHMAC;
+
+	var link = Files[0];
+	if (link.substring(0,5) == "https")	{
+		for (var i=1; i<=Files.length; i++) {
+			link = Files[i-1];
+			encryptedLink = CryptoJS.AES.encrypt(link, passphrase).toString();
+			//console.log(encryptedLink);
+			document.getElementById('Log').value += '  "'+encryptedLink+'",\n';
+			i++;
+		}
+	}
+	var bytes;
 	for (i=1; i<=Files.length; i++) {
 		encryptedMsg = Files[i-1],
-		encryptedHMAC = encryptedMsg.substring(0, 64),
+		/*encryptedHMAC = encryptedMsg.substring(0, 64),
 		encryptedHTML = encryptedMsg.substring(64),
 		decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
-		/*createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));*/
-		if (decryptedHMAC !== encryptedHMAC) {
+
+		console.log(encryptedHMAC);
+        console.log(decryptedHMAC);
+        console.log("--------");*/
+
+		bytes = CryptoJS.AES.decrypt(encryptedMsg, passphrase); 
+        //console.log(bytes);
+		try {
+			bytes = bytes.toString(CryptoJS.enc.Utf8);
+		} catch (error) {
+			bytes = "Грешна парола";
+			createOpt("", "Грешна парола")
+		}
+		//console.log(2+bytes)
+		if (bytes.substring(0, 5) == "https") createOpt(bytes, Files[i].substring(0, 18));
+
+		/*if (decryptedHMAC !== encryptedHMAC) {
 				createOpt("", "Грешна парола");
 				document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
 		} else {
 			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
 			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
-		}
+		}*/
 		i++;
 	}
+	document.getElementById("Password").value="";
 }
 
 function createCats() {

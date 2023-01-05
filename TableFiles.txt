@@ -1,12 +1,12 @@
 Files = [
-  "https://script.google.com/macros/s/AKfycbx58JR2rKUGMUr2O0v8FQalaK8JNq_hqRANi5bQacYDbwPBG_s9jQm5Zqk2k5F06sbh8Q/exec",
+  "U2FsdGVkX19OpzUbNJDA+RaznFrEFjszJD8Qaqg7t5ojLgHv6ZJJNj8EjiW8kT1Vxk0kCGRwSKWFOQdZBR8CNAD3M6frQZyHBdmfIheylSvq39eXz4068xVbwAbyZC3hOvywjb8tmaHceHgcrwvc63vwFchwOygBD5bSQYrJh3jgWHwuF3f+dcSW1+7tBhnL",
   "Персонални финанси",
-  "https://script.google.com/macros/s/AKfycbwxYXFwmxR_vvGPo5bmM1ajxGpypHda3zQh2C18YtErBu59opece-6vBJJghdl7IZg5DA/exec",
+  "U2FsdGVkX1/BzU1klJni0q3THFvZlVlHOdFCpGSUr0blZr/iydkrsVyGnbyUWCD95drH3TmETza8ox11JcEt34isahRjihOyEIDAy7zjZdZI3jvunsKB5Y/CdMMLVfvqgbh4C3wrmkngzNstsBiA0Kclb0nfuiojz5yIWfImRmZS+vMfFeawNCM510ha8RHL",
   "Интернет покупки",
-  "https://script.google.com/macros/s/AKfycbyYqMqsyCJWsGZnnDwrXnh0Da3x3Z2scFFxGQ8xJO0Yp-LCeGzF/exec",
+  "U2FsdGVkX1/N7pQ3mhRoqBQr4zH+WGUjD7utLBCYAsOMhyh9ek1tlIVORCjSzm1b5E2F5iuEktq7vXF/7rpyUQ7x3D07taic8p9QxKiH3qTjGHSeRgCzXHR/Xwl4zwsKd3i1WAx7rGQ/1X7ffyP89u1FJ2sP96o7xaWXYajJupc=",
   "Статистика",
-  "https://script.google.com/macros/s/AKfycbwxYXFwmxR_vvGPo5bmM1ajxGpypHda3zQh2C18YtErBu59opece-6vBJJghdl7IZg5DA/exec",
+  "U2FsdGVkX184ZDwmrbNndw73Ec5uEzGsSAKl42SfJKxOnQtCTQVtX3YkWbdA5JiFgqJ7BiL/pD+9hNzoLF8NAViQ3TM2HReQWl0HgD9zhKs1WUEuxZz+3i5ZjcBdtCndLr/83CX1gPGL6PyW2HE70Nv/NM13z8ZZk3ykTqKN6yuC8XE+yibpeMTxi5EESS27",
   "Бележки",
-  "https://script.google.com/macros/s/AKfycbwbT2YrsiSkJ6wwDdS1ofFklKFwgqunWeDRUHBf31YIZVJ4s4Yi_hHRjUUEO6JuVxyFTw/exec",
+  "U2FsdGVkX1+t5jk/tV7cByPyuLnmxiTDrI5PIJ1y+vyIZgmFYTAZRjRwBBn29xg1kQmvvFhDZeQky32wJVIDFpSbaRcZHJUG1Ol3i+1HLHXywdlhxwHJxhar7JaWLvVGvkoCFhF8ts+1bXpciC/TNePD6a6Lr8BxNwELygxMiGcMUK2xc8pUbFDxxI/K+/FE",
   "Салда"
 ];
