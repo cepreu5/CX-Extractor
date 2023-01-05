@@ -133,7 +133,7 @@ function createFilesDec(passphrase) {
 					iv: iv,
 					padding: CryptoJS.pad.Pkcs7,
 					mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
+			}).toString(CryptoJS.enc.Latin1);
 			return decrypted;
 	}
 
