@@ -133,7 +133,7 @@ function createFilesDec(passphrase) {
 					iv: iv,
 					padding: CryptoJS.pad.Pkcs7,
 					mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Utf8);
+			}).toString(CryptoJS.enc.Latin1);
 			return decrypted;
 	}
 
@@ -147,7 +147,8 @@ function createFilesDec(passphrase) {
 		encryptedHMAC = encryptedMsg.substring(0, 64),
 		encryptedHTML = encryptedMsg.substring(64),
 		decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
-		/*createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));*/
+		createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
+		/*
 		if (decryptedHMAC !== encryptedHMAC) {
 				createOpt("", "Грешна парола");
 				document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
@@ -155,6 +156,7 @@ function createFilesDec(passphrase) {
 			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
 			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
 		}
+		*/
 		i++;
 	}
 }
