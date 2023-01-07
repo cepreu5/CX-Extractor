@@ -1,5 +1,5 @@
 const WLimit=501; // определя дали бутоните да са отгоре
-var Encrypted=false; // true - use the encrypted links in TableFiles.txt
+var Encrypted=true; // true - use the encrypted links in TableFiles.txt
 	// остава без криптиране на връзките към Google, не иска да работи за новата година, със старите криптирани работи
 
 var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
@@ -113,50 +113,6 @@ function createFiles() {
 	var i;
 	for (i=1; i<=Files.length; i++) {
 		createOpt(Files[i-1], Files[i].substring(0, 18));
-		i++;
-	}
-}
-
-function createFilesDec(passphrase) {
-
-	function decrypt (encryptedMsg, pass) {
-			var keySize = 256;
-			var iterations = 1000;
-			var salt = CryptoJS.enc.Hex.parse(encryptedMsg.substr(0, 32));
-			var iv = CryptoJS.enc.Hex.parse(encryptedMsg.substr(32, 32))
-			var encrypted = encryptedMsg.substring(64);
-			var key = CryptoJS.PBKDF2(pass, salt, {
-					keySize: keySize/32,
-					iterations: iterations
-			});
-			var decrypted = CryptoJS.AES.decrypt(encrypted, key, {
-					iv: iv,
-					padding: CryptoJS.pad.Pkcs7,
-					mode: CryptoJS.mode.CBC
-			}).toString(CryptoJS.enc.Latin1);
-			return decrypted;
-	}
-
-	var i,
-		encryptedMsg,
-		encryptedHMAC,
-		encryptedHTML,
-		decryptedHMAC;
-	for (i=1; i<=Files.length; i++) {
-		encryptedMsg = Files[i-1],
-		encryptedHMAC = encryptedMsg.substring(0, 64),
-		encryptedHTML = encryptedMsg.substring(64),
-		decryptedHMAC = CryptoJS.HmacSHA256(encryptedHTML, CryptoJS.SHA256(passphrase).toString()).toString();
-		createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
-		/*
-		if (decryptedHMAC !== encryptedHMAC) {
-				createOpt("", "Грешна парола");
-				document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
-		} else {
-			createOpt(decrypt(encryptedHTML, passphrase), Files[i].substring(0, 18));
-			//document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
-		}
-		*/
 		i++;
 	}
 }
@@ -1042,13 +998,6 @@ function init() {
 	detectSwipe('MsgText', Gestures);
 	if (Encrypted) {
 		document.getElementById("PwdFld").hidden = false;
-		var pwd = localStorage.getItem("CXpass");
-  		if (pwd != null) {
-			// Decrypt
-			var bytes = CryptoJS.AES.decrypt(pwd, Author); 
-			pwd = bytes.toString(CryptoJS.enc.Utf8);
-			document.getElementById("Password").value = pwd;
-		}
 		document.getElementById("Password").focus();
 	} else {
 		createFiles();
@@ -1095,22 +1044,20 @@ function paste() {
 	document.getElementById("Note").value = document.getElementById("MsgText").value;
 }
 
+var AlreadyDecripted = false;
 function init2() {
-	if (document.getElementById("RCookie").checked) {
-		// Encrypt
-		var ciphertext = CryptoJS.AES.encrypt(document.getElementById("Password").value, Author).toString();
-		localStorage.setItem("CXpass", ciphertext);
-	}  
 	if (document.getElementById("RFgtCookie").checked) {
 		localStorage.removeItem("CXpass");
 		localStorage.removeItem("ZoomL1");
 		localStorage.removeItem("ZoomL2");
 		localStorage.removeItem("cfgTheme");
 		localStorage.removeItem("cfgZoom");
+		clearLocalStorage();
 	}  
 	createFilesDec(document.getElementById("Password").value);
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
+	document.getElementById("Password").value = "";
 	document.getElementById("Main").style = "display: inline;";
 	paste();
 }

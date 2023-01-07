@@ -12,18 +12,49 @@
 <script type="text/javascript" src="Templates.txt"></script>
 <script type="text/javascript" src="app-config.txt"></script>
 <script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
-<!-- script src="js/crypto-js.min.js"></script-->
-<!-- script src="../js/crypto-js.min.js" integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js" 
- integrity="sha384-lp4k1VRKPU9eBnPePjnJ9M2RF3i7PC30gXs70+elCVfgwLwx1tv5+ctxdtwxqZa7" crossorigin="anonymous"></script>
+<script src="crypto-js.min.js"></script>
+<script src="newcrypt.js"></script>
 
 <script src="main.js"></script>
 
 </head>
 
 <body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
-	onload="init()" allow="clipboard-read">
+	onload="init(); decryptOnLoadFromRememberMe()" allow="clipboard-read">
+<!--
+<div id="staticrypt_loading" class="staticrypt-spinner-container">
+    <div class="staticrypt-spinner"></div>
+</div>
 
+<div id="staticrypt_content" class="staticrypt-content hidden">
+    <div class="staticrypt-page">
+        <div class="staticrypt-form">
+            <div class="staticrypt-instructions">
+                <p class="staticrypt-title">CX Extractor</p>
+                <p></p>
+            </div>
+
+            <form id="staticrypt-form" action="#" method="post">
+                <input id="staticrypt-password"
+                       type="password"
+                       name="password"
+                       placeholder="Парола"
+                       autofocus/>
+
+                <label id="staticrypt-remember-label" class="staticrypt-remember hidden">
+                    <input id="staticrypt-remember"
+                           type="checkbox"
+                           name="remember"/>
+                    Запомни
+                </label>
+
+                <input type="submit" class="staticrypt-decrypt-button" value="СТАРТ"/>
+            </form>
+
+        </div>
+    </div>
+</div>
+-->
 	<section class="outer-container">
 	<div class="inner-container">
 
@@ -365,81 +396,10 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2022 CX Extractor 04.01 / 
+			© 2023 CX Extractor 07.01 / 
 		</span>
 	</fieldset>
 	</div>
 </section>
 </body>
 </html>
-<!--
-Steps: 
-1.Create a directory on the local file system.
-2.Create a repo on Github.
-3.Select Clone "Clone or download" on Github, copy the link
-4.In Visual Studio Code, sect File -> Add Folder to Workspace -> Select the newly created directory
-5.Select Terminal Window
-6.In the window, type:
-git config --global user.name <github userID>
-git clone <URL from github link copied earlier>
-Any newly created file should be available on github after stage/commit/push.
--->
-
-<!--
-				//var CSave = SSave = 0;
-				//if (document.getElementById("res4").value.substr(0,4)=="EUR/") { // да не категоризира разхода в EUR
-				//	CSave = document.getElementById("Cats").selectedIndex
-				//	SSave = document.getElementById("SubCats").selectedIndex
-				//  document.getElementById("Cats").options[0].selected=true - yes
-				//		document.getElementById("Cats").value = 0            - no
-				//		document.getElementById("Cats").selectedIndex = 0    - no
-				//	document.getElementById("SubCats").value = 0
-				//	document.getElementById("SubCats").selectedIndex = 0
-				//}
-
-.collapsible {
-  color: var(--LblColor, white);
-  cursor: pointer;
-  padding: 0px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 14px;
-}
-.content {
-  padding: 0 0px;
-  display: none;
-  overflow: hidden;
-}
-<button type="button" class="collapsible">Дефиниции</button>
-<div class="content">
-</div>
-<script>
-	var coll = document.getElementsByClassName("collapsible");
-	for (let i=0; i<coll.length; i++) {
-		coll[i].addEventListener("click", function() {
-			this.classList.toggle("active");
-			var content = this.nextElementSibling;
-			if (content.style.display === "block") {
-				content.style.display = "none";
-			} else {
-				content.style.display = "block";
-			}
-		})
-	}
-
-	Object.assign(document.createElement('a'), {target: '_blank', href: scriptURL}).click();
-
-			/*var formatter = new Intl.NumberFormat(undefined, {
-				style: 'currency',
-				currency: 'BGN',
-				//These options are needed to round to whole numbers if that's what you want.
-				//minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-				//maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-			});*/
-
-
-<a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFwBlS8X7CvTlJ3sNHvZ4mcoky34spCoThaN1BWeQJPgW-87ocHZRaBjdNvoWvtXFnt8vG0M9KdpeA/pubhtml?gid=1231932610&amp;single=true&amp;widget=true&amp;headers=false">Link</a>
-<iframe width=”500” and height=”500” src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRFwBlS8X7CvTlJ3sNHvZ4mcoky34spCoThaN1BWeQJPgW-87ocHZRaBjdNvoWvtXFnt8vG0M9KdpeA/pubhtml?gid=1231932610&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
--->
