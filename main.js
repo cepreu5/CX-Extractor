@@ -20,6 +20,10 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
 	OpenFrom = 'res2'; // calculator OpenFrom which field
+var AlreadyDecripted = false, // in newcrypt.js
+	plainHTML,
+	encryptedLink;
+
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
@@ -627,7 +631,7 @@ function SaveConfig() {
 
 	if (document.getElementById("Zoom1").checked) cfgZoom=ZoomL1;
 	else cfgZoom=ZoomL2;
-	//localStorage.setItem("cfgZoom", cfgZoom);
+	localStorage.setItem("cfgZoom", cfgZoom);
 	if (cfgZoom==ZoomL2) {document.body.style.zoom=ZoomL2;
 		document.getElementById("ZoomBtn").src="Zoom2.png";
 		document.getElementById("ZoomBtn").title="Намали";
@@ -1044,17 +1048,9 @@ function paste() {
 	document.getElementById("Note").value = document.getElementById("MsgText").value;
 }
 
-var AlreadyDecripted = false;
 function init2() {
-	if (document.getElementById("RFgtCookie").checked) {
-		localStorage.removeItem("CXpass");
-		localStorage.removeItem("ZoomL1");
-		localStorage.removeItem("ZoomL2");
-		localStorage.removeItem("cfgTheme");
-		localStorage.removeItem("cfgZoom");
-		clearLocalStorage();
-	}  
-	createFilesDec(document.getElementById("Password").value);
+	if (document.getElementById("RFgtCookie").checked) clearLocalStorage();  
+	createFilesDec(document.getElementById("Password").value); // in newcrypt.js
 	SelFile();
 	document.getElementById("PwdFld").hidden = true;
 	document.getElementById("Password").value = "";
@@ -1062,6 +1058,13 @@ function init2() {
 	paste();
 }
 
+function ResetConfig() {
+	localStorage.removeItem("ZoomL1");
+	localStorage.removeItem("ZoomL2");
+	localStorage.removeItem("cfgTheme");
+	localStorage.removeItem("cfgZoom");
+	location.reload();
+}
 // Calc
 //function that display value 
 function dis(val) {

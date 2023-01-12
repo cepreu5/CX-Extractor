@@ -1,6 +1,3 @@
-var plainHTML;
-var encryptedLink;
-
 var cryptoEngine = 
 ((function(){
 const exports = {};
@@ -61,8 +58,8 @@ function signMessage(hashedPassphrase, message) {
     CryptoJS.SHA256(hashedPassphrase).toString()
   ).toString();
 }
-
 exports.signMessage = signMessage;
+
 return exports;
 })())
 
@@ -76,6 +73,7 @@ var codec =
  */
 function init(cryptoEngine) {
   const exports = {};
+
   /**
    * Top-level function for encoding a message.
    * Includes passphrase hashing, encryption, and signing.
@@ -120,8 +118,8 @@ function init(cryptoEngine) {
   exports.decode = decode;
   return exports;
 }
-
 exports.init = init;
+
 return exports;
 })())
 
@@ -131,13 +129,13 @@ var encode = codec.init(cryptoEngine).encode;
 // variables to be filled when generating the file
 var
   salt = 'a59e9b3a47972726974d35dbc0148fe2',
-  labelError = '',
-  isRememberEnabled = true,
+  //labelError = '',
+  //isRememberEnabled = true,
   rememberDurationInDays = 7; // 0 means forever
 
 // constants
-var rememberPassphraseKey = 'staticrypt_passphrase',
-    rememberExpirationKey = 'staticrypt_expiration';
+var rememberPassphraseKey = 'CX_passphrase',
+    rememberExpirationKey = 'CX_expiration';
 
 /**
  * Decrypt our encrypted page, replace the whole HTML.
@@ -155,11 +153,25 @@ function decryptHashed(encryptedMsg, hashedPassphrase) {
 }
 
 /**
- * Clear localstorage from staticrypt related values
+ * Clear localstorage from crypt related values
  */
 function clearLocalStorage() {
     localStorage.removeItem(rememberPassphraseKey);
     localStorage.removeItem(rememberExpirationKey);
+}
+
+function DecryptLinks(hashedPassphrase) {
+  for (var i=1; i<=Files.length; i++) {
+    encryptedLink = Files[i-1];
+    isDecryptionSuccessful = decryptHashed(encryptedLink, hashedPassphrase);
+    if (isDecryptionSuccessful) createOpt(plainHTML, Files[i].substring(0, 18))
+    else {
+        createOpt("", "Грешна парола");
+        document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
+        return isDecryptionSuccessful;
+    }
+    i++;
+  }
 }
 
 /**
@@ -188,6 +200,8 @@ function decryptOnLoadFromRememberMe() {
       clearLocalStorage();
       return false;
     }
+    DecryptLinks(hashedPassphrase);
+    /*
     for (var i=1; i<=Files.length; i++) {
       encryptedLink = Files[i-1];
       isDecryptionSuccessful = decryptHashed(encryptedLink, hashedPassphrase);
@@ -197,8 +211,8 @@ function decryptOnLoadFromRememberMe() {
           document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
       }
       i++;
-    }
-    document.getElementById('Password').value = "11111111111111111111";
+    }*/
+    document.getElementById('Password').value = "11111111111111111111"; // dummy password to indicate remembered password is get
     AlreadyDecripted = true;
     return true;
   }
@@ -212,7 +226,7 @@ function createFilesDec() {
       passphrase = document.getElementById('Password').value,
       shouldRememberPassphrase = document.getElementById('RCookie').checked;
 
-  // encrypt plain text links for future usage
+  // encrypt plain text links for future usage and fill Log with encrypted result
   var link = Files[0];
   if (link.substring(0,5) == "https")	{
     for (var i=1; i<=Files.length; i++) {
@@ -236,6 +250,9 @@ function createFilesDec() {
         );
     }
   }
+  // if (isDecryptionSuccessful) 
+  DecryptLinks(hashedPassphrase);
+  /*
   for (var i=1; i<=Files.length; i++) {
     encryptedLink = Files[i-1];
     isDecryptionSuccessful = decryptHashed(encryptedLink, hashedPassphrase);
@@ -247,5 +264,5 @@ function createFilesDec() {
     //console.log(encryptedLink);
     //console.log(plainHTML);
     i++;
-  }
+  }*/
 };

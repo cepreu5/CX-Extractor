@@ -21,40 +21,6 @@
 
 <body style="text-align:left; font-family:Arial; font-size:14px; color: var(--LblColor);" 
 	onload="init(); decryptOnLoadFromRememberMe()" allow="clipboard-read">
-<!--
-<div id="staticrypt_loading" class="staticrypt-spinner-container">
-    <div class="staticrypt-spinner"></div>
-</div>
-
-<div id="staticrypt_content" class="staticrypt-content hidden">
-    <div class="staticrypt-page">
-        <div class="staticrypt-form">
-            <div class="staticrypt-instructions">
-                <p class="staticrypt-title">CX Extractor</p>
-                <p></p>
-            </div>
-
-            <form id="staticrypt-form" action="#" method="post">
-                <input id="staticrypt-password"
-                       type="password"
-                       name="password"
-                       placeholder="Парола"
-                       autofocus/>
-
-                <label id="staticrypt-remember-label" class="staticrypt-remember hidden">
-                    <input id="staticrypt-remember"
-                           type="checkbox"
-                           name="remember"/>
-                    Запомни
-                </label>
-
-                <input type="submit" class="staticrypt-decrypt-button" value="СТАРТ"/>
-            </form>
-
-        </div>
-    </div>
-</div>
--->
 	<section class="outer-container">
 	<div class="inner-container">
 
@@ -116,12 +82,11 @@
 			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="NormZoom" value="">
 			Увел.
 			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="MaxZoom" value="">
-			&nbsp;&nbsp;&nbsp;&nbsp;
+			&nbsp;
 			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
 			  onclick="SaveConfig()" value="Запис">
-			<!-- Запис на шаблони: 
-			<input type="image" src="Save.png" ID="LoadBtn" style="width: 20px;" border="0"  align="center"
-				title="Запис шаблони" onclick="FileTemplates('get'); FileTemplates('save')" -->
+			<a><img src="Remove.png" width="20px" style="vertical-align: bottom;"  title="Reset" 
+			  onclick="ResetConfig()"></a>
 			<hr>
 		</div>
 
@@ -138,7 +103,7 @@
 		<span ID="Sels" hidden>
 			Име: <input style="text-align:left; width: 7.95em" ID="TmplName" class="inputMessage" value="">&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value="">
-			<a><img src="Remove.png" width="20px" style="vertical-align: sub;" 
+			<a><img src="Remove.png" width="20px" style="vertical-align: bottom;" title="Изтриване"
 				onclick="ClearTmplFld()"></a>
 			<br>
 			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
@@ -147,21 +112,10 @@
 				<datalist id="acc-options">
 				</datalist>
 			в поле <input style="text-align:left; width: 1.2em" ID="ReplFld" class="inputMessage" value=""> 
-			<a><img src="Space.png" width="20px" style="vertical-align: sub;" ID="ReplBtn"
+			<a><img src="Space.png" width="20px" style="vertical-align: bottom;" ID="ReplBtn"
 				onclick="GetRepl()" title="Търси замяна"></a>
 			<hr>
 		</span>
-
-		<!--span class="container">
-			<div class="accordion">
-				<dt>
-				  <a href="#Sels" aria-expanded="false" aria-controls="Sels" ID="Info"
-					class="accordion-title accordionTitle js-accordionTrigger"></a>
-				</dt>
-				<div class="accordion-content accordionItem is-collapsed" id="Sels" aria-hidden="true"><br></div><br>
-			</div>
-		</span>
-		<script src="Accordion.js"></script-->
 
 		<!-- Calc -->
 		<div style="margin-left: 1px; text-align: center;">
@@ -338,8 +292,10 @@
 						}
 						if (document.getElementById("res2Split").value === "0.00") ShowSplit();
 					})
-					.catch(error => {document.getElementById('loadingGif').style.display = "none"; alert('Грешка! ' + error.message)}
-					)
+					.catch(error => {
+						document.getElementById('loadingGif').style.display = "none"; 
+						alert('Грешка! Неуспешно изпращане (' + error.message + ').')
+					})
 					
 				if ((document.getElementById("res6").value.substr(3,1)=="/") ||	
 				   (document.getElementById("Cats").selectedIndex==1)) {
@@ -373,7 +329,7 @@
 								else throw Error(`Request rejected with status ${res.status}`);
 							})
 							.catch(error => {document.getElementById('loadingGif').style.display = "none"; 
-								alert('Грешка! ' + error.message)
+								alert('Грешка! Неуспешно изпращане (' + error.message + ').')
 							})
 				}
 			})
@@ -396,7 +352,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 07.01 / 
+			© 2023 CX Extractor 12.01 / 
 		</span>
 	</fieldset>
 	</div>
