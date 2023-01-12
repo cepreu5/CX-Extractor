@@ -128,10 +128,10 @@ var encode = codec.init(cryptoEngine).encode;
 
 // variables to be filled when generating the file
 var
-  salt = 'a59e9b3a47972726974d35dbc0148fe2',
+  salt = 'a59e9b3a47972726974d35dbc0148fe2';
   //labelError = '',
   //isRememberEnabled = true,
-  rememberDurationInDays = 7; // 0 means forever
+  //rememberDurationInDays = 7; // 0 means forever
 
 // constants
 var rememberPassphraseKey = 'CX_passphrase',
@@ -201,17 +201,6 @@ function decryptOnLoadFromRememberMe() {
       return false;
     }
     DecryptLinks(hashedPassphrase);
-    /*
-    for (var i=1; i<=Files.length; i++) {
-      encryptedLink = Files[i-1];
-      isDecryptionSuccessful = decryptHashed(encryptedLink, hashedPassphrase);
-      if (isDecryptionSuccessful) createOpt(plainHTML, Files[i].substring(0, 18))
-      else {
-          createOpt("", "Грешна парола");
-          document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
-      }
-      i++;
-    }*/
     document.getElementById('Password').value = "11111111111111111111"; // dummy password to indicate remembered password is get
     AlreadyDecripted = true;
     return true;
@@ -225,7 +214,6 @@ function createFilesDec() {
   var 
       passphrase = document.getElementById('Password').value,
       shouldRememberPassphrase = document.getElementById('RCookie').checked;
-
   // encrypt plain text links for future usage and fill Log with encrypted result
   var link = Files[0];
   if (link.substring(0,5) == "https")	{
@@ -252,17 +240,4 @@ function createFilesDec() {
   }
   // if (isDecryptionSuccessful) 
   DecryptLinks(hashedPassphrase);
-  /*
-  for (var i=1; i<=Files.length; i++) {
-    encryptedLink = Files[i-1];
-    isDecryptionSuccessful = decryptHashed(encryptedLink, hashedPassphrase);
-    if (isDecryptionSuccessful) createOpt(plainHTML, Files[i].substring(0, 18))
-    else {
-        createOpt("", "Грешна парола");
-        document.getElementById("MsgText").value="Програмата е напълно функционална, но няма да изпраща данни.";
-    }
-    //console.log(encryptedLink);
-    //console.log(plainHTML);
-    i++;
-  }*/
 };
