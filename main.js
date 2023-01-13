@@ -705,14 +705,14 @@ function showSuc() {
 function SelFile() {
 	var x = document.getElementById("Files");
 	scriptURL=x.value;  // URL of selected file (table)
-	if (x.selectedIndex == ((Files.length/2) - 1)) { // if it is last option
+	if (x.selectedIndex == ((Files.length/2) - 1)) { // if it is last option - Salda special entry
 		window.open(scriptURL);
 		x.remove(x.selectedIndex); // remove last option
 		x.selectedIndex = 0; scriptURL=x.value; // set to first option
 	};
-	if (x.selectedIndex == ((Files.length/2) - 2)) { // if it is the option before the last one
-		window.open(scriptURL);
-	}
+	//if (x.selectedIndex == ((Files.length/2) - 2)) { // if it is the option before the last one
+	//	window.open(scriptURL);   // Бележки в отделен файл - отменено решение
+	//}
 }
 
 function ShowSplit() {
