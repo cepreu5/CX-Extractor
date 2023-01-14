@@ -771,6 +771,7 @@ function ClearTextArea() {
 
 function ClearFld(FldID) {
 	document.getElementById(FldID).value="";
+	document.getElementById(FldID).focus();
 }
 
 function ClearDef() {

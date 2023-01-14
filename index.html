@@ -211,7 +211,7 @@
 				<option value="" selected>Подкатегория</option>
 			</SELECT>
 			<img src="Remove.png" width="30px" title="Изтриване сума&#13;Изтриване подкат." align="center"
-				onclick="if(event.ctrlKey) {NoCat('Sub'); return false;} else {ClearFld('res2')}"
+				onclick="if(event.ctrlKey) {NoCat('Sub'); return false;} else {ClearFld('res2'); document.getElementById('res2').value='-0'}"
 			</span>
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
@@ -220,7 +220,7 @@
 				ID=res2 value="">
 			<img src="Skin/NoteFace.png" width="30px" align="center" title="Разделяне" onclick="ShowSplit()">
 			<img src="Calculator.png" width="30px" align="center" title="Калкулатор&#13;Изтриване"
-        		onclick="if(event.ctrlKey) {ClearFld('res2'); return false;} else {Calc();}">  <!-- qwe -> 123&#13; -->
+        		onclick="if(event.ctrlKey) {ClearFld('res2'); document.getElementById('res2').value='-0'; return false;} else {Calc();}">
 
 			<span ID="SplitArea" hidden>
 				<img src="Spacer.png" width="32px" height="20" align="center">Сума за разделяне:
