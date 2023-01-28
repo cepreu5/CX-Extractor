@@ -153,13 +153,20 @@ function createSubCat(SC) {
 		z.setAttribute("value", n);
 		var t = document.createTextNode(n);
 		z.appendChild(t);
+		if (t.data.substring(0, 1) == "-") z.setAttribute("disabled", true);
 		document.getElementById("SubCats").appendChild(z);
 	}
 
 	var a, l, i;
-	if (SC=="SubCat0") {clearOpts(); document.getElementById("SubCats").size= 1; return;}
+	if (SC=="SubCat0") {
+		clearOpts(); 
+		document.getElementById("SubCats").size = 1; 
+		document.getElementById("SubCats").options[0].selected = true;
+		return;
+	}
 	eval ("l="+SC+".length");
 	document.getElementById("SubCats").options[0].selected=true;
+	document.getElementById("SubCats").options[0].disabled=true;
 	clearOpts();
 	for (i=1; i<l+1; i++) {
 		eval("a="+SC+"[i-1]");
@@ -338,7 +345,6 @@ function createSels() { // Extract selection field
 	var x, i;
 	for (i=1; i<=6; i++) {
 		x = document.createElement("LABEL");
-		//x.setAttribute("id", "L"+i);
 		x.innerHTML=i+":";
 		document.getElementById("Sels").appendChild(x);
 		x = document.createElement("SELECT");
@@ -346,6 +352,7 @@ function createSels() { // Extract selection field
 		x.setAttribute("onChange", "Combo("+i+")");
 		x.setAttribute("class", "inputMessage");
 		x.setAttribute("style", "height: 23px;");
+		x.setAttribute("title", "Types"+i);
 		document.getElementById("Sels").appendChild(x);
 			createOpt("1", "Сума", i);
 			createOpt("2", "ДатаЧас", i);
@@ -511,7 +518,7 @@ function UseTmpl() {
 
 function getTmpls() {
 	var i;
-	var htmlString = '<select id="Templates" style="width: 133px;" class="inputMessage" '+
+	var htmlString = '<select id="Templates" style="width: 133px;" class="inputMessage" title="Templates"'+
 		'onChange="SelTmpl(' + 
 		"document.getElementById('Templates').value" +
 		', true); Extract6()"><option value="'+Templates[1]+'">Изберете шаблон</option>';

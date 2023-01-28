@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="bg">
-<meta http-equiv="content-type" content="text/html" charset="utf-8">
+<meta http-equiv="content-type" content="text/html">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <head> 
 <title>CX Extractor</title>
@@ -11,8 +12,9 @@
 	
 <script type="text/javascript" src="Templates.txt"></script>
 <script type="text/javascript" src="app-config.txt"></script>
-<script type="text/javascript" src="TableFiles.txt"></script> <!-- https://robinmoisson.github.io/staticrypt/ -->
+<script type="text/javascript" src="TableFiles.txt"></script>
 <script src="crypto-js.min.js"></script>
+<!-- https://robinmoisson.github.io/staticrypt/ -->
 <script src="newcrypt.js"></script>
 
 <script src="main.js"></script>
@@ -48,7 +50,8 @@
 		</div>
 	
 		<fieldset ID="Main" class="centered-content" style="display:none;">
-		<SELECT ID="Files" style="vertical-align: super; width: 158px;" onChange="SelFile()" class="inputMessage">
+		<SELECT ID="Files" style="vertical-align: super; width: 158px;" title="Файлове" 
+			onChange="SelFile()" class="inputMessage">
 		</SELECT>
 		&nbsp;
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
@@ -163,7 +166,7 @@
 				Шаблон: <input style="text-align:left; margin-top: 5px; width: 14.4em" ID="res" class="inputMessage" value="">
 				<a><img src="Space.png"  title="Генериране" width="20px" onclick="ClearFld('res'); MakeTmpl()"
 					align="center"></a>
-				<a><img src="Remove.png" width="20px" align="center"
+				<a><img src="Remove.png" width="20px" align="center" title="Изтриване" 
 					onclick="ClearFld('res')"></a>
 				<a><img src="Save.png" width="20px" ID="Floppy"
 					onclick="if(event.ctrlKey) {FileTemplates('get'); FileTemplates('save'); return false;} else {MemTemplate()}"
@@ -201,17 +204,17 @@
 			input class="activator" type="checkbox">
 			<div class="condpart">Hide me</div-->
 			<span ID="CatsTop">
-				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7"
-				onChange="createSubCat('SubCat'+this.selectedIndex)">
-				<option value="" selected>Категория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" onclick="NoCat('Cats')"
-					align="center" title="Изтриване">
-			<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8">
-				<option value="" selected>Подкатегория</option>
-			</SELECT>
-			<img src="Remove.png" width="30px" title="Изтриване сума&#13;Изтриване подкат." align="center"
-				onclick="if(event.ctrlKey) {NoCat('Sub'); return false;} else {ClearFld('res2'); document.getElementById('res2').value='-0'}"
+				<SELECT ID="Cats" class="inputMessage" style="width: 9.5em" name="Field7" title="Cats"
+					onChange="createSubCat('SubCat'+this.selectedIndex)">
+					<option value="" selected>Категория</option>
+				</SELECT>
+				<img src="Remove.png" width="30px" onclick="NoCat('Cats')"
+						align="center" title="Изтриване">
+				<SELECT ID="SubCats" class="inputMessage" style="width: 9.5em;" name="Field8" title="SubCats">
+					<option value="" selected>Подкатегория</option>
+				</SELECT>
+				<img src="Remove.png" width="30px" title="Изтриване сума&#13;Изтриване подкат." align="center"
+					onclick="if(event.ctrlKey) {NoCat('Sub'); return false;} else {ClearFld('res2'); document.getElementById('res2').value='-0'}"
 			</span>
 			<input style="text-align:center; width: 9.5em" class="inputMessage" name="Field1" ID=res1 value="">
 			<img src="Calendar.png" width="30px" align="center" title="Дата&#13;Изтриване"
@@ -223,7 +226,7 @@
         		onclick="if(event.ctrlKey) {ClearFld('res2'); document.getElementById('res2').value='-0'; return false;} else {Calc();}">
 
 			<span ID="SplitArea" hidden>
-				<img src="Spacer.png" width="32px" height="20" align="center">Сума за разделяне:
+				<img src="Spacer.png" width="32px" height="20" align="center" title="Изтриване">Сума за разделяне:
 				<input type="number" step="0.01" style="text-align:center; width: 6.9em" class="inputMessage" name="Field2Split" 
 					ID=res2Split value="">&nbsp
 				<img src="Remove.png" width="30px" title="Изтриване" align="center"
@@ -341,7 +344,7 @@
 			<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
 			&nbsp;
 			<input type="color" value="#FFFFFF" id="colorPicker" hidden>
-			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" hidden>&nbsp;
+			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" title="Colors" hidden>&nbsp;
 				<option value="--FormBgrd">- Оцвети -</option>
 				<option value="--FormBgrd">Фон</option>
 				<option value="--LblColor">Етикети</option>
@@ -352,7 +355,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 13.01 / 
+			© 2023 CX Extractor 28.01 / 
 		</span>
 	</fieldset>
 	</div>
