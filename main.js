@@ -686,7 +686,10 @@ function dataListOpt(Field, List) {
 		z = document.createElement("option");
 		t = document.createTextNode(Field[i]);
 		z.appendChild(t);
-		// if (Field[i].substring(0, 1) == "-") z.setAttribute("readonly", true); doesn't work
+		// if (Field[i].substring(0, 1) == "-") { // doesn't work
+		// 	z.setAttribute("value", ".");
+		// 	z.setAttribute("readonly", true);
+		// }
 		document.getElementById(List).appendChild(z);
 	}
 }

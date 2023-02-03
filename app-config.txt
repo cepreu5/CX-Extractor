@@ -1,6 +1,5 @@
 var
 rememberDurationInDays = 30; // 0 means forever
-CfgDate="13.01",
 TextBtns=1;
 //Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',
 //digi = '1234567890--.1234567890.1234567890';
