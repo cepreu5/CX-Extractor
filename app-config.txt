@@ -15,6 +15,7 @@ Accs = [
   "Светлана",
   "-- Интернет --",
   "Paysera",
+  "PayseraBGN",
   "Revolut",
   "RevolutBGN",
   "RevolutUSD",
