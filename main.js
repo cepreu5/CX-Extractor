@@ -23,7 +23,9 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 var AlreadyDecripted = false, // in newcrypt.js
 	plainHTML,
 	encryptedLink;
-
+var Templates = [], // array of templates
+	AutoT = [], // array of Auto templates
+	Replaces = []; // array of replace fields
 
 function processUser() {
 	var parameters = location.search.substring(1).split("&");
@@ -425,7 +427,7 @@ function MakeTmpl() {
 		let Found=FindInCol(AutoT, document.getElementById("TmplName").value, 1); //show auto
 		if (Found>=0) document.getElementById("TmplAuto").value=AutoT[Found-1];
 	}
-	document.getElementById("blink").hidden=true;
+	// document.getElementById("blink").hidden=true;
 }
 
 function ClearTmplFld() {
@@ -1156,7 +1158,7 @@ function MemTemplate() {
 	}
 	MemAuto();
 	getTmpls(); //recreate template Selection
-	document.getElementById("blink").hidden=false;
+	// document.getElementById("blink").hidden=false;
 }
 
 var myBlob, url, anchor;

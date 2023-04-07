@@ -133,7 +133,7 @@ AutoT = [
 "BG4***681", "InDebit",
 "BG6***907", "InSvetla",
 "Unique", "ToRevoBGN",
-"Ток Ч. връх", "ePayТЧ",
+"връх", "ePayТЧ",
 "е-Винетка", "Винетка",
 "22342544", "Alo",
 "64216106", "EasyPay",
