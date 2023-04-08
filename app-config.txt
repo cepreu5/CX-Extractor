@@ -1,5 +1,4 @@
 var
-CfgDate="8.04",
 rememberDurationInDays = 30; // 0 means forever
 TextBtns=1;
 //Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',

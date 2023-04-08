@@ -19,6 +19,7 @@ var ReplaceF, // Replace Field calculated in getTmpls and used in Extract
 	ZoomL1="100%",
 	ZoomL2="160%",
 	cfgZoom=ZoomL1,
+	CfgDate="",
 	OpenFrom = 'res2'; // calculator OpenFrom which field
 var AlreadyDecripted = false, // in newcrypt.js
 	plainHTML,
@@ -611,6 +612,7 @@ function Config() {
 	else document.getElementById("Zoom1").checked = true;
 	document.getElementById("NormZoom").value=ZoomL1;
 	document.getElementById("MaxZoom").value=ZoomL2;
+	document.getElementById("res6").value="Шаблони от: " + CfgDate;
 }
 
 function SaveConfig() {

@@ -39,7 +39,6 @@
 	async function FireReadTemplates() {
 		var resp,
 			  tmplRef = ref(db);
-
 		resp = await get(child(tmplRef, 'Templates'))
 		.then ((snapshot) => {
 			snapshot.forEach((childSnapshot) => {
@@ -48,6 +47,13 @@
 				Templates.push(childKey);
 				Templates.push(childData.Tmpl);
 			})
+		});
+		get(child(tmplRef, 'Config/CfgDate')).then((snapshot)=> {
+			if (snapshot.exists()) {
+				CfgDate = snapshot.val().Tmpl;
+			} else {
+				CfgDate = "Няма дата!";
+			}
 		});
 		resp = await get(child(tmplRef, 'AutoT'))
 		.then ((snapshot) => {
@@ -70,9 +76,6 @@
 		});
 	}
 
-	//var rdbtn = document.getElementById("RTmpls");
-	//rdbtn.addEventListener("click", FireReadTemplates);
-
 	function FireWriteTemplates() {
 		for (let i=0; i<Templates.length; i++) {
 			set(ref(db, "Templates/" + Templates[i]), {Tmpl: Templates[i+1].replace(/\\/gi, "\\\\")})
@@ -80,6 +83,11 @@
 			.catch((error)=>{console.log(i + ", error: " + error)});
 			i=i+1;  
 		}
+		let d = new Date();
+		let m = d.getMonth() + 1;
+		if (m < 10) m = '0' + m;
+		d = d.getDate() + "." + m;
+		set(ref(db, "Config/CfgDate"), {Tmpl: d})
 		for (let i=0; i<AutoT.length; i++) {
 			set(ref(db, "AutoT/" + AutoT[i]), {Autot: AutoT[i+1]})
 			.then(()=> {console.log(i + ": ")})
@@ -132,7 +140,7 @@
 	flpbtn.addEventListener("click", UpdateTmpl);
 	var delbtn = document.getElementById("DelTmpl");
 	delbtn.addEventListener("click", DeleteTmpl);
-
+	
 	window.addEventListener('load', function () {FireReadTemplates()})
 	
 </script>
@@ -477,7 +485,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 9.04 / 
+			© 2023 CX Extractor 9.04
 		</span>
 	</fieldset>
 	</div>
