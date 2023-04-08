@@ -19,10 +19,8 @@
 <script src="main.js"></script>
 
 <script type="module">
-  // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.19.1/firebase-app.js";
 
-  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyAjXsQL_nenVKdVBVpa3jN15hfP3uw0d_c",
     authDomain: "cxtemplates.firebaseapp.com",
@@ -40,11 +38,10 @@
 
 	async function FireReadTemplates() {
 		var resp,
-			tmplRef = ref(db);
+			  tmplRef = ref(db);
 
 		resp = await get(child(tmplRef, 'Templates'))
 		.then ((snapshot) => {
-			// var Templates = [];
 			snapshot.forEach((childSnapshot) => {
 				var childKey = childSnapshot.key;
 				var childData = childSnapshot.val();
@@ -71,83 +68,72 @@
 				Replaces.push(childData.Repl);
 			})
 		});
-			// const data = snapshot.val();
-			// console.log(Replaces);
 	}
 
-	var rdbtn = document.getElementById("RTmpls");
-	rdbtn.addEventListener("click", FireReadTemplates);
+	//var rdbtn = document.getElementById("RTmpls");
+	//rdbtn.addEventListener("click", FireReadTemplates);
 
-	function FireTemplates() {
+	function FireWriteTemplates() {
 		for (let i=0; i<Templates.length; i++) {
-			set(ref(db, "Templates/" + Templates[i]), {
-					Tmpl: Templates[i+1].replace(/\\/gi, "\\\\")
-				})
-				.then(()=> {
-					console.log(i + ", ")
-				})
-				.catch((error)=>{
-					console.log(i + ", error: " + error)
-				});
+			set(ref(db, "Templates/" + Templates[i]), {Tmpl: Templates[i+1].replace(/\\/gi, "\\\\")})
+			.then(()=> {console.log(i + ", ")})
+			.catch((error)=>{console.log(i + ", error: " + error)});
 			i=i+1;  
 		}
 		for (let i=0; i<AutoT.length; i++) {
-			set(ref(db, "AutoT/" + AutoT[i]), {
-					Autot: AutoT[i+1]
-				})
-				.then(()=> {
-					console.log(i + ": ")
-				})
-				.catch((error)=>{
-					console.log(i + ", error:: " + error)
-				});
+			set(ref(db, "AutoT/" + AutoT[i]), {Autot: AutoT[i+1]})
+			.then(()=> {console.log(i + ": ")})
+			.catch((error)=>{console.log(i + ", error:: " + error)});
 			i=i+1;  
 		}
-
 		for (let i=0; i<Replaces.length; i++) {
-			set(ref(db, "Replaces/" + Replaces[i]), {
-					Repl: Replaces[i+1]
-				})
-				.then(()=> {
-					console.log(i + "; ")
-				})
-				.catch((error)=>{
-					console.log(i + ", error; " + error)
-				});
+			set(ref(db, "Replaces/" + Replaces[i]), {Repl: Replaces[i+1]})
+			.then(()=> {console.log(i + "; ")})
+			.catch((error)=>{console.log(i + ", error; " + error)});
 			i=i+1;  
 		}
-
 	}
 
   function UpdateTmpl() {
-	MemTemplate();
-	FireTemplates();
-	/*
-    update(ref(db, "Templates/" + document.getElementById("TmplName").value), {
-      Tmpl: document.getElementById("res").value
-    })
-    .then(()=>{
-      console.log("Record updated")
-    })
-    .catch((error)=>{
-      console.log("Record not updated, error: " + error)
-    });
-	*/
+		MemTemplate();
+		if (document.getElementById("TmplName").value == "Дублирано име!") return;
+		FireWriteTemplates();
   }
 
-	// var updbtn = document.getElementById("Upd");
-	// updbtn.addEventListener("click", UpdateTmpl);
+  function DeleteTmpl() {
+		const toDel = document.getElementById("TmplName").value;
+		if (toDel != "") {
+			remove(ref(db, "Templates/" + toDel))
+			.then(()=>{
+				console.log("Template: ", toDel, " removed");
+				let Found=FindInCol(AutoT, toDel, 1);
+				if (Found > 0) {
+					remove(ref(db, "AutoT/" + AutoT[Found-1]))
+					.then(()=>{
+						console.log("Triger: ", AutoT[Found-1], " removed");
+					})
+					//.catch((error)=>{
+					//	alert("triger not removed, error: " + error)
+					//});
+				}
+				console.log("Template: ", toDel, " > Triger: ", AutoT[Found-1]);
+				Templates = [];
+				FireReadTemplates();
+				getTmpls(); //recreate template Selection
+			})
+			//.catch((error)=>{
+			//	alert("Record not removed, error: " + error)
+			//});
+		}
+		else alert("Името на шаблона не може да е празно!")
+  }
 
 	var flpbtn = document.getElementById("Floppy");
 	flpbtn.addEventListener("click", UpdateTmpl);
+	var delbtn = document.getElementById("DelTmpl");
+	delbtn.addEventListener("click", DeleteTmpl);
 
-window.addEventListener('load', function () {
-	FireReadTemplates();
-	//alert("It's loaded!")
-})
-	//window.onload = async function() {
-	//	const data = await FireReadTemplates();
-	//}
+	window.addEventListener('load', function () {FireReadTemplates()})
 	
 </script>
 
@@ -185,8 +171,9 @@ window.addEventListener('load', function () {
 		<SELECT ID="Files" style="vertical-align: super; width: 158px;" title="Файлове" 
 			onChange="SelFile()" class="inputMessage">
 		</SELECT>
-		<a><img src="Save.png" width="10px" ID="RTmpls"
-			align="center" title="Зареди"></a>
+		&nbsp;&nbsp;
+		<!--a><img src="Save.png" width="10px" ID="RTmpls"
+			align="center" title="Зареди"></!--a-->
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;
 		<a><img src="Copy.png" width="20px" title="Paste&#13Copy"
@@ -240,7 +227,7 @@ window.addEventListener('load', function () {
 			Име: <input style="text-align:left; width: 7.95em" ID="TmplName" class="inputMessage" value="">&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value="">
 			<a><img src="Remove.png" width="20px" style="vertical-align: bottom;" title="Изтриване"
-				onclick="ClearTmplFld()"></a>
+				ID = "DelTmpl"></a> <!-- onclick="ClearTmplFld()" -->
 			<br>
 			Замени: <input style="text-align:left; margin-top: 5px; width: 5.4em" ID="Replace" class="inputMessage" value="">
 			с <input style="text-align:center; width: 6.8em" class="inputMessage" ID="ReplWith" value=""
@@ -305,7 +292,7 @@ window.addEventListener('load', function () {
 					align="center" title="Редактиране"></!--a-->
 				<a><img src="Save.png" width="20px" ID="Floppy"
 					align="center" title="Запис"></a>
-<!-- onclick="if(event.ctrlKey) {FireTemplates(); FileTemplates('get'); FileTemplates('save'); return false;} else {MemTemplate()}">
+<!-- onclick="if(event.ctrlKey) {FireWriteTemplates(); FileTemplates('get'); FileTemplates('save'); return false;} else {MemTemplate()}">
 				<span id="blink" style="text-align: center; font-family:Arial; font-size:13px; color: var(--LblColor, white);" hidden>
 					 Моля, запишете шаблоните! (Ctrl+click)</span>
 				<script-- type="text/javascript">

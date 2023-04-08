@@ -1224,6 +1224,7 @@ function EditExtr() {
 		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text;
 		FillTmplFdl (document.getElementById("Templates").value, false);
 	}
+	if (CVal < 2) ClearFld('TmplName'); // clear last edited template name
 	ShowAnim("TmplFld");
 	MakeTmpl();
 }
