@@ -77,10 +77,10 @@
 	}
 
 	function FireWriteTemplates() {
-		for (let i=0; i<Templates.length; i++) {
+		for (let i=0; i<Templates.length; i++) { console.log(Templates[i])
 			set(ref(db, "Templates/" + Templates[i]), {Tmpl: Templates[i+1].replace(/\\/gi, "\\\\")})
-			.then(()=> {console.log(i + ", ")})
-			.catch((error)=>{console.log(i + ", error: " + error)});
+			.then(()=> {console.log(Templates[i])}) // Templates[i] + 
+			.catch((error)=>{alert(Templates[i] + ", error: " + error)}); // console.log
 			i=i+1;  
 		}
 		let d = new Date();
@@ -90,14 +90,14 @@
 		set(ref(db, "Config/CfgDate"), {Tmpl: d})
 		for (let i=0; i<AutoT.length; i++) {
 			set(ref(db, "AutoT/" + AutoT[i]), {Autot: AutoT[i+1]})
-			.then(()=> {console.log(i + ": ")})
-			.catch((error)=>{console.log(i + ", error:: " + error)});
+			.then(()=> {console.log(AutoT[i])})
+			.catch((error)=>{alert(AutoT[i] + ", error:: " + error)}); // console.log
 			i=i+1;  
 		}
 		for (let i=0; i<Replaces.length; i++) {
 			set(ref(db, "Replaces/" + Replaces[i]), {Repl: Replaces[i+1]})
-			.then(()=> {console.log(i + "; ")})
-			.catch((error)=>{console.log(i + ", error; " + error)});
+			.then(()=> {console.log(Replaces[i])})
+			.catch((error)=>{alert(Replaces[i] + ", error; " + error)}); // console.log
 			i=i+1;  
 		}
 	}
@@ -124,7 +124,7 @@
 					//	alert("triger not removed, error: " + error)
 					//});
 				}
-				console.log("Template: ", toDel, " > Triger: ", AutoT[Found-1]);
+				alert("Изтрити: шаблон: " + toDel + " > тригер: " + AutoT[Found-1]);
 				Templates = [];
 				FireReadTemplates();
 				getTmpls(); //recreate template Selection
@@ -485,7 +485,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 9.04
+			© 2023 CX Extractor 21.04
 		</span>
 	</fieldset>
 	</div>

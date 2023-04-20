@@ -228,9 +228,9 @@ function Extract6() {
 				if (sep=="") break;
 				document.getElementById("res"+part).value="";
 				T='', WordTmpl=''; // remove Tmpl chars
-				var ii, Yes="^";
-				WordTmpF = (sep.substr(-1)==Yes);
-				if (WordTmpF) { // remove - ^ chars and store them in WordTmpl
+				var ii, Yes="^"; // remove (- ^) chars and store them in WordTmpl
+				WordTmpF = (sep.substr(-1)==Yes) || (sep.substr(-1)=="-");
+				if (WordTmpF) { 
 					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
 						WordTmpl=sep.substr(-1)+WordTmpl;
 						sep=sep.substr(0,sep.length-1);
@@ -242,7 +242,7 @@ function Extract6() {
 					Process(part, pattern, count-1);
 					break;
 				}
-				if (Incl) sep=sep.substr(0,sep.length-1); // cut +    alert(sep)
+				if (Incl) sep=sep.substr(0,sep.length-1); // cut +
 				PutTxt = (sep.substr(-1)=="!");
 				if (PutTxt) {document.getElementById("res"+part).value= // cut !
 					sep.substr(0,sep.length-1);
