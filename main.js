@@ -906,6 +906,8 @@ function switchSheet() {
 /*
 function LetToDig() {
     var Converted = false;
+		//Lets = 'QWERTYUIOPMМ,УЕИШЩКСДЗЦБЯВЕРТЪУИОП',
+		//digi = '1234567890--.1234567890.1234567890';
     var toConv=document.getElementById("res2").value;
     var res = '';
     for (var i=0; i<toConv.length; i++) {
