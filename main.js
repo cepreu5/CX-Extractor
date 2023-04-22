@@ -40,9 +40,9 @@ RegExp.quote = function(str) {
 };
 
 function CheckAuto(F) {
-	if (AllTmplFlag) {return true}
+	if (AllTmplFlag) return true
 	for (let i=0; i<AutoT.length; i++) { 
-		if (F == AutoT[i+1]) {return false}
+		if (F == AutoT[i+1]) return false
 		i=i+1;  
 	}
 	return true;
