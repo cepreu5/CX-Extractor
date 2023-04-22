@@ -314,9 +314,13 @@ function createSels() { // Extract selection field
 			document.getElementById("TSpan"+s+i).innerHTML=I1+I2;
 		}
 		else {
-			var I1='<input ID="'+i+s+
-				'" class="inputMessage" oninput="Extract6();ChangeTip(\'Tip'+s+i+'\', '+s+
-				');" value="" size="'+sz+'" hidden></input>';
+			//var I1='<input ID="'+i+s+
+			//	'" class="inputMessage" oninput="Extract6();ChangeTip(\'Tip'+s+i+'\', '+s+
+			//	');" value="" size="'+sz+'" hidden></input>';
+			var I1='<input class="inputMessage" ID="'+i+s+
+				'" oninput="Extract6();ChangeTip(\'Tip'+s+i+
+				'\', '+s+');" value="1" style="width: '+sz+
+				'em" hidden></input>';
 			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
 			  '">.</span>';
 			document.getElementById("TSpan"+s+i).innerHTML=I1+I2;
@@ -329,7 +333,7 @@ function createSels() { // Extract selection field
 		x = document.createElement("input");
 		x.type = "checkbox";
 		x.setAttribute("id", "Exp"+i);
-		x.setAttribute("style", "vertical-align: sub;");
+		x.setAttribute("style", "vertical-align: sub; margin-right: 8px;");
 		x.setAttribute("onchange", "Extract6()");
 		x.setAttribute("hidden", true);
 		where = document.getElementById('Sels');
@@ -368,10 +372,10 @@ function createSels() { // Extract selection field
 		createLbl(i, "2", " Брой ");
 		createInp(i, "count", 3)
 		createLbl(i, "", " След ");
-		createInp(i, "sep", 10);
+		createInp(i, "sep", 8);
 		createLbl(i, "3", "&nbsp Разход");
 		createChk(i);
-		createInp(i, "Add", 1);
+		createInp(i, "Add", 2);
 
 		document.getElementById("Sels").appendChild(document.createElement("br"));
 	}
