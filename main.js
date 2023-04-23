@@ -319,7 +319,7 @@ function createSels() { // Extract selection field
 			//	');" value="" size="'+sz+'" hidden></input>';
 			var I1='<input class="inputMessage" ID="'+i+s+
 				'" oninput="Extract6();ChangeTip(\'Tip'+s+i+
-				'\', '+s+');" value="1" style="width: '+sz+
+				'\', '+s+');" value="" style="width: '+sz+
 				'em" hidden></input>';
 			var I2='<span class="tooltiptext" onclick="NowHide(this)" id="Tip'+s+i+
 			  '">.</span>';
