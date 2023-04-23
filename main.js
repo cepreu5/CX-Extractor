@@ -1016,7 +1016,19 @@ function init() {
 	document.getElementById('Yes').style.display = "inline";
 	//document.getElementById("Info").innerHTML="» SW: "+ww+",      "+((100*ww/330)-6).toFixed(0)+"%";
 	createCats();
-	document.getElementById("Log").value="";
+	document.getElementById("Log").value=`Текст:
+ааааааа! - включи задължително ааааааа
+           в резултата
+ааааааа+ - включи ааааааа, ако се среща                                        
+           в текста
+ааа-^-^^ - включи думите, съответстващи
+>        - включи дума с пореден номер
+           Брой от началото на текста
+           в резултата
+Сума: Като последен елемент в полета 3-5
+      в шаблона може да се записват +-*/
+      за извършване на пресмятания с
+      числата от тези полета`;
 	document.getElementById("PwdFld").hidden = true;
 	if (localStorage.getItem("ZoomL1")!=null) ZoomL1=localStorage.getItem("ZoomL1");
 	if (localStorage.getItem("ZoomL2")!=null) ZoomL2=localStorage.getItem("ZoomL2");
