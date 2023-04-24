@@ -196,6 +196,18 @@ function Extract6() {
 		}
 	}
 
+	function Process2(part, pattern, c, cc) {
+		re = new RegExp(pattern,"g");
+		work=text.match(re);
+		//console.log(work);
+		if ((work!=null) && (work[c]!=undefined) && (c<=work.length)) {
+			document.getElementById("res"+part).value=work[c];
+		}
+		if (cc > 0) for (let i=1; i<cc; i++) {
+			if (work[c+i]!=undefined) document.getElementById("res"+part).value+=" "+work[c+i];
+		}
+	}
+
 	for (part=1; part<=6; part++) {
 		sep=document.getElementById("sep"+part).value;
 		count=document.getElementById("count"+part).value;
@@ -226,9 +238,16 @@ function Extract6() {
 				break;
 			case "3": // text
 				if (sep=="") break;
+				var ii, Yes="^";
+				if (sep.substr(-1)==">") {
+					pattern = "(?<=([A-z,0-9,А-я,\,\.\:]+\s){0})([A-z,0-9,А-я,\,\.\:]+)";
+					ii = +sep.substr(0, 1)
+					Process2(part, pattern, count-1, ii);
+					break;
+				}
 				document.getElementById("res"+part).value="";
-				T='', WordTmpl=''; // remove Tmpl chars
-				var ii, Yes="^"; // remove (- ^) chars and store them in WordTmpl
+				T='', WordTmpl='';
+				// remove (- ^) chars and store them in WordTmpl
 				WordTmpF = (sep.substr(-1)==Yes) || (sep.substr(-1)=="-");
 				if (WordTmpF) { 
 					while (sep.substr(-1)==Yes || sep.substr(-1)=="-") {
@@ -237,11 +256,6 @@ function Extract6() {
 					}
 				}
 				Incl = (sep.substr(-1)=="+");
-				if (sep.substr(-1)==">") {
-					pattern = "(?<=([A-z,0-9,А-я,\,\.\:]+\s){0})([A-z,0-9,А-я,\,\.\:]+)";
-					Process(part, pattern, count-1);
-					break;
-				}
 				if (Incl) sep=sep.substr(0,sep.length-1); // cut +
 				PutTxt = (sep.substr(-1)=="!");
 				if (PutTxt) {document.getElementById("res"+part).value= // cut !
