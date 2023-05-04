@@ -415,10 +415,10 @@
 						if (!document.getElementById("SplitArea").classList.length>0) Total += +document.getElementById("res2").value
 						else Cnt -= 1
 						Cnt += 1
-						document.getElementById("Log").value = document.getElementById("Log").value +
+						document.getElementById("Log").value = 
 							Cnt + ". "+document.getElementById("res3").value + " " +
 							Number(document.getElementById("res2").value).toFixed(2) + " "+document.getElementById("Cats").value + " " +
-							Total.toFixed(2)+"\n";
+							Total.toFixed(2)+"\n"+document.getElementById("Log").value;
 						if ((Number(document.getElementById("res2Split").value) !== 0) ||  // има още за сплитване
 							(document.getElementById("res2Split").value === "0.00")) {
 							document.getElementById("res2").value = "";	
@@ -485,7 +485,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 25.04
+			© 2023 CX Extractor 4.05
 		</span>
 	</fieldset>
 	</div>

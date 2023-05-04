@@ -185,6 +185,7 @@ function NoCat(S) {
 function Extract6() {
 	var C1, C2;
 	var text=document.getElementById("MsgText").value;
+	//console.log("Extract6");
 	text=text + ' ';	// to process dd.dd at the end
 	var Exp, T, TT, TS, sep, count, Incl, pattern, re, work, WordTmpl, WordTmpF;
 
@@ -196,10 +197,10 @@ function Extract6() {
 		}
 	}
 
-	function Process2(part, pattern, c, cc) {
+	function Process2(part, pattern, c, cc) { // get cc words after >
+		//console.log(cc);
 		re = new RegExp(pattern,"g");
 		work=text.match(re);
-		//console.log(work);
 		if ((work!=null) && (work[c]!=undefined) && (c<=work.length)) {
 			document.getElementById("res"+part).value=work[c];
 		}
@@ -719,7 +720,7 @@ function dataListOpt(Field, List) {
 function showDiv() {
 	var x = (Files.length/2) - 1; // remove ShowSaldo option and Help at first use
 	document.getElementById("Files").remove(x);
-	document.getElementById("Log").value = "";
+	//document.getElementById("Log").value = "";
 	CalcFl=true;
 	document.getElementById("CalcSp").hidden=true;
 	document.getElementById('ZoomBtn2').style.display = "none";
