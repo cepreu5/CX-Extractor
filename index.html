@@ -65,7 +65,7 @@
 			inpTextValue = colorsData.InpText;
 			lblColorValue = colorsData.LblColor;
 			formBgrdValue = colorsData.FormBgrd;
-			console.log(inpTextValue, lblColorValue, formBgrdValue);
+			// console.log(inpTextValue, lblColorValue, formBgrdValue);
 			} else {
 				inpTextValue = "#010101";
 				lblColorValue = "#010101";
@@ -80,28 +80,6 @@
 		root.style.setProperty("--InpText", inpTextValue);
 		root.style.setProperty("--LblColor", lblColorValue);
 		root.style.setProperty("--FormBgrd", formBgrdValue);
-
-		/* resp = await get(child(tmplRef, 'Config/IColor')).then((snapshot)=> {
-			if (snapshot.exists()) {
-				inpTextValue = snapshot.val().InpText; // console.log(inpTextValue);
-			} else {
-				inpTextValue = "#010101";
-			}
-		}); 
-		resp = await get(child(tmplRef, 'Config/LColor')).then((snapshot)=> {
-			if (snapshot.exists()) {
-				lblColorValue = snapshot.val().LblColor; // console.log("color
-			} else {
-				lblColorValue = "#010101";
-			}
-		});*/
-		// Изберете всички елементи с клас "inputMessage"
-		// const inputMessageElements = document.getElementsByClassName("inputMessage");
-		// Обходете всички елементи и задайте стиловете им
-		// for (let i = 0; i < inputMessageElements.length; i++) { // console.log(i, inpTextValue, inputMessageElements[i]);
-		// 	inputMessageElements[i].style.color = inpTextValue;
-		// }
-
 		resp = await get(child(tmplRef, 'AutoT'))
 		.then ((snapshot) => {
 			snapshot.forEach((childSnapshot) => {
@@ -125,9 +103,10 @@
 
 	function FireWriteTemplates() {
 		var pos, icolor, lcolor, fcolor;
-		for (let i=0; i<Templates.length; i++) { console.log(Templates[i])
+		for (let i=0; i<Templates.length; i++) { // console.log(Templates[i])
 			set(ref(db, "Templates/" + Templates[i]), {Tmpl: Templates[i+1].replace(/\\/gi, "\\\\")})
-			.then(()=> {console.log(Templates[i])}) // Templates[i] + 
+			.then(()=> {//console.log(Templates[i])
+			  }) // Templates[i] + 
 			.catch((error)=>{alert(Templates[i] + ", error: " + error)}); // console.log
 			i=i+1;  
 		}
@@ -140,28 +119,25 @@
 		pos = document.getElementById("Log").value.indexOf("--InpText:");
 		if (pos != -1) {
 			icolor = document.getElementById("Log").value.slice(pos+11, pos+18);
-			console.log(pos, icolor);
+			//console.log(pos, icolor);
 			updateData["Config/Colors/InpText"] = icolor;
-			// set(ref(db, "Config/IColor"), {InpText: color});
 		}
 		pos = document.getElementById("Log").value.indexOf("--LblColor:");
 		if (pos != -1) {
 			lcolor = document.getElementById("Log").value.slice(pos+12, pos+19);
-			console.log("L", pos, lcolor);
+			//console.log("L", pos, lcolor);
 			updateData["Config/Colors/LblColor"] = lcolor;
-			// set(ref(db, "Config/LColor"), {LblColor: color});
 		}
 		pos = document.getElementById("Log").value.indexOf("--FormBgrd:");
 		if (pos != -1) {
 			fcolor = document.getElementById("Log").value.slice(pos+12, pos+19);
-			console.log("F", pos, fcolor);
+			//console.log("F", pos, fcolor);
 			updateData["Config/Colors/FormBgrd"] = fcolor;
-			// set(ref(db, "Config/LColor"), {LblColor: color});
 		}
 		// Обединете двата записа и ги запишете под ключ "Colors"
 		update(ref(db), updateData)
 		.then(() => {
-			console.log("Данните са успешно записани с ключ 'Colors' в базата данни.");
+			console.log("Настройките са успешно записани с ключ 'Colors' в базата данни.");
 		})
 		.catch((error) => {
 			console.error("Грешка при запис на данните:", error);
@@ -169,13 +145,15 @@
 
 		for (let i=0; i<AutoT.length; i++) {
 			set(ref(db, "AutoT/" + AutoT[i]), {Autot: AutoT[i+1]})
-			.then(()=> {console.log(AutoT[i])})
+			.then(()=> { //console.log(AutoT[i])
+			  })
 			.catch((error)=>{alert(AutoT[i] + ", error:: " + error)}); // console.log
 			i=i+1;  
 		}
 		for (let i=0; i<Replaces.length; i++) {
 			set(ref(db, "Replaces/" + Replaces[i]), {Repl: Replaces[i+1]})
-			.then(()=> {console.log(Replaces[i])})
+			.then(()=> {//console.log(Replaces[i])
+			  })
 			.catch((error)=>{alert(Replaces[i] + ", error; " + error)}); // console.log
 			i=i+1;  
 		}
@@ -561,7 +539,7 @@
 				<option value="--LblColor">Етикети</option>
 				<option value="--InpText">Текст</option>
 				<option value="--InpText">-------------</option>
-				<option value="--FormColor">Форма</option>
+				<!--option value="--FormColor">Форма</!--option-->
 				<option value="--BtnColor">Бутони</option>
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
