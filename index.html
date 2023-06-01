@@ -37,8 +37,8 @@
   const db = getDatabase();
 
 	async function FireReadTemplates() {
-		var resp,
-			  tmplRef = ref(db);
+		var resp, inpTextValue, lblColorValue, formBgrdValue,
+			tmplRef = ref(db);
 		resp = await get(child(tmplRef, 'Templates'))
 		.then ((snapshot) => {
 			snapshot.forEach((childSnapshot) => {
@@ -55,6 +55,53 @@
 				CfgDate = "Няма дата!";
 			}
 		});
+		// Прочетете стойностите на ключ "Colors"
+		resp = await get(child(tmplRef, "Config/Colors"))
+		.then((snapshot) => {
+			if (snapshot.exists()) {
+			const colorsData = snapshot.val();
+			console.log("Стойностите на ключ 'Colors' са:", colorsData);
+			// Използвайте стойностите на цветовете както ви е необходимо
+			inpTextValue = colorsData.InpText;
+			lblColorValue = colorsData.LblColor;
+			formBgrdValue = colorsData.FormBgrd;
+			console.log(inpTextValue, lblColorValue, formBgrdValue);
+			} else {
+				inpTextValue = "#010101";
+				lblColorValue = "#010101";
+				formBgrdValue = "#211308";
+				console.log("Ключът 'Colors' не съществува в базата данни.");
+			}
+		})
+		.catch((error) => {
+			console.error("Грешка при прочитане на данните от ключ 'Colors':", error);
+		});
+		var root = document.documentElement;
+		root.style.setProperty("--InpText", inpTextValue);
+		root.style.setProperty("--LblColor", lblColorValue);
+		root.style.setProperty("--FormBgrd", formBgrdValue);
+
+		/* resp = await get(child(tmplRef, 'Config/IColor')).then((snapshot)=> {
+			if (snapshot.exists()) {
+				inpTextValue = snapshot.val().InpText; // console.log(inpTextValue);
+			} else {
+				inpTextValue = "#010101";
+			}
+		}); 
+		resp = await get(child(tmplRef, 'Config/LColor')).then((snapshot)=> {
+			if (snapshot.exists()) {
+				lblColorValue = snapshot.val().LblColor; // console.log("color
+			} else {
+				lblColorValue = "#010101";
+			}
+		});*/
+		// Изберете всички елементи с клас "inputMessage"
+		// const inputMessageElements = document.getElementsByClassName("inputMessage");
+		// Обходете всички елементи и задайте стиловете им
+		// for (let i = 0; i < inputMessageElements.length; i++) { // console.log(i, inpTextValue, inputMessageElements[i]);
+		// 	inputMessageElements[i].style.color = inpTextValue;
+		// }
+
 		resp = await get(child(tmplRef, 'AutoT'))
 		.then ((snapshot) => {
 			snapshot.forEach((childSnapshot) => {
@@ -77,6 +124,7 @@
 	}
 
 	function FireWriteTemplates() {
+		var pos, icolor, lcolor, fcolor;
 		for (let i=0; i<Templates.length; i++) { console.log(Templates[i])
 			set(ref(db, "Templates/" + Templates[i]), {Tmpl: Templates[i+1].replace(/\\/gi, "\\\\")})
 			.then(()=> {console.log(Templates[i])}) // Templates[i] + 
@@ -87,7 +135,38 @@
 		let m = d.getMonth() + 1;
 		if (m < 10) m = '0' + m;
 		d = d.getDate() + "." + m;
-		set(ref(db, "Config/CfgDate"), {Tmpl: d})
+		set(ref(db, "Config/CfgDate"), {Tmpl: d});
+		const updateData = {};
+		pos = document.getElementById("Log").value.indexOf("--InpText:");
+		if (pos != -1) {
+			icolor = document.getElementById("Log").value.slice(pos+11, pos+18);
+			console.log(pos, icolor);
+			updateData["Config/Colors/InpText"] = icolor;
+			// set(ref(db, "Config/IColor"), {InpText: color});
+		}
+		pos = document.getElementById("Log").value.indexOf("--LblColor:");
+		if (pos != -1) {
+			lcolor = document.getElementById("Log").value.slice(pos+12, pos+19);
+			console.log("L", pos, lcolor);
+			updateData["Config/Colors/LblColor"] = lcolor;
+			// set(ref(db, "Config/LColor"), {LblColor: color});
+		}
+		pos = document.getElementById("Log").value.indexOf("--FormBgrd:");
+		if (pos != -1) {
+			fcolor = document.getElementById("Log").value.slice(pos+12, pos+19);
+			console.log("F", pos, fcolor);
+			updateData["Config/Colors/FormBgrd"] = fcolor;
+			// set(ref(db, "Config/LColor"), {LblColor: color});
+		}
+		// Обединете двата записа и ги запишете под ключ "Colors"
+		update(ref(db), updateData)
+		.then(() => {
+			console.log("Данните са успешно записани с ключ 'Colors' в базата данни.");
+		})
+		.catch((error) => {
+			console.error("Грешка при запис на данните:", error);
+		});
+
 		for (let i=0; i<AutoT.length; i++) {
 			set(ref(db, "AutoT/" + AutoT[i]), {Autot: AutoT[i+1]})
 			.then(()=> {console.log(AutoT[i])})
@@ -291,7 +370,9 @@
 
 		<form name="submit-to-google-sheet" onsubmit="return false;">
 			<span ID="TmplFld">
-				Шаблон: <input style="text-align:left; margin-top: 5px; width: 14.4em" ID="res" class="inputMessage" value="">
+				Шаблон: 
+				<input style="text-align:left; margin-top: 5px; width: 14.4em" ID="res" 
+					class="inputMessage" onclick="SelectAndCopy('res');" value="">
 				<a><img src="Space.png"  title="Генериране" width="20px" onclick="ClearFld('res'); MakeTmpl()"
 					align="center"></a>
 				<a><img src="Remove.png" width="20px" align="center" title="Изтриване" 
@@ -485,7 +566,7 @@
 				<option value="--InpBgrd">Полета</option>
 			</SELECT>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 4.05
+			© 2023 CX Extractor 1.06
 		</span>
 	</fieldset>
 	</div>

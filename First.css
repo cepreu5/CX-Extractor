@@ -1,7 +1,7 @@
 @import url("Skin/Colors1.css");
 
 fieldset {
-  background-color: var(--FormColor, #242424);
+  /*background-color: var(--FormColor, #242424);*/
   background-image: url("Skin/Bgrd.jpg");
   background-repeat: repeat;
 }

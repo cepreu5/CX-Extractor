@@ -910,13 +910,14 @@ function switchSheet() {
 	if (TextBtns) document.getElementById("TextRow").hidden=false;
 }
 
-  function setColor() {
+function setColor() {
 	var SC=document.getElementById("colorPicker").value;
+	console.log(SC)
 	var root = document.documentElement;
-  root.style.setProperty(document.getElementById("Colors").value, SC);
-  document.getElementById("Log").value+=
-    document.getElementById("Colors").value+": "+SC+";\n";
-  document.getElementById("Colors").selectedIndex=0;
+	root.style.setProperty(document.getElementById("Colors").value, SC);
+	document.getElementById("Log").value+=
+    	document.getElementById("Colors").value+": "+SC+";\n";
+	document.getElementById("Colors").selectedIndex=0;
 }
 
 /*
@@ -1244,11 +1245,13 @@ function EditExtr() {
 	if (TextBtns) document.getElementById("TextRow").hidden=false;
 	let T=document.getElementById("Info").innerHTML;
 	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
+	// console.log(CVal);
 	if ((CVal>1) && !(T.includes(":"))) {
 		document.getElementById("Info").innerHTML+=": "+document.getElementById("Templates").options[CVal].text;
+		document.getElementById("TmplName").value=document.getElementById("Templates").options[CVal].text;
 		FillTmplFdl (document.getElementById("Templates").value, false);
 	}
-	if (CVal < 2) ClearFld('TmplName'); // clear last edited template name
+	// if (CVal < 2) ClearFld('TmplName'); // clear last edited template name
 	ShowAnim("TmplFld");
 	MakeTmpl();
 }
