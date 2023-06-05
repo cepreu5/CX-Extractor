@@ -912,7 +912,7 @@ function switchSheet() {
 
 function setColor() {
 	var SC=document.getElementById("colorPicker").value;
-	console.log(SC)
+	//console.log(SC)
 	var root = document.documentElement;
 	root.style.setProperty(document.getElementById("Colors").value, SC);
 	document.getElementById("Log").value+=
@@ -969,9 +969,11 @@ function ShowColors() {
 	if (document.getElementById("colorPicker").hidden) {
 		document.getElementById("colorPicker").hidden = false;
 		document.getElementById("Colors").hidden = false;
+		document.getElementById("SaveCol").hidden = false;
 	} else {
 		document.getElementById("colorPicker").hidden = true;
 		document.getElementById("Colors").hidden = true;
+		document.getElementById("SaveCol").hidden = true;
 	}
 }
 
@@ -1254,4 +1256,19 @@ function EditExtr() {
 	// if (CVal < 2) ClearFld('TmplName'); // clear last edited template name
 	ShowAnim("TmplFld");
 	MakeTmpl();
+}
+
+const setAnimationName = (element, animationName) => {
+	if (element) {
+		element.style.animationName = animationName;
+	}
+	};
+	
+function CXAnim() {
+	const textAnimation = document.querySelector(".text-stroke");
+
+	setAnimationName(textAnimation, "none");
+	requestAnimationFrame(() =>
+		setTimeout(() => setAnimationName(textAnimation, ""), 0)
+	);
 }
