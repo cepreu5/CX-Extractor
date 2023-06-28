@@ -1,4 +1,4 @@
 # CX-Extractor
 CX Extractor versions
 #
-The current CalcBranch of the Exctractor.
+The current branch of CX Exctractor is CX-Fire - FireBase configuration.
