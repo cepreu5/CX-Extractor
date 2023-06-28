@@ -691,6 +691,7 @@ function Normal() {
 		text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
 		text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
 		text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
+		text=text.replace(/(\d\d)\.(\d\d)\.(\d\d)/g,'$1.$2.20$3'); // 07.09.19 07.09.2019
 		text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
 		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
 		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
@@ -713,6 +714,11 @@ function dataListOpt(Field, List) {
 		// 	z.setAttribute("value", ".");
 		// 	z.setAttribute("readonly", true);
 		// }
+		// ChatGPT version
+		// if (Field[i].charAt(0) === "-") { // Check if the first character is "-"
+        //     z.value = ".";
+        //     z.disabled = true; // Disable the option
+        // }
 		document.getElementById(List).appendChild(z);
 	}
 }
