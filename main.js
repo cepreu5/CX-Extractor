@@ -1035,11 +1035,8 @@ function init() {
 	createSels();
 	dataListOpt(Notes, "combo-options");
 	dataListOpt(Accs, "acc-options");
-	// document.getElementById("MsgText").value="Тук поставете текста, от който искате да вземете данни.";
-	// document.getElementById("MsgText").select()
 	AddCfg();
 	document.getElementById('Yes').style.display = "inline";
-	//document.getElementById("Info").innerHTML="» SW: "+ww+",      "+((100*ww/330)-6).toFixed(0)+"%";
 	createCats();
 	document.getElementById("Log").value = Help;
 	document.getElementById("PwdFld").hidden = true;
@@ -1060,10 +1057,8 @@ function init() {
 	BArea = document.getElementById("Top").innerHTML;
 	if (ww<WLimit) {
 		document.getElementById("Top").hidden = false;
-		//document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
 	}
 	else {
-		//document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
 		document.getElementById("Top").innerHTML="";
 		document.getElementById("Bottom").innerHTML=BArea;
 		document.getElementById("Bottom").hidden = false;
@@ -1078,10 +1073,12 @@ function init() {
 		CZoom();
 		document.getElementById("Zoom2").checked = true;
 	}
-	//GetMemTemplates();
 	getTmpls();
 	ClearTextArea();
 	if (TextBtns) document.getElementById("TextRow").hidden=false;
+		//document.getElementById("Top").parentNode.removeChild(document.getElementById("Top"));
+		//document.getElementById("Bottom").parentNode.removeChild(document.getElementById("Bottom"));
+	//document.getElementById("Info").innerHTML="» SW: "+ww+",      "+((100*ww/330)-6).toFixed(0)+"%";
 }	
 
 function paste() {
@@ -1092,7 +1089,6 @@ function paste() {
 	setTimeout(function() {
 		if (document.getElementById("MsgText").value!="") AutoTmpl();	
 	},2500);
-	document.getElementById("Note").value = document.getElementById("MsgText").value;
 }
 
 function init2() {
