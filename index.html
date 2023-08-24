@@ -179,9 +179,9 @@
 					.then(()=>{
 						console.log("Triger: ", AutoT[Found-1], " removed");
 					})
-					//.catch((error)=>{
-					//	alert("triger not removed, error: " + error)
-					//});
+					.catch((error)=>{
+						alert("Triger not removed, error: " + error)
+					});
 				}
 				alert("Изтрити: шаблон: " + toDel + " > тригер: " + AutoT[Found-1]);
 				Templates = [];
@@ -283,8 +283,13 @@
 			Увел.
 			<input style="text-align:center; width: 3.5em" class="inputMessage" ID="MaxZoom" value="">
 			&nbsp;
-			<input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
-			  onclick="SaveConfig()" value="Запис">
+			<!--input type = "button" style="background-color: var(--TipColor, Yellow); color: var(--TipText, black); cursor: pointer;" 
+			  onclick="SaveConfig()" value="Запис"-->
+	
+			<a><img src="Save.png" width="20px" style="vertical-align: bottom;" ID="Floppy2"
+				onclick="if(event.ctrlKey) {FileTemplates('get'); FileTemplates('save'); return false;} else {SaveConfig()}"
+				title="Запис&#13Extract"></a>&nbsp;
+	
 			<a><img src="Remove.png" width="20px" style="vertical-align: bottom;"  title="Reset" 
 			  onclick="ResetConfig()"></a>
 			<hr>
@@ -300,6 +305,7 @@
 			align="center" title="Параметри"></a><br>
 
 		<button class="solo typewriter-yellow" onclick="EditExtr()"><span ID="Info"></span></button>
+		<button class="solo typewriter-yellow" style="width: 18%" onclick="AutoTmpl()"><span> » </span></button>
 		<span ID="Sels" hidden>
 			Име: <input style="text-align:left; width: 7.95em" ID="TmplName" class="inputMessage" value="">&nbsp;
 			Тригер: <input style="text-align:left; width: 7.5em" ID="TmplAuto" class="inputMessage" value="">
@@ -558,7 +564,7 @@
 			</SELECT>
 			<a><img src="Save.png" width="20px" ID="SaveCol" align="center" title="Запис цветове" hidden></a>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 1.06
+			© 2023 CX Extractor 24.08
 		</span>
 	</fieldset>
 	</div>

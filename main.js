@@ -484,7 +484,7 @@ function FillTmplFdl(Tmpl, clear) {
 
 function SelTmpl(Tmpl, clear) {
 	if (clear) {
-	  document.getElementById("Info").innerHTML="» Редактиране на екстракт";
+	  document.getElementById("Info").innerHTML="Редактиране на екстракт";
 	  if (document.getElementById("Sels").classList.length>0) ShowAnim("Sels");
 	  if (document.getElementById("TmplFld").classList.length>0) ShowAnim('TmplFld');
 	  for (var i=3; i<7; i++) document.getElementById('Add'+i).value=""; // clear Add fields
@@ -495,7 +495,8 @@ function SelTmpl(Tmpl, clear) {
 	if (Tmpl[0] == '"') { // delete "s
 		result=Tmpl.split('"');
 		Tmpl=result[1];
-	}	
+	}
+	document.getElementById("Info").innerHTML="Редактиране на шаблон";
 	result=Tmpl.split("#");
 	ReplaceF=result[LTmpl];
 	if (typeof ReplaceF === "undefined") ReplaceF=0;
@@ -588,16 +589,17 @@ function AutoTmpl() {
 	document.getElementById("NormBtn").title="Нормализация";
 	var i, j, stop=false;
 	var text=document.getElementById("MsgText").value;
-	if (!AllTmplFlag && (text!="")) {
+	if (!AllTmplFlag && (text!="")) {console.log("Start: " + Start);
 		for (i=Start; i<AutoT.length; i++) {
-			if (i==(AutoT.length-1)) Start=1; // next search from begining again
+			// console.log(AutoT[i]);
+			if (i==(AutoT.length-1)) {Start=1; stop=true} // next search from begining again
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
 			if (text.match(re)) { // намерен е тригера в текста
 				for (j=0; j<Templates.length; j++) { // търсим шаблон със съответното име и го прилагаме
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
 						WorkTmpl=Templates[j];
 						document.getElementById("TmplName").value=Templates[j];
-						document.getElementById("Info").innerHTML="» Редактиране на шаблон: "+WorkTmpl;
+						document.getElementById("Info").innerHTML=i+" Редактиране на шаблон: "+WorkTmpl;
 						ClearDef();
 						SelTmpl(Templates[j+1], false);
 						Extract6();
