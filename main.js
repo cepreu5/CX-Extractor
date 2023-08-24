@@ -696,7 +696,7 @@ function Normal() {
 		text=text.replace(/ ([\d]) ([\d\s])/g,'$1$2');		// € 5 672.65 € 5672.65
 		text=text.replace(/(\d\d\d\d)\-(\d\d)\-(\d\d)/g,'$3.$2.$1'); // 2019-07-19 19.07.2019
 		text=text.replace(/(\d\d\d\d)\.(\d\d)\.(\d\d)/g,'$3.$2.$1'); // 2019.07.19 19.07.2019
-		text=text.replace(/(\d\d)\.(\d\d)\.(\d\d)/g,'$1.$2.20$3'); // 07.09.19 07.09.2019
+		text=text.replace(/(\d\d)\.(\d\d)\.(\d\d) /g,'$1.$2.20$3 '); // 07.09.19 07.09.2019
 		text=text.replace(/(\d\d)\-(\d\d)\-(\d\d\d\d)/g,'$1.$2.$3'); // 07-09-2019 07.09.2019
 		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d\d\d)/g,'$1.$2.$3'); // 07/09/2019 07.09.2019
 		text=text.replace(/(\d\d)\/(\d\d)\/(\d\d)/g,'$1.$2.$3');// 07/09/19 07.09.19
@@ -1202,7 +1202,7 @@ function FileTemplates(mode) {
 		// (A) CREATE BLOB OBJECT
 		document.getElementById("Log").value = "var Templates = [\n";
 		for (let i=0; i<Templates.length; i++) {
-			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1].replace(/\\/gi, "\\\\")+'",\n';
+			document.getElementById("Log").value+='"'+Templates[i]+'", "'+Templates[i+1].replace(/\\/gi, "\\\\")+'",\n'; // i+': 
 			i=i+1;  
 		}
 		document.getElementById("Log").value+='],'
