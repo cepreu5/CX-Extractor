@@ -496,7 +496,10 @@ function SelTmpl(Tmpl, clear) {
 		result=Tmpl.split('"');
 		Tmpl=result[1];
 	}
-	document.getElementById("Info").innerHTML="Редактиране на шаблон";
+	//document.getElementById("Info").innerHTML="Редактиране на шаблон: " + WorkTmpl;
+	let CVal = document.getElementById("Templates").selectedIndex; // show templ name
+	if (CVal>1)
+		document.getElementById("Info").innerHTML="Редактиране на шаблон: "+document.getElementById("Templates").options[CVal].text;
 	result=Tmpl.split("#");
 	ReplaceF=result[LTmpl];
 	if (typeof ReplaceF === "undefined") ReplaceF=0;
@@ -599,7 +602,7 @@ function AutoTmpl() {
 					if (AutoT[i].toUpperCase() == Templates[j].toUpperCase()) {
 						WorkTmpl=Templates[j];
 						document.getElementById("TmplName").value=Templates[j];
-						document.getElementById("Info").innerHTML=i+" Редактиране на шаблон: "+WorkTmpl;
+						document.getElementById("Info").innerHTML = "Редактиране на шаблон: " + WorkTmpl + ":" + i;
 						ClearDef();
 						SelTmpl(Templates[j+1], false);
 						Extract6();
