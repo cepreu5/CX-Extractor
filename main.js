@@ -594,7 +594,7 @@ function AutoTmpl() {
 	var text=document.getElementById("MsgText").value;
 	if (!AllTmplFlag && (text!="")) {console.log("Start: " + Start);
 		for (i=Start; i<AutoT.length; i++) {
-			// console.log(AutoT[i]);
+			//  console.log(AutoT[i]);
 			if (i==(AutoT.length-1)) {Start=1; stop=true} // next search from begining again
 			var re = new RegExp(AutoT[i-1].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'),"gi");
 			if (text.match(re)) { // намерен е тригера в текста
