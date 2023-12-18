@@ -655,7 +655,7 @@ function SaveConfig() {
 		document.getElementById("Cell1").innerHTML=
 			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'Skin/SendFace.png\');">&nbsp';
 		document.getElementById("Cell2").innerHTML=
-			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+			'<input type="button" class="abutton" title="Paste" style="background-image: url(\'Skin/ExtractFace.png\');" onclick="paste()">&nbsp';
 		document.getElementById("Cell3").innerHTML=
 			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
 		//document.getElementById("Cell4").innerHTML=
@@ -907,7 +907,7 @@ function switchSheet() {
 		document.getElementById("Cell1").innerHTML=
 			'<input type="submit" class="abutton" title="Изпрати" onclick="showDiv()" value="" style="background-image: url(\'Skin/SendFace.png\');">&nbsp';
 		document.getElementById("Cell2").innerHTML=
-			'<input type="button" class="abutton" title="Екстракт" style="background-image: url(\'Skin/ExtractFace.png\');" ID="ExtBtn" onclick="ExtClick()">&nbsp';
+			'<input type="button" class="abutton" title="Paste" style="background-image: url(\'Skin/ExtractFace.png\');" onclick="paste()">&nbsp';
 		document.getElementById("Cell3").innerHTML=
 			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
 		if (document.getElementById("Top").innerHTML=="") {BArea=document.getElementById("Bottom").innerHTML;}

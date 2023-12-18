@@ -253,8 +253,8 @@
 			align="center" title="Зареди"></!--a-->
 		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		&nbsp;
-		<a><img src="Copy.png" width="20px" title="Paste&#13Copy"
-			onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></a>
+		<a><img src="Extract.png" width="20px" title="Екстракт" ID="ExtBtn"
+			onclick="ExtClick()"></a>
 		&nbsp;
 		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a>
 		&nbsp;
@@ -393,8 +393,8 @@
 				<tr ID="TRow" align="center">
 				<td ID="Cell3" style="width: 90px"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Extract.png" title="Екстракт" ID="ExtBtn"
-					onclick="ExtClick()"></td>
+				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Copy70.png" title="Paste&#13Copy"
+					onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></td>
 				<td ID="Cell1" style="width: 90px"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
 				<td><span class="loader" id="loadingGif" style="display:none;"></span>
@@ -405,7 +405,7 @@
 				</tr>
 				<tr ID="TextRow" hidden
 					style="text-align: center; font-family:Arial; font-size:14px; color: var(--LblColor, white);">
-					<td>Бележка</td><td>Екстракт</td><td>Изпрати</td>
+					<td>Бележка</td><td>Paste</td><td>Изпрати</td>
 				</tr>
 			</table>
 			<!--  visibility: var(--TextBtns, hidden)
@@ -564,7 +564,7 @@
 			</SELECT>
 			<a><img src="Save.png" width="20px" ID="SaveCol" align="center" title="Запис цветове" hidden></a>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 24.08
+			© 2023 CX Extractor 19.12
 		</span>
 	</fieldset>
 	</div>

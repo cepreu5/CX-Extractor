@@ -1,6 +1,6 @@
 var
 rememberDurationInDays = 30; // 0 means forever
-TextBtns=1;
+TextBtns=0;
 
 Accs = [
   "Планирани",
