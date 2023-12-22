@@ -252,15 +252,15 @@
 		<!--a><img src="Save.png" width="10px" ID="RTmpls"
 			align="center" title="Зареди"></!--a-->
 		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
-		&nbsp;
+		&nbsp;&nbsp;&nbsp;
 		<a><img src="Extract.png" width="20px" title="Екстракт" ID="ExtBtn"
 			onclick="ExtClick()"></a>
-		&nbsp;
+		&nbsp;&nbsp;&nbsp;
 		<a><img src="Palette.png" onclick="switchSheet()" width="20px" title="Тема"></a>
-		&nbsp;
+		&nbsp;&nbsp;&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a> <!-- ShowLog()	 -->
 		&nbsp;
-		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
+		<!--a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></!--a-->
 		<br>
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
 			onFocus="AutoTmpl()" onInput="Start=1; AutoTmpl()">
@@ -304,7 +304,7 @@
 		<a><img src="Space.png" width="20px" onclick="Normal()" ID="NormBtn"
 			align="center" title="Параметри"></a><br>
 
-		<button class="solo typewriter-yellow" onclick="EditExtr()"><span ID="Info"></span></button>
+		<button class="solo typewriter-yellow" style="width: 80%"onclick="EditExtr()"><span ID="Info"></span></button>
 		<button class="solo typewriter-yellow" style="width: 18%" onclick="AutoTmpl()"><span> » </span></button>
 		<span ID="Sels" hidden>
 			Име: <input style="text-align:left; width: 7.95em" ID="TmplName" class="inputMessage" value="">&nbsp;
@@ -391,9 +391,9 @@
 			</span>
 			<table ID="Top" hidden>
 				<tr ID="TRow" align="center">
-				<td ID="Cell3" style="width: 90px"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
-					title="Бележка"></td>
-				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Copy70.png" title="Paste&#13Изтриване" ID="Copy70"
+				<td ID="Cell3" style="width: 90px"><img style="height: 60px;" src="Remove.png" ID="NoteBtn" onclick="ClearTextArea();" 
+					title="Изтриване"></td>
+				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Copy70.png" title="Paste&#13Copy" ID="Copy70"
 					onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></td>
 				<td ID="Cell1" style="width: 90px"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
@@ -549,7 +549,7 @@
 		<hr>
 		<span ID="Author" style="font-family:Arial; font-size:10px; color: var(--LblColor, white);">
 			&nbsp;&nbsp;
-			<a><img src="Palette.png" width="15px" style="vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
+			<a><img src="Palette.png" width="15px" style="margin-top: 5px; vertical-align: sub" onclick="ShowColors()" title="Цвят"></a>	
 			&nbsp;
 			<input type="color" value="#FFFFFF" id="colorPicker" hidden>
 			<SELECT ID="Colors" onChange="setColor()" class="inputMessage" title="Colors" hidden>&nbsp;
@@ -564,8 +564,9 @@
 			</SELECT>
 			<a><img src="Save.png" width="20px" ID="SaveCol" align="center" title="Запис цветове" hidden></a>
 			&nbsp;&nbsp;&nbsp;
-			© 2023 CX Extractor 19.12
+			<span style="float: right; margin-top: 7px; ">© 2023 CX Extractor 22.12</span>
 		</span>
+
 	</fieldset>
 	</div>
 </section>
@@ -576,8 +577,22 @@
             document.execCommand('copy');
         }
 
+		document.getElementById('Copy70').addEventListener('contextmenu', function(e) {
+	   		SelectAndCopy("MsgText");
+            e.preventDefault();
+        });
+
+/*
+            isHold = false;
+            setTimeout(function() {
+                isHold = true;
+                hideButton();
+            }, 500); // Примерно време за задържане - 1000 милисекунди (1 секунда)
+        });
+
+
         (function () {
-            var ImageId = document.getElementById("Copy70");
+            var ImageId = document.getElementById("NoteBtn");
             if (ImageId.addEventListener) {
                 ImageId.addEventListener('contextmenu', function (e) {
 					ClearTextArea();
@@ -591,6 +606,7 @@
                 });
             }
         })();
+*/
     </script>
 </body>
 </html>

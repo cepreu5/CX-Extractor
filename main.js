@@ -396,7 +396,7 @@ function createSels() { // Extract selection field
 	}
 	document.getElementById("Sels").appendChild(document.createElement("hr"));
 	document.getElementById("TmplFld").hidden=true;
-	document.getElementById("NoteFld").hidden=true;
+	// document.getElementById("NoteFld").hidden=true;
 	document.getElementById("CalcSp").hidden=true; //
 }
 
@@ -592,7 +592,7 @@ function AutoTmpl() {
 	document.getElementById("NormBtn").title="Нормализация";
 	var i, j, stop=false;
 	var text=document.getElementById("MsgText").value;
-	if (!AllTmplFlag && (text!="")) {console.log("Start: " + Start);
+	if (!AllTmplFlag && (text!="")) {//console.log("Start: " + Start);
 		for (i=Start; i<AutoT.length; i++) {
 			//  console.log(AutoT[i]);
 			if (i==(AutoT.length-1)) {Start=1; stop=true} // next search from begining again
@@ -657,8 +657,8 @@ function SaveConfig() {
 		document.getElementById("Cell2").innerHTML=
 			'<input type="button" class="abutton" title="Paste" style="background-image: url(\'Skin/ExtractFace.png\');" onclick="paste()">&nbsp';
 		document.getElementById("Cell3").innerHTML=
-			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
-		//document.getElementById("Cell4").innerHTML=
+			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Remove.png\');" onclick="ClearTextArea()">&nbsp';
+		//document.getElementById("Cell4").innerHTML=                                                   url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')
 		//	'<input type="button" class="abutton" title="Шаблон" style="background-image: url(\'Skin/TemplateFace.png\');" onclick="MakeTmpl()">&nbsp&nbsp';
 	} else {
 		document.getElementById("Top").innerHTML=BArea;
@@ -909,7 +909,7 @@ function switchSheet() {
 		document.getElementById("Cell2").innerHTML=
 			'<input type="button" class="abutton" title="Paste" style="background-image: url(\'Skin/ExtractFace.png\');" onclick="paste()">&nbsp';
 		document.getElementById("Cell3").innerHTML=
-			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Skin/NoteFace.png\');" onclick="ShowAnim(\'NoteFld\')">&nbsp';
+			'<input type="button" class="abutton" title="Бележка" ID="NoteBtn" style="background-image: url(\'Remove.png\');" onclick="ClearTextArea()">&nbsp';
 		if (document.getElementById("Top").innerHTML=="") {BArea=document.getElementById("Bottom").innerHTML;}
 		else {BArea=document.getElementById("Top").innerHTML;}
 	} else {
