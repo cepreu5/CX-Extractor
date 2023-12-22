@@ -251,7 +251,7 @@
 		&nbsp;&nbsp;
 		<!--a><img src="Save.png" width="10px" ID="RTmpls"
 			align="center" title="Зареди"></!--a-->
-		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
+		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
 		&nbsp;
 		<a><img src="Extract.png" width="20px" title="Екстракт" ID="ExtBtn"
 			onclick="ExtClick()"></a>
@@ -260,7 +260,7 @@
 		&nbsp;
 		<a><img src="Log.png" height="20px" ID="Pst" title="Log" onclick="ShowLog()"></a> <!-- ShowLog()	 -->
 		&nbsp;
-		<a><img ID="ZoomBtn" src="Zoom.png" width="20px" onclick="CZoom();" title="Увеличи"></a>
+		<a><img src="Remove.png" width="20px" onclick="ClearTextArea()" title="Изтриване"></a>
 		<br>
 		<textarea ID="MsgText" rows="5" style="width: 320px" class="inputMessage"
 			onFocus="AutoTmpl()" onInput="Start=1; AutoTmpl()">
@@ -393,7 +393,7 @@
 				<tr ID="TRow" align="center">
 				<td ID="Cell3" style="width: 90px"><img style="width: 70px;" src="Skin/Note.png" ID="NoteBtn" onclick="ShowAnim('NoteFld')" 
 					title="Бележка"></td>
-				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Copy70.png" title="Paste&#13Copy"
+				<td ID="Cell2" style="width: 90px"><img style="width: 70px;" src="Skin/Copy70.png" title="Paste&#13Изтриване" ID="Copy70"
 					onclick="if(event.ctrlKey) {SelectAndCopy('MsgText'); return false} else {paste();}"></td>
 				<td ID="Cell1" style="width: 90px"><input type="image" name="submit" src="Skin/Send.png" style="width: 70px;" border="0" 
 					title="Изпрати" onclick="showDiv()"></td>
@@ -569,5 +569,28 @@
 	</fieldset>
 	</div>
 </section>
+    <script>
+        function SelectAndCopy(What) {
+            document.getElementById(What).select();
+            Clp = document.getElementById(What).value;
+            document.execCommand('copy');
+        }
+
+        (function () {
+            var ImageId = document.getElementById("Copy70");
+            if (ImageId.addEventListener) {
+                ImageId.addEventListener('contextmenu', function (e) {
+					ClearTextArea();
+                    // SelectAndCopy("MsgText");  Тук можете да изобразите вашето собствено меню
+                    e.preventDefault();
+                }, false);
+            } else {
+                ImageId.attachEvent('oncontextmenu', function () {
+                    alert("You've tried to open context menu");
+                    window.event.returnValue = false;
+                });
+            }
+        })();
+    </script>
 </body>
 </html>

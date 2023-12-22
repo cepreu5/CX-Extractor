@@ -806,7 +806,7 @@ function ClearTextArea() {
 	if (document.getElementById("Log").hidden) {
 		document.getElementById("MsgText").value="";
 		ClearTemplate();
-		document.getElementById("MsgText").focus();
+		document.getElementById("NormBtn").focus();
 	}
 	else {
 		document.getElementById("Log").value="";
