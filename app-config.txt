@@ -3,7 +3,7 @@ rememberDurationInDays = 30; // 0 means forever
 TextBtns=0;
 
 Accs = [
-  "Планирани",
+  // "Планирани",
   "Кеш",
   "Кредитна",
   "Дебитна",
@@ -11,6 +11,7 @@ Accs = [
   "W1TTY",
   "Майка",
   "Светлана",
+  "ДСК",
   "-- Интернет --",
   "Paysera",
   "PayseraBGN",
@@ -20,13 +21,12 @@ Accs = [
   "EasyPay",
   "-- Инвест --",
   "Mintos",
+  "Crypto",
   "iuvo",
   "iuvoEUR",
   "Robocash",
-  "doFinance",
   "--- Сметки ---",
   // "ПИБ",
-  "ДСК",
   "ЕМайка",
 ],
 
